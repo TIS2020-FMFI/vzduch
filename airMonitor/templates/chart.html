@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>GrafiGraf</title>
+{% endblock title %}
+{% block chart %}
+<div id="container"></div>
+
+<script src="{% static 'js/Highcharts/code/highcharts.src.js' %}"></script>
+  <script>
+    Highcharts.chart('container', JSON.parse("{{data|escapejs}}"));
+  </script>
+{% endblock chart %}
