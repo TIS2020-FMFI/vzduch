@@ -3,9 +3,13 @@ import json
 
 class Chart:
     def __init__(self):
-        with open("airMonitor/static/default_chart.json", "r") as file:
-            self._chart = json.load(file)
+        self._chart = dict()
         self._data = dict()
+        self.load_defaults("airMonitor/static/default_chart.json")
+
+    def load_defaults(self, path):
+        with open(path, "r") as file:
+            self._chart = json.load(file)
 
     def export_data(self):
         result = []
