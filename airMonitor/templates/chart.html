@@ -5,9 +5,15 @@
 {% endblock title %}
 {% block chart %}
 <div id="container"></div>
-
-<script src="{% static 'js/Highcharts/code/highcharts.src.js' %}"></script>
+    <script src="{% static 'js/Chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'js/Chart.js/utils.js' %}"></script>
+    <div style="width:50%;">
+		<canvas id="canvas"></canvas>
+	</div>
   <script>
-    Highcharts.chart('container', JSON.parse("{{data|escapejs}}"));
+        window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, JSON.parse("{{data|escapejs}}"));
+		};
   </script>
 {% endblock chart %}

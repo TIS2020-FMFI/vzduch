@@ -1,44 +1,36 @@
 {
-    "title": {
-        "text": "Skodlive plyny graf test"
+    "type": "line",
+    "data": {
     },
-    "yAxis": {
+    "options": {
+        "responsive": true,
         "title": {
-            "text": "Koncentracia plynu"
-        }
-    },
-    "xAxis": {
-        "accessibility": {
-            "rangeDescription": "Range: 2010 to 2017"
-        }
-    },
-    "legend": {
-        "layout": "vertical",
-        "align": "right",
-        "verticalAlign": "middle"
-    },
-    "plotOptions": {
-        "series": {
-            "label": {
-                "connectorAllowed": false
-            },
-            "pointStart": 2010
-        }
-    },
-    "responsive": {
-        "rules": [
-            {
-                "condition": {
-                    "maxWidth": 500
-                },
-                "chartOptions": {
-                    "legend": {
-                        "layout": "horizontal",
-                        "align": "center",
-                        "verticalAlign": "bottom"
-                    }
+            "display": true,
+            "text": "ZL"
+        },
+        "tooltips": {
+            "mode": "index",
+            "intersect": false
+        },
+        "hover": {
+            "mode": "nearest",
+            "intersect": true
+        },
+        "scales": {
+            "xAxes": [{
+                "display": true,
+                "scaleLabel": {
+                    "display": true,
+                    "labelString": "Date"
                 }
-            }
-        ]
+            }],
+            "yAxes": [{
+                "display": true,
+                "scaleLabel": {
+                    "display": true,
+                    "labelString": "Value"
+                }
+            }]
+        }
     }
 }
