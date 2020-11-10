@@ -26,4 +26,3 @@ class TestChartWrapper(TestCase):
             for i in range(10):
                 chart.add_data(key, i)
         self.assertEqual(len(chart._datasets), 4)
-    
