@@ -20,6 +20,9 @@ class AirMonitorView(View):
 
         stations = Station.objects.all()
 
+        for i in range(len(stations)):
+            stations[i].set_color("red", "#f03")
+
         print(len(s))
 
         for date in date_list:
@@ -28,7 +31,7 @@ class AirMonitorView(View):
                 data.add_label(f"hour{i + 1}")
 
         #print(json.dumps(data.dict(), indent=4))
-        return render(request, "chart.html", {'data': json.dumps(data.dict())})
+        return render(request, "final.html", {'data': json.dumps(data.dict()), "stations": stations})
 
     def post(self, request):
 
