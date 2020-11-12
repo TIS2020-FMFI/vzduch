@@ -1,0 +1,32 @@
+{% extends 'chart.html' %}
+{% load static %}
+{% block map %}
+    <link rel="stylesheet" href="{% static 'js/leaflet/leaflet.css' %}"/>
+    <script src="{% static 'js/leaflet/leaflet.js' %}"></script>
+    <div id="map" style="height: 360px;width: 50%;"></div>
+    <script>
+        var map = L.map('map', {
+                minZoom: 7.2,
+                zoom: 7.2,
+                maxZoom: 9,
+                center: [48.60, 19.30],
+            });
+        map.setMaxBounds([[49.70, 16.00],[47.60, 22.60]])
+
+            var cartodbAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attribution">CARTO</a>';
+
+            var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+                attribution: cartodbAttribution
+            }).addTo(map);
+
+        {% for station in stations %}
+            var circle = L.circle([{{ station.lat }}, {{ station.lon }}],{
+                color: "{{ station.color_name }}",
+                fillColor: "{{ station.color_code }}",
+                fillOpacity: 0.5,
+                radius: 1000
+            }).addTo(map);
+
+        {% endfor %}
+    </script>
+{% endblock map %}
