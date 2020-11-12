@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from airMonitor.views import AirMonitorView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', AirMonitorView.as_view()),
 ]
