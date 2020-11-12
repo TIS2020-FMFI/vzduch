@@ -1,4 +1,4 @@
 /venv/*
 .idea/
 __pycache__/
-vzduch/__pyache__/*
+vzduch/__pycache__/*
