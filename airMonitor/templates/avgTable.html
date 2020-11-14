@@ -1,0 +1,69 @@
+{% extends 'map.html' %}
+{% load static %}
+{% block avgTable %}
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+    <script>
+        let table = document.createElement('table');
+        table.style.width = '50%';
+        table.classList.add('table');
+
+        let thead = document.createElement('thead');
+        let headRow = document.createElement('tr');
+        let columnNames = ["-12h", "-11h", "-10h", "-9h", "-8h", "-7h",
+                            "-6h", "-5h", "-4h", "-3h", "-2h", "-1h",
+                            "0h", "+1h", "+2h", "+3h", "+4h", "+5h",];
+
+        let th = document.createElement('th');
+        th.appendChild(document.createTextNode("\\"));
+        th.style.border = '1px solid black';
+        headRow.appendChild(th);
+
+        for (let i = 0; i < 18; i++) {
+          let th = document.createElement('th');
+          th.appendChild(document.createTextNode(columnNames[i]));
+          th.style.border = '1px solid black';
+          headRow.appendChild(th);
+        }
+
+        thead.appendChild(headRow);
+
+        let tbody = document.createElement('tbody');
+
+        for (let i = 0; i < 2; i++) {
+          let tr = document.createElement('tr');
+          let td = document.createElement('td');
+          td.appendChild(document.createTextNode(i===0 ? "HOD" : "AVG"));
+          td.style.border = '1px solid black';
+          td.style.width = '50px';
+          tr.appendChild(td);
+
+          for (let j = 0; j < 18; j++) {
+            let td = document.createElement('td');
+            td.style.border = '1px solid black';
+            td.style.width = '50px';
+
+            if (j > 12) {
+              td.classList.add("input");
+              td.style.padding = '0';
+              let input = document.createElement('input');
+              input.type = "text";
+              input.style.width = '100%';
+              input.style.height = '37px';
+              td.appendChild(input);
+              tr.appendChild(td);
+              continue;
+            }
+            td.appendChild(document.createTextNode("x"));
+            td.style.border = '1px solid black';
+            td.style.width = '50px';
+            tr.appendChild(td);
+          }
+
+          tbody.appendChild(tr);
+        }
+
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        document.body.appendChild(table);
+    </script>
+{% endblock avgTable %}
