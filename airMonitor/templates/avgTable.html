@@ -14,19 +14,19 @@
         let thead = document.createElement('thead');
         let headRow = document.createElement('tr');
         let columnNames = ["-12h", "-11h", "-10h", "-9h", "-8h", "-7h",
-                            "-6h", "-5h", "-4h", "-3h", "-2h", "-1h",
-                            "0h", "+1h", "+2h", "+3h", "+4h", "+5h",];
+            "-6h", "-5h", "-4h", "-3h", "-2h", "-1h",
+            "0h", "+1h", "+2h", "+3h", "+4h", "+5h",];
 
         let th = document.createElement('th');
-        th.appendChild(document.createTextNode("\\"));
+        th.appendChild(document.createTextNode(''));
         th.style.border = '1px solid black';
         headRow.appendChild(th);
 
         for (let i = 0; i < 18; i++) {
-          let th = document.createElement('th');
-          th.appendChild(document.createTextNode(columnNames[i]));
-          th.style.border = '1px solid black';
-          headRow.appendChild(th);
+            let th = document.createElement('th');
+            th.appendChild(document.createTextNode(columnNames[i]));
+            th.style.border = '1px solid black';
+            headRow.appendChild(th);
         }
 
         thead.appendChild(headRow);
@@ -34,40 +34,40 @@
         let tbody = document.createElement('tbody');
 
         for (let i = 0; i < 2; i++) {
-          let tr = document.createElement('tr');
-          let td = document.createElement('td');
-          td.appendChild(document.createTextNode(i===0 ? "HOD" : "AVG"));
-          td.style.border = '1px solid black';
-          td.style.width = '50px';
-          tr.appendChild(td);
-
-
-          for (let j = 0; j < 18; j++) {
+            let tr = document.createElement('tr');
             let td = document.createElement('td');
-            td.style.border = '1px solid black';
-            td.style.width = '50px';
-
-            if (j > 12) {
-              td.classList.add("input");
-              td.style.padding = '0';
-              let input = document.createElement('input');
-              input.id = i === 0 ? 'hour_' + (j-12) + 'h' : 'avg_' + (j-12) + 'h';
-              input.type = "text";
-              input.disabled = i !== 0;
-              input.style.width = '100%';
-              input.style.height = '37px';
-              td.appendChild(input);
-              tr.appendChild(td);
-              continue;
-            }
-
-            td.appendChild(document.createTextNode(i === 0 ? hourly_values[12-j] : average_values[12-j]));
+            td.appendChild(document.createTextNode(i === 0 ? "HOD" : "AVG"));
             td.style.border = '1px solid black';
             td.style.width = '50px';
             tr.appendChild(td);
-           }
 
-          tbody.appendChild(tr);
+
+            for (let j = 0; j < 18; j++) {
+                let td = document.createElement('td');
+                td.style.border = '1px solid black';
+                td.style.width = '50px';
+
+                if (j > 12) {
+                    td.classList.add("input");
+                    td.style.padding = '0';
+                    let input = document.createElement('input');
+                    input.id = i === 0 ? 'hour_' + (j - 12) + 'h' : 'avg_' + (j - 12) + 'h';
+                    input.type = "text";
+                    input.disabled = i !== 0;
+                    input.style.width = '100%';
+                    input.style.height = '37px';
+                    td.appendChild(input);
+                    tr.appendChild(td);
+                    continue;
+                }
+
+                td.appendChild(document.createTextNode(i === 0 ? hourly_values[12 - j] : average_values[12 - j]));
+                td.style.border = '1px solid black';
+                td.style.width = '50px';
+                tr.appendChild(td);
+            }
+
+            tbody.appendChild(tr);
         }
 
         table.appendChild(thead);
@@ -75,23 +75,37 @@
         document.body.appendChild(table);
     </script>
     <script>
-    window.addEventListener('load', (e) => {
-        for (let i=1; i <= 5; i++) {
-            let tmp = document.getElementById('hour_' + i + 'h');
-            tmp.addEventListener('change', (ev) => {
-                hourly_values.unshift(parseFloat(tmp.value));
-                document.getElementById('avg_' + i + 'h').value = average(hourly_values.slice(0, 12));
-            });
-        }
-    }, false);
+        window.addEventListener('load', (e) => {
+            let added_values = [NaN, NaN, NaN, NaN, NaN];
+            for (let i = 1; i <= 5; i++) {
+                let tmp = document.getElementById('hour_' + i + 'h');
+                tmp.addEventListener('input', (ev) => {
+                    added_values[i - 1] = (isNumber(tmp.value)) ? parseFloat(tmp.value) : NaN;
+                    for (let k = 1; k <= 5; k++) {
+                        if (!isNaN(added_values[k - 1])) {
+                            let nums = added_values.slice(0, k).filter(n => !isNaN(n));
+                            document.getElementById('avg_' + k + 'h').value =
+                                average(nums.concat(hourly_values.slice(0, (12 - nums.length))));
+                        } else {
+                            document.getElementById('hour_' + k + 'h').value = '';
+                            document.getElementById('avg_' + k + 'h').value = '';
+                        }
+                    }
+                });
+            }
+        }, false);
 
-    function average(vals) {
-        let total = 0;
-        for (let i = 0; i < vals.length; i++) {
-            total += vals[i];
+        function average(vals) {
+            let total = 0;
+            for (let i = 0; i < vals.length; i++) {
+                total += vals[i];
+            }
+            total = total / vals.length;
+            return Math.round((total + Number.EPSILON) * 100) / 100;
         }
-        total = total / vals.length;
-        return Math.round((total + Number.EPSILON) * 100) / 100;
-    }
+
+        function isNumber(value) {
+            return /[+-]?([0-9]*[.])?[0-9]+/.test(value);
+        }
     </script>
 {% endblock avgTable %}

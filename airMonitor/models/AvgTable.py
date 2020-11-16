@@ -8,7 +8,6 @@ class AvgTable:
 
     def load_data(self):
         vals = ObsNmsko1H.objects.all()
-        print(type(ObsNmsko1H.objects.all().values_list('pm10', flat=True)[0]))
         stations_id = Station.objects.values_list('id', flat=True)
         self._hour_vals['stations'] = list(stations_id)
 
