@@ -9,11 +9,15 @@ import random
 from airMonitor.models.Chart import Chart
 from airMonitor.models.SHMU import ObsNmsko1H
 from airMonitor.models.Station import Station
-
+from airMonitor.models.AvgTable import AvgTable
 
 class AirMonitorView(View):
     def get(self, request):
         data = Chart()
+
+        t = AvgTable()
+        table = t.load_data()
+        # print(table)
 
         date_list = ["NO2", "PM10", "PM2,5", "O3"]
         s = ObsNmsko1H.objects.all()
@@ -31,7 +35,12 @@ class AirMonitorView(View):
                 data.add_label(f"hour{i + 1}")
 
         #print(json.dumps(data.dict(), indent=4))
-        return render(request, "final.html", {'data': json.dumps(data.dict()), "stations": stations})
+
+        return render(request, "final.html", {
+            "data": json.dumps(data.dict()),
+            "stations": stations,
+            "table": table})
+
 
     def post(self, request):
 
