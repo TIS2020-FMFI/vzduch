@@ -18,7 +18,7 @@ class AirMonitorView(View):
         date_list = ["NO2", "PM10", "PM2,5", "O3"]
         s = ObsNmsko1H.objects.all()
 
-        stations = Station.objects.all()
+        stations = Station.all()
 
         for i in range(len(stations)):
             stations[i].set_color("red", "#f03")
