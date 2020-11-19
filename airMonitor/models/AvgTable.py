@@ -1,5 +1,6 @@
-from airMonitor.models.SHMU import ObsNmsko1H
+from airMonitor.models.SHMU import ObsNmsko1H, Si
 from airMonitor.models.Station import Station
+
 
 class AvgTable:
     def __init__(self):
@@ -8,7 +9,7 @@ class AvgTable:
 
     def load_data(self):
         vals = ObsNmsko1H.objects.all()
-        stations_id = Station.objects.values_list('id', flat=True)
+        stations_id = Si.objects.values_list('id', flat=True)
         self._hour_vals['stations'] = list(stations_id)
 
         for id in stations_id:
