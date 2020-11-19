@@ -18,5 +18,6 @@ from django.urls import path
 from airMonitor.views import AirMonitorView
 
 urlpatterns = [
-    path('', AirMonitorView.as_view()),
+    path('graf', AirMonitorView.as_view()),
+    path('vzduch', AirMonitorView.as_view()),
 ]
