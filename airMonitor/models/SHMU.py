@@ -3,7 +3,7 @@ from django.db import models
 
 class ObsNmsko1H(models.Model):
     obs_id = models.BigIntegerField(null=False, primary_key=True)
-    si = models.ForeignKey('Station', on_delete=models.CASCADE)
+    si = models.ForeignKey('Si', on_delete=models.CASCADE)
     date = models.DateTimeField()
     ta_2m = models.FloatField(blank=True, null=True)
     pa_avg = models.FloatField(blank=True, null=True)
@@ -50,6 +50,5 @@ class Si(models.Model):
     ue = models.BooleanField(blank=True, null=True, default=0)
 
     class Meta:
-        abstract = True
         managed = False
         db_table = 'si'
