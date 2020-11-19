@@ -1,6 +1,9 @@
 {% extends 'chart.html' %}
 {% load static %}
 {% block map %}
+    <link rel="stylesheet" href="{% static 'js/leaflet/leaflet.css' %}"/>
+    <script src="{% static 'js/leaflet/leaflet.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
 
     <div id="map" style="height: 360px;width: 50%;"></div>
     <script>
