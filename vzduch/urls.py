@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from airMonitor.views import AirMonitorView
+from airMonitor.views.HomeView import HomeView
+from airMonitor.views.VzduchView import VzduchView
 
 urlpatterns = [
-    path('graf', AirMonitorView.as_view()),
-    path('vzduch', AirMonitorView.as_view()),
+    path('graf', HomeView.as_view()),
+    path('', HomeView.as_view()),
+    path('vzduch', VzduchView.as_view()),
 ]
