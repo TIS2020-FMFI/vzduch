@@ -13,7 +13,7 @@ class AvgTable:
         self._hour_vals['stations'] = list(stations_id)
 
         for id in stations_id:
-            self._hour_vals[id] = list(map(lambda x: round(x, 2) if type(x) == float else x,
+            self._hour_vals[id] = list(map(lambda x: round(x, 2) if type(x) == float else x if type(x) == int else -1,
                 vals.filter(si_id=id).order_by('-date')[:25].values_list('pm10', flat=True)))
 
             avg_vals = []
@@ -27,7 +27,7 @@ class AvgTable:
     def moving_average(self, hour_values):
         sum = 0
         for i in hour_values:
-            if i is not None:
+            if i != -1:
                 sum += i
 
         return round(sum/12, 2)

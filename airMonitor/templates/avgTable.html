@@ -61,7 +61,8 @@
                     continue;
                 }
 
-                td.appendChild(document.createTextNode(i === 0 ? hourly_values[12 - j] : average_values[12 - j]));
+                td.appendChild(document.createTextNode(
+                    i === 0 ? hourly_values[12 - j] : average_values[12 - j]));
                 td.style.border = '1px solid black';
                 td.style.width = '50px';
                 tr.appendChild(td);
