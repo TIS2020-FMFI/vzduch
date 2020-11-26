@@ -13,9 +13,12 @@ html {
     display:flex;
     justify-content: center;
 }
-select {
-    margin:auto;
-    width: 50%;
+#time-select {
+    margin-right: 10px;
+    width: 30%;
+}
+#step-select {
+    width: 20%;
 }
 #air-container {
 

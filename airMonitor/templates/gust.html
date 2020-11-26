@@ -2,12 +2,14 @@
 {% load static %}
 {% block gust %}
 
-{{ wind|json_script:"wind" }};
+{{ wind|json_script:"wind" }}
 
 <div id="container">
     <div id="air-view">
         <div id="time-select-div">
             <select id="time-select">
+            </select>
+            <select id="step-select">
             </select>
         </div>
         <div id="air-container">
