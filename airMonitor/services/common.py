@@ -15,6 +15,8 @@ def add_colors(stations, zl):
                     if pom[k][1] < settings.ZL_LIMIT[pom[k][0]][j]:
                         pom[k][1] = j
                         break
+                    if j == 4:
+                        pom[k][1] = 5
             mx = pom[0]
             for k in pom:
                 if k[1] > mx[1]:
