@@ -118,4 +118,62 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = 'statics/'
+STATIC_URL = 'airMonitor/statics/'
+
+ZL_LIMIT = {
+    "pm10": {
+        1: 20,
+        2: 40,
+        3: 100,
+        4: 180,
+    },
+    "pm2_5": {
+        1: 14,
+        2: 25,
+        3: 70,
+        4: 140
+    },
+    "so2": {
+        1: 25,
+        2: 50,
+        3: 350,
+        4: 500
+    },
+    "no2": {
+        1: 20,
+        2: 40,
+        3: 200,
+        4: 400
+    },
+    "co": {
+        1: 1000,
+        2: 2000,
+        3: 10000,
+        4: 30000
+    },
+    "o3": {
+        1: 33,
+        2: 65,
+        3: 180,
+        4: 240
+    }
+}
+
+COLORS = {
+    0: ["gray", "#efefef"],
+    1: ["green", "#00b050"],
+    2: ["light green", "#92d050"],
+    3: ["yellow", "#ffff00"],
+    4: ["orange", "#ffc000"],
+    5: ["red", "#ff0000"]
+}
+
+DATA_COLORS = {
+    "red": "rgb(255, 99, 132)",
+    "orange": "rgb(255, 159, 64)",
+    "yellow": "rgb(255, 205, 86)",
+    "green": "rgb(75, 192, 192)",
+    "blue": "rgb(54, 162, 235)",
+    "purple": "rgb(153, 102, 255)",
+    "grey": "rgb(201, 203, 207)"
+}

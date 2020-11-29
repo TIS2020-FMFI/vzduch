@@ -5,16 +5,31 @@
 {% endblock title %}
 {% block chart %}
 <div id="container"></div>
-    <script src="{% static 'js/Chart.js/Chart.min.js' %}"></script>
-    <script src="{% static 'js/Chart.js/utils.js' %}"></script>
     <div style="width:50%;">
 		<canvas id="canvas"></canvas>
 	</div>
   <script>
-        window.onload = function() {
-			var ctx = document.getElementById('canvas').getContext('2d');
-			window.myLine = new Chart(ctx, JSON.parse("{{data|escapejs}}"));
-		};
+    const chart = new ChartWrapper(JSON.parse("{{data|escapejs}}"));
+    document.getElementById("id_stations").onchange = function (){
+         let sel = document.getElementById('id_stations');
+         let opt = sel.options[sel.selectedIndex];
+         chart.setStation(opt.text);
+    }
+    document.getElementById("id_hours").onchange = function (){
+         let sel = document.getElementById('id_hours');
+         let opt = sel.options[sel.selectedIndex];
+         chart.setHours(opt.text);
+    }
 
-  </script>
+    window.onload = function() {
+        chart.drawChart();
+    };
+    let s1 = document.getElementById('id_stations');
+    let o1 = s1.options[s1.selectedIndex];
+    let s2 = document.getElementById('id_hours');
+    let o2 = s2.options[s2.selectedIndex];
+    chart.stationName = o1.text;
+    chart.hours = o2.text;
+    chart.drawChart();
+    </script>
 {% endblock chart %}

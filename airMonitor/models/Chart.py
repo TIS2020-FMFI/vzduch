@@ -1,14 +1,6 @@
 import json
 
-data_colors = {
-    "red": "rgb(255, 99, 132)",
-    "orange": "rgb(255, 159, 64)",
-    "yellow": "rgb(255, 205, 86)",
-    "green": "rgb(75, 192, 192)",
-    "blue": "rgb(54, 162, 235)",
-    "purple": "rgb(153, 102, 255)",
-    "grey": "rgb(201, 203, 207)"
-}
+from django.conf import settings
 
 
 class Chart:
@@ -17,7 +9,7 @@ class Chart:
         self._datasets = []
         self.load_defaults("airMonitor/static/default_chart.json")
         self._labels = list()
-        self._data_colors = ["red", "orange", "yellow", "green", "blue", "purple", "grey"]
+        self._data_colors = ["red", "orange", "yellow", "green", "blue", "purple"]
 
     def load_defaults(self, path):
         with open(path, "r") as file:
@@ -25,8 +17,8 @@ class Chart:
 
     def add_colors(self):
         for index in range(len(self._datasets)):
-            self._datasets[index]["backgroundColor"] = data_colors[self._data_colors[index]]
-            self._datasets[index]["borderColor"] = data_colors[self._data_colors[index]]
+            self._datasets[index]["backgroundColor"] = settings.DATA_COLORS[self._data_colors[index]]
+            self._datasets[index]["borderColor"] = settings.DATA_COLORS[self._data_colors[index]]
 
     def add_label(self, label):
         if label not in self._labels:
@@ -35,18 +27,20 @@ class Chart:
     def dict(self):
         self.add_colors()
         self._chart["data"] = {
-           "labels": self._labels,
+            "labels": [str(x) for x in self._labels],
             "datasets": self._datasets
         }
         return self._chart
 
-    def add_data(self, label, data):
+    def add_data(self, station, zl, data):
         for dataset in self._datasets:
-            if dataset["label"] == label:
-                dataset["data"].append(data)
+            if dataset["label"] == zl:
+                if station not in dataset["data"]:
+                    dataset["data"][station] = []
+                dataset["data"][station].append(data)
                 return
         self._datasets.append({
-            "label": label,
-            "data": [data, ],
+            "label": zl,
+            "data": {station: [data, ]},
             "fill": False
         })
