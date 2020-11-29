@@ -52,3 +52,6 @@ class Si(models.Model):
     class Meta:
         managed = False
         db_table = 'si'
+
+    def __str__(self):
+        return self.name
