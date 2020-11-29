@@ -13,6 +13,13 @@ class Station{
                 fillOpacity: 0.1,
                 radius: this.radius
             });
+        this.circle.bindPopup(this.name + ': ' + this.zl);
+        this.circle.on('mouseover', function (e){
+            this.openPopup();
+        });
+        this.circle.on('mouseout', function (e){
+            this.closePopup();
+        });
     }
     getLocation(){
         return [this.lat, this.lon];
