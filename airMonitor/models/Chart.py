@@ -17,7 +17,7 @@ class Chart:
         self._datasets = []
         self.load_defaults("airMonitor/static/default_chart.json")
         self._labels = list()
-        self._data_colors = ["red", "orange", "yellow", "green", "blue", "purple", "grey"]
+        self._data_colors = ["red", "orange", "yellow", "green", "blue", "purple", "grey", "grey", "grey", "grey", "grey", "grey", "grey", "grey", "grey", "grey", "grey"]
 
     def load_defaults(self, path):
         with open(path, "r") as file:
@@ -35,18 +35,20 @@ class Chart:
     def dict(self):
         self.add_colors()
         self._chart["data"] = {
-           "labels": self._labels,
+            "labels": [str(x) for x in self._labels],
             "datasets": self._datasets
         }
         return self._chart
 
-    def add_data(self, label, data):
+    def add_data(self, station, zl, data):
         for dataset in self._datasets:
-            if dataset["label"] == label:
-                dataset["data"].append(data)
+            if dataset["label"] == zl:
+                if station not in dataset["data"]:
+                    dataset["data"][station] = []
+                dataset["data"][station].append(data)
                 return
         self._datasets.append({
-            "label": label,
-            "data": [data, ],
+            "label": zl,
+            "data": {station: [data, ]},
             "fill": False
         })
