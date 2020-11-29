@@ -15,12 +15,18 @@ def add_colors(stations, zl):
                     if pom[k][1] < settings.ZL_LIMIT[pom[k][0]][j]:
                         pom[k][1] = j
                         break
+                    if j == 4:
+                        pom[k][1] = 5
+            print(stations[i], pom)
             mx = pom[0]
             for k in pom:
                 if k[1] > mx[1]:
                     mx = k
             stations[i].set_zl(mx[0])
             mx = mx[1]
+
+        print(i)
+        print(mx)
 
         stations[i].set_color(settings.COLORS[mx][0], settings.COLORS[mx][1])
     return stations
