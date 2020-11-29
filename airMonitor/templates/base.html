@@ -1,11 +1,20 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     {% block title %}{{ section.title }}{% endblock %}
+
+    <script src="{% static 'js/Chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'js/Chart.js/utils.js' %}"></script>
+    <script src="{% static 'js/custom/ZL.js' %}"></script>
+    <script src="{% static 'js/custom/ChartWrapper.js' %}"></script>
+
 </head>
 <body>
 {% block content %}
+    {% block dateForm %}
+    {% endblock dateForm %}
     {% block map %}
     {% endblock map %}
     {% block chart %}
