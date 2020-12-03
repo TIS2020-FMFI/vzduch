@@ -6,8 +6,8 @@ class Station{
         this.color = color;
         this.color_code = color_code;
         this.zl = zl;
-        this.radius = 2000;
-        this.circle = L.circle(this.getLocation(),{
+        this.radius = 5;
+        this.circle = L.circleMarker(this.getLocation(),{
                 color: this.color,
                 fillColor: this.color_code,
                 fillOpacity: 0.1,
@@ -19,7 +19,7 @@ class Station{
     }
 
     getCircle(){
-        this.circle = L.circle(this.getLocation(),{
+        this.circle = L.circleMarker(this.getLocation(),{
                 color: this.color,
                 fillColor: this.color_code,
                 fillOpacity: 1,
