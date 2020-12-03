@@ -1,4 +1,4 @@
-{% extends 'airBase.html' %}
+{% extends 'windBase.html' %}
 {% load static %}
 {% block gust %}
 
@@ -8,8 +8,14 @@
     <div id="air-view">
         <div id="time-select-div">
             <select id="time-select">
+                <option>14.11.2020</option>
             </select>
             <select id="step-select">
+                <option value="1" selected="selected">1 hod</option>
+                <option value="2">2 hod</option>
+                <option value="3">3 hod</option>
+                <option value="4">4 hod</option>
+                <option value="8">8 hod</option>
             </select>
         </div>
         <div id="air-container">
@@ -40,18 +46,21 @@
     const wind_data = JSON.parse(document.getElementById('wind').textContent);
     const gust_img = document.getElementById('gust');
     const veind_img = document.getElementById('veind');
+    let step = 0;
 
     let index = 0;
     function clicked(type) {
+        step = parseInt(document.getElementById('step-select').value);
         switch (type) {
             case 'first' : index = 0; break;
-            case 'prev' : index > 0 ? index-- : index = 78; break;
-            case 'next' : index < 78 ? index++ : index = 0; break;
+            case 'prev' : index - step >= 0 ? index -= step : index = 0; break;
+            case 'next' : index + step <= 78 ? index += step : index = 78; break;
             case 'last' : index = 78; break;
             default: break;
         }
-        gust_img.src = 'statics/air/GUST/' + wind_data['gust'][index];
-        veind_img.src = 'statics/air/VEIND/' + wind_data['veind'][index];
+        console.log(index);
+        gust_img.src = 'airMonitor/statics/air/GUST/' + wind_data['gust'][index];
+        veind_img.src = 'airMonitor/statics/air/VEIND/' + wind_data['veind'][index];
     }
 </script>
 {% endblock gust %}

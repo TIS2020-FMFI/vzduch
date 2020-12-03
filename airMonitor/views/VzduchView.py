@@ -14,7 +14,7 @@ class VzduchView(View):
         wind = Wind()
         wind_data = wind.load_data()
 
-        return render(request, "airFinal.html", {
+        return render(request, "windFinal.html", {
             "wind": wind_data
         })
 
