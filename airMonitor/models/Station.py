@@ -25,6 +25,9 @@ class Station:
     def set_zl(self, zl):
         self.zl = zl
 
+    def get_station(self):
+        return self._station
+
     def __repr__(self):
         return self.__str__()
 

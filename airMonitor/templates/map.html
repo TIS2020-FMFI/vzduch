@@ -1,5 +1,12 @@
 {% extends 'chart.html' %}
 {% load static %}
+{% block dateForm %}
+<form action="" method="post" id="dateForm">
+    {% csrf_token %}
+    {{ dateForm }}
+    <input type="submit" value="Submit">
+</form>
+{% endblock dateForm %}
 {% block map %}
     <link rel="stylesheet" href="{% static 'js/leaflet/leaflet.css' %}"/>
     <script src="{% static 'js/leaflet/leaflet.js' %}"></script>
