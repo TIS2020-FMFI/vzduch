@@ -12,6 +12,7 @@ from airMonitor.models.Chart import Chart
 from airMonitor.models.SHMU import ObsNmsko1H, Si
 from airMonitor.models.Station import Station
 from airMonitor.models.AvgTable import AvgTable
+from airMonitor.models.StationsTable import StationsTable
 from airMonitor.services.common import add_colors
 
 POST_DATA = None
@@ -20,6 +21,8 @@ POST_DATA = None
 class HomeView(View):
     def get(self, request):
         data = Chart()
+
+        stations_table = StationsTable().load_data()
 
         t = AvgTable()
         table = t.load_data()
@@ -35,6 +38,18 @@ class HomeView(View):
 
         stations = Station.all()
 
+
+        if POST_DATA is not None:
+            date_form = DateForm(POST_DATA)
+        else:
+            date_form = DateForm()
+
+        date = datetime.datetime.now()
+        if date_form.is_valid():
+            date = date_form.cleaned_data.get("date")
+
+        for i in range(len(stations)):
+            stations[i].set_color("red", "#f03")
         zl = ObsNmsko1H.objects.all().filter(date__range=[date - datetime.timedelta(hours=72),
                                                           date + datetime.timedelta(hours=24)])
 
@@ -51,6 +66,7 @@ class HomeView(View):
             "data": json.dumps(data.dict()),
             "stations": stations,
             "table": table,
+            "stations_table": stations_table,
             "dateForm": date_form})
 
     def post(self, request):

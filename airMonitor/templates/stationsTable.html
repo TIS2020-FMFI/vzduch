@@ -1,0 +1,105 @@
+{% extends 'avgTable.html' %}
+{% load static %}
+{% block stationsTable %}
+    <select id="stationsTableParams" onchange="onSelectParameter()">
+        <option value="max" selected="selected">Maximálne hodnoty</option>
+        <option value="hour">Hodinové hodnoty</option>
+        <option value="nulls">Výpadky</option>
+    </select>
+
+    <table id="stationsTable" style="width:50%">
+    </table>
+
+    <script>
+        let tableHeaders = JSON.parse("{{ stations_table.thead|escapejs }}");
+        let tableValues = JSON.parse("{{ stations_table.tbody|escapejs }}");
+        const stringForNullValue = "";
+        const tableHeadersTextMap = {
+            'name': 'Stanica',
+            'hg': 'HG',
+            'pm10': 'PM' + '10'.sub(),
+            'pm2_5': 'PM' + '2.5'.sub(),
+            'so2': 'SO' + '2'.sub(),
+            'no': 'NO',
+            'no2': 'NO' + '2'.sub(),
+            'nox': 'NOx',
+            'co': 'CO',
+            'ben': 'Benzén',
+            'h2s': 'H' + '2'.sub() + 'S',
+            'o3': 'O' + '3'.sub()
+        };
+        const nullsOrangeLimit = 2;
+        const nullsRedLimit = 12;
+        const limits = {
+            'pm10': [180, 100, 40, 20],
+            'pm2_5': [140, 70, 25, 14],
+            'o3': [240, 180, 65, 33],
+            'so2': [500, 350, 50, 25],
+            'co': [30000, 10000, 2000, 1000],
+            'no2': [400, 200, 40, 20]
+        };
+        const colorsForLimits = ['Red', 'Orange', 'Yellow', 'YellowGreen', 'Green'];
+
+        function getColorByTableValue(parameter, material, value) {
+            if (parameter === 'nulls') {
+                if (value >= nullsRedLimit) return 'Red'
+                else if (value >= nullsOrangeLimit) return 'Orange'
+                else return 'White'
+            }
+            if ( ! (material in limits) || value == null) {
+                return 'White'
+            }
+            for (let i in limits[material]) {
+                if (value > limits[material][i]) return colorsForLimits[i]
+            }
+            return colorsForLimits[colorsForLimits.length - 1]
+        }
+
+        function createStationsTableHeader() {
+            let thead = document.createElement('thead');
+            let tr = document.createElement('tr');
+            for (let i in tableHeaders) {
+                let th = document.createElement('th');
+                let text = tableHeaders[i];
+                th.innerHTML = tableHeadersTextMap[text];
+                th.style.border = '1px solid black';
+                tr.appendChild(th);
+            }
+            thead.appendChild(tr);
+            return thead;
+        }
+
+        function createStationsTableBody(parameter) {
+            let tbody = document.createElement('tbody');
+            for (let i in tableValues[parameter]) {
+                let tr = document.createElement('tr');
+                for (let j in tableHeaders) {
+                    let td = document.createElement('td');
+                    let value = tableValues[parameter][i][tableHeaders[j]];
+                    td.appendChild(document.createTextNode((value == null) ? stringForNullValue : value));
+                    td.style.border = '1px solid black';
+                    td.style.backgroundColor = getColorByTableValue(parameter, tableHeaders[j], value);
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            }
+            return tbody;
+        }
+
+        function loadStationsTableContent(selectedParameter = "max") {
+            let table = document.getElementById("stationsTable");
+            let thead = createStationsTableHeader();
+            table.appendChild(thead);
+            let tbody = createStationsTableBody(selectedParameter);
+            table.appendChild(tbody);
+        }
+
+        function onSelectParameter() {
+            let parameter = document.getElementById("stationsTableParams").value;
+            document.getElementById("stationsTable").innerHTML = "";
+            loadStationsTableContent(parameter);
+        }
+
+        loadStationsTableContent();
+    </script>
+{% endblock stationsTable %}
