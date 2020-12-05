@@ -10,11 +10,14 @@ from airMonitor.models.Chart import Chart
 from airMonitor.models.SHMU import ObsNmsko1H
 from airMonitor.models.Station import Station
 from airMonitor.models.AvgTable import AvgTable
+from airMonitor.models.StationsTable import StationsTable
 
 
 class HomeView(View):
     def get(self, request):
         data = Chart()
+
+        stations_table = StationsTable().load_data()
 
         t = AvgTable()
         table = t.load_data()
@@ -40,7 +43,8 @@ class HomeView(View):
         return render(request, "final.html", {
             "data": json.dumps(data.dict()),
             "stations": stations,
-            "table": table})
+            "table": table,
+            "stations_table": stations_table})
 
 
     def post(self, request):
