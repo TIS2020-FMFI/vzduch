@@ -14,7 +14,7 @@ STATIONS = [(x.get_station().id, x.get_station().name) for x in Station.all()]
 
 class DateForm(Form):
     date = forms.DateField(label='Datum', widget=forms.SelectDateWidget(years=YEARS, months=MONTHS), required=False)
-    hours = forms.ChoiceField(choices=[(str(x), str(x)) for x in range(1, 73)], required=False)
+    days = forms.ChoiceField(choices=[(str(x), str(x)) for x in range(1, 8)], required=False)
     stations = forms.ChoiceField(choices=STATIONS, required=False)
 
     class Meta:
