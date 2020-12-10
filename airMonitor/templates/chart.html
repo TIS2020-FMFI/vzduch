@@ -4,7 +4,7 @@
     <title>GrafiGraf</title>
 {% endblock title %}
 {% block chart %}
-<div>
+<div class="form-group" style="margin-bottom: 0;">
     <input type="radio" id="noLines" name="lines" value="noLines">
     <label for="noLines">No Lines</label>
     <input type="radio" id="withTension" name="lines" value="withTension">
@@ -12,9 +12,7 @@
     <input type="radio" id="withoutTension" name="lines" value="withoutTension" checked>
     <label for="withoutTension">Lines Without Tension</label>
 </div>
-
-<div id="container"></div>
-    <div style="width:100%;height:500px;">
+    <div style="width:100%;height:720px;">
 		<canvas id="canvas" aria-label="ZL_CHART" role="img"></canvas>
 	</div>
   <script>

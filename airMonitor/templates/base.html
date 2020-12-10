@@ -15,31 +15,47 @@
 
 </head>
 <body>
+
     <div class="main-wrapper">
-    {% block content %}
-        <article class="content">
-            <div class="section">
-                <div class="row sameheight-container">
-                    <div class="col-md-6">
-                        {% block dateForm %}
-                        {% endblock dateForm %}
-                        {% block map %}
-                        {% endblock map %}
-                        {% block chart %}
-                        {% endblock chart %}
-                        <div style="position: fixed;">
-                        {% block avgTable %}
-                        {% endblock avgTable %}
+        <div class="app">
+            <header class="header">
+                <div class="header-block header-block-nav">
+                    <a href='/vzduch'> Vzduch</a>
+
+                </div>
+
+            </header>
+            <div class="mobile-menu-handle"></div>
+            {% block content %}
+                <article class="content buttons-page">
+                    <div class="section">
+                        <div class="row sameheight-container">
+                            <div class="col-md-6">
+                                <div class="card-block">
+                                    {% block dateForm %}
+                                    {% endblock dateForm %}
+                                    {% block map %}
+                                    {% endblock map %}
+                                </div>
+                                <div class="card-block">
+                                    {% block chart %}
+                                    {% endblock chart %}
+                                </div>
+                                <div class="card-block">
+
+                                    {% block avgTable %}
+                                    {% endblock avgTable %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                {% block stationsTable %}
+                                {% endblock stationsTable %}
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        {% block stationsTable %}
-                        {% endblock stationsTable %}
-                    </div>
-                </div>
-            </div>
-        </article>
-    {% endblock content %}
+                </article>
+            {% endblock content %}
+        </div>
     </div>
 </body>
 <footer>
