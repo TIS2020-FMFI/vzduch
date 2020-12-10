@@ -42,6 +42,8 @@ class HomeView(View):
 
         stations = add_colors(stations, zl.filter(date__range=[date, date + datetime.timedelta(days=1)]))
 
+        # ToDo dopocitat pre kazdu stanicu klzavy priemer a pridat to ako dalsiu zl s tym ze nazov bude mat avg
+
         for z in zl:
             for i in settings.ZL_LIMIT:
                 data.add_data(z.si.name, i, z.__dict__[i])
