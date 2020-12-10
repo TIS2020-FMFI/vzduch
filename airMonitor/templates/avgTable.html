@@ -5,7 +5,10 @@
     <script>
 
         let avgTable = new AverageTable(JSON.parse("{{ table|escapejs }}"));
-        avgTable.setStation('78001');
+
+        let sel = document.getElementById('id_stations');
+        let opt = sel.options[sel.selectedIndex];
+        avgTable.setStation(sel.value);
 
         let hourly_values = avgTable.getHourValues();
         let average_values = avgTable.getAverageValues();

@@ -26,13 +26,18 @@ class AverageTable{
     updateTable(station_id) {
         let rows = document.getElementsByClassName('valueRows');
         console.log(station_id, typeof station_id);
-        for (let i = 0; i < (rows[0].children.length-6); i++) {
-            rows[0].children[i+1].innerHTML =
-                this.data["hours"][station_id][12-i] !== -1 ? this.data["hours"][station_id][12-i] : '';
-            rows[1].children[i+1].innerHTML = this.data["averages"][station_id][12-i];
+        for (let i = 0; i < (rows[0].children.length-1); i++) {
+            if (i > 12) {
+                rows[0].children[i+1].children[0].value = '';
+                rows[1].children[i+1].children[0].value = '';
+            } else {
+                rows[0].children[i+1].innerHTML =
+                    this.data["hours"][station_id][12-i] !== -1 ? this.data["hours"][station_id][12-i] : '';
+                rows[1].children[i+1].innerHTML = this.data["averages"][station_id][12-i];
+            }
         }
-
     }
+
     getTable() {
         let table = document.createElement('table');
         table.style.width = '50%';
