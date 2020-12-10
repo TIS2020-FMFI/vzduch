@@ -61,8 +61,11 @@
                     continue;
                 }
 
-                td.appendChild(document.createTextNode(
-                    i === 0 ? hourly_values[12 - j] : average_values[12 - j]));
+                 if ( i === 0 ) {
+                    td.appendChild(document.createTextNode(hourly_values[12 - j] !== -1 ? hourly_values[12 - j] : ''));
+                } else {
+                    td.appendChild(document.createTextNode(average_values[12 - j]));
+                }
                 td.style.border = '1px solid black';
                 td.style.width = '50px';
                 tr.appendChild(td);
@@ -99,7 +102,10 @@
         function average(vals) {
             let total = 0;
             for (let i = 0; i < vals.length; i++) {
-                total += vals[i];
+                if (vals[i] !== -1) {
+                    total += vals[i];
+                }
+
             }
             total = total / vals.length;
             return Math.round((total + Number.EPSILON) * 100) / 100;
