@@ -74,8 +74,6 @@ class ChartWrapper{
             this.data["data"]["labels"] = this.labels.slice(this.labels.length - this.hours - 6,
                 this.labels.length);
         }
-        console.log(this.labels);
-        console.log(this.data["data"]["labels"]);
 
         if(this.tension){
             this.data["options"]["elements"]["line"]["tension"] = 0.5;
@@ -142,7 +140,7 @@ class ChartWrapper{
                 return;
             }if(!visibleLabels.includes("pm2_5")){
                 return;
-            }if(!visibleLabels.includes("klz")){
+            }if(!visibleLabels.includes("avg")){
                 return;
             }
 
@@ -184,5 +182,24 @@ class ChartWrapper{
         return result;
     }
 
+    getZlIndex(name){
+        for(let i = 0; i < this.zl.length; i++){
+            if(this.zl[i].name === name){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    addAverageValue(stationName, value){
+        let i = this.getZlIndex("avg");
+        this.zl[i].addValue(stationName, value);
+    }
+
+
+    popAverageValue(stationName){
+        let i = this.getZlIndex("avg");
+        this.zl[i].pop(stationName);
+    }
 
 }
