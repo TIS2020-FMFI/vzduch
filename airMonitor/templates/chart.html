@@ -9,27 +9,30 @@
 		<canvas id="canvas"></canvas>
 	</div>
   <script>
-    var chart = new ChartWrapper(JSON.parse("{{data|escapejs}}"));
+    let chart = new ChartWrapper(JSON.parse("{{data|escapejs}}"));
     document.getElementById("id_stations").onchange = function (){
          let sel = document.getElementById('id_stations');
          let opt = sel.options[sel.selectedIndex];
          chart.setStation(opt.text);
+         chart.drawChart();
     }
-    document.getElementById("id_hours").onchange = function (){
-         let sel = document.getElementById('id_hours');
+    document.getElementById("id_days").onchange = function (){
+         console.log("Ahoj");
+         let sel = document.getElementById('id_days');
          let opt = sel.options[sel.selectedIndex];
-         chart.setHours(opt.text);
+         chart.setDays(opt.text);
+         chart.drawChart();
     }
 
     window.onload = function() {
         chart.drawChart();
     };
-    let s1 = document.getElementById('id_stations');
+    /*let s1 = document.getElementById('id_stations');
     let o1 = s1.options[s1.selectedIndex];
     let s2 = document.getElementById('id_hours');
-    let o2 = s2.options[s2.selectedIndex];
-    chart.stationName = o1.text;
-    chart.hours = o2.text;
+    // let o2 = s2.options[s2.selectedIndex];
+    // chart.stationName = o1.text;
+    // chart.hours = o2.text;*/
     chart.drawChart();
     </script>
 {% endblock chart %}
