@@ -25,8 +25,12 @@ class ZL{
         return result;
     }
 
+    addValue(stationName, value){
+        this.data[stationName].push(value);
+    }
 
-
-
+    pop(stationName){
+        return this.data[stationName].pop();
+    }
 
 }
