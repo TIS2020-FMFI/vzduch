@@ -59,7 +59,7 @@ class HomeView(View):
         return render(request, "final.html", {
             "data": json.dumps(data.dict()),
             "stations": stations,
-            "table": table,
+            "table": json.dumps(table),
             "stations_table": stations_table,
             "dateForm": date_form})
 
