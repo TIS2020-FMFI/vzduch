@@ -2,13 +2,15 @@ import json
 
 from airMonitor.models.SHMU import Si
 
+from django.db.models import Q
+
 
 class Station:
 
     @staticmethod
     def all():
         result = []
-        for station in Si.objects.all():
+        for station in Si.objects.filter(ci=78).filter(~Q(lat=0.0)):
             result.append(Station(station.name))
         return result
 

@@ -14,6 +14,7 @@ class Chart:
     def load_defaults(self, path):
         with open(path, "r") as file:
             self._chart = json.load(file)
+        self._chart["limits"] = settings.ZL_LIMIT
 
     def add_colors(self):
         for index in range(len(self._datasets)):

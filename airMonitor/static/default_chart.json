@@ -3,6 +3,7 @@
     "data": {
     },
     "options": {
+        "horizontalLine": null,
         "responsive": true,
         "title": {
             "display": true,
@@ -31,6 +32,14 @@
                     "labelString": "Value"
                 }
             }]
+        },
+        "elements": {
+            "line": {
+                "tension": 0.5
+            }
+        },
+        "legend": {
+            "display": true
         }
     }
 }

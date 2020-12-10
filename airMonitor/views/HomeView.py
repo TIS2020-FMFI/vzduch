@@ -5,11 +5,10 @@ from django.shortcuts import render
 from django.views import View
 
 import json
-import random
 
 from airMonitor.forms.DateForm import DateForm
 from airMonitor.models.Chart import Chart
-from airMonitor.models.SHMU import ObsNmsko1H, Si
+from airMonitor.models.SHMU import ObsNmsko1H
 from airMonitor.models.Station import Station
 from airMonitor.models.AvgTable import AvgTable
 from airMonitor.models.StationsTable import StationsTable
@@ -26,16 +25,6 @@ class HomeView(View):
 
         t = AvgTable()
         table = t.load_data()
-
-        if POST_DATA is not None:
-            date_form = DateForm(POST_DATA)
-        else:
-            date_form = DateForm()
-
-        date = datetime.datetime.now()
-        if date_form.is_valid():
-            date = date_form.cleaned_data.get("date")
-
         stations = Station.all()
 
 
@@ -48,12 +37,10 @@ class HomeView(View):
         if date_form.is_valid():
             date = date_form.cleaned_data.get("date")
 
-        for i in range(len(stations)):
-            stations[i].set_color("red", "#f03")
-        zl = ObsNmsko1H.objects.all().filter(date__range=[date - datetime.timedelta(hours=72),
-                                                          date + datetime.timedelta(hours=24)])
+        zl = ObsNmsko1H.objects.all().filter(date__range=[date - datetime.timedelta(days=7),
+                                                          date + datetime.timedelta(days=1)])
 
-        stations = add_colors(stations, zl.filter(date=date))
+        stations = add_colors(stations, zl.filter(date__range=[date, date + datetime.timedelta(days=1)]))
 
         for z in zl:
             for i in settings.ZL_LIMIT:
@@ -61,6 +48,13 @@ class HomeView(View):
             key = f"{z.date.day}.{z.date.month}.\n{str(z.date.hour).zfill(2)}:{str(z.date.minute).zfill(2)}"
             data.add_label(key)
 
+        d = date + datetime.timedelta(days=1)
+        d = datetime.datetime(d.year, d.month, d.day)
+
+        for i in range(5):
+            d = d + datetime.timedelta(hours=1)
+            key = f"{d.day}.{d.month}.\n{str(d.hour).zfill(2)}:{str(d.minute).zfill(2)}"
+            data.add_label(key)
 
         return render(request, "final.html", {
             "data": json.dumps(data.dict()),
@@ -71,9 +65,5 @@ class HomeView(View):
 
     def post(self, request):
         global POST_DATA
-        date_form = DateForm(request.POST)
-        # check whether it's valid:
-
         POST_DATA = request.POST
-
         return self.get(request)
