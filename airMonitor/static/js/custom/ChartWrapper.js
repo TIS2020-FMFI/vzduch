@@ -67,8 +67,15 @@ class ChartWrapper{
             dataset.push(data);
         }
         this.data["data"]["datasets"] = dataset;
-        this.data["data"]["labels"] = this.labels.slice(this.labels.length - this.hours - 6,
-            this.labels.length);
+        if(this.hours - 6 > this.labels.length){
+            this.data["data"]["labels"] = this.labels;
+        }
+        else {
+            this.data["data"]["labels"] = this.labels.slice(this.labels.length - this.hours - 6,
+                this.labels.length);
+        }
+        console.log(this.labels);
+        console.log(this.data["data"]["labels"]);
 
         if(this.tension){
             this.data["options"]["elements"]["line"]["tension"] = 0.5;
