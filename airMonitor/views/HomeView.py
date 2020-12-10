@@ -49,6 +49,17 @@ class HomeView(View):
             key = f"{z.date.day}.{z.date.month}.\n{str(z.date.hour).zfill(2)}:{str(z.date.minute).zfill(2)}"
             data.add_label(key)
 
+        d = date + datetime.timedelta(days=1)
+        d = datetime.datetime(d.year, d.month, d.day)
+
+        print(type(date))
+        print("date: ", d, d + datetime.timedelta(hours=5))
+        for i in range(5):
+            d = d + datetime.timedelta(hours=1)
+            key = f"{d.day}.{d.month}.\n{str(d.hour).zfill(2)}:{str(d.minute).zfill(2)}"
+            data.add_label(key)
+            print(key)
+
         return render(request, "final.html", {
             "data": json.dumps(data.dict()),
             "stations": stations,
@@ -58,7 +69,6 @@ class HomeView(View):
 
     def post(self, request):
         global POST_DATA
-        date_form = DateForm(request.POST)
         # check whether it's valid:
 
         POST_DATA = request.POST
