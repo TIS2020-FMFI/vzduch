@@ -19,43 +19,6 @@
 	</div>
   <script>
     const chart = new ChartWrapper(JSON.parse("{{data|escapejs}}"));
-
-
-    document.getElementById("id_stations").onchange = function (){
-         let sel = document.getElementById('id_stations');
-         let opt = sel.options[sel.selectedIndex];
-         chart.setStation(opt.text);
-         chart.updateChart();
-    }
-    document.getElementById("id_days").onchange = function (){
-         let sel = document.getElementById('id_days');
-         let opt = sel.options[sel.selectedIndex];
-         chart.setDays(opt.text);
-         chart.updateChart();
-    }
-    document.getElementById("noLines").onclick = function (){
-        chart.showLine(false);
-        chart.updateChart();
-    }
-    document.getElementById("withTension").onclick = function (){
-        chart.showTension(true);
-        chart.drawChart();
-    }
-    document.getElementById("withoutTension").onclick = function (){
-        chart.showTension(false);
-        chart.drawChart();
-    }
-
-
-    window.onload = function() {
-        let sel = document.getElementById('id_stations');
-        let opt = sel.options[sel.selectedIndex];
-        chart.setStation(opt.text);
-        sel = document.getElementById('id_days');
-        opt = sel.options[sel.selectedIndex];
-        chart.setDays(opt.text);
-        chart.drawChart();
-    };
-
     </script>
+    <script src="{% static 'js/custom/listeners.js' %}"></script>
 {% endblock chart %}
