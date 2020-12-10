@@ -10,20 +10,37 @@
     <script src="{% static 'js/custom/ZL.js' %}"></script>
     <script src="{% static 'js/custom/ChartWrapper.js' %}"></script>
 
+    <link rel="stylesheet" href="{% static 'css/modularAdmin/app.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modularAdmin/vendor.css' %}">
+
 </head>
 <body>
-{% block content %}
-    {% block dateForm %}
-    {% endblock dateForm %}
-    {% block map %}
-    {% endblock map %}
-    {% block chart %}
-    {% endblock chart %}
-    {% block avgTable %}
-    {% endblock avgTable %}
-    {% block stationsTable %}
-    {% endblock stationsTable %}
-{% endblock content %}
+    <div class="main-wrapper">
+    {% block content %}
+        <article class="content">
+            <div class="section">
+                <div class="row sameheight-container">
+                    <div class="col-md-6">
+                        {% block dateForm %}
+                        {% endblock dateForm %}
+                        {% block map %}
+                        {% endblock map %}
+                        {% block chart %}
+                        {% endblock chart %}
+                        <div style="position: fixed;">
+                        {% block avgTable %}
+                        {% endblock avgTable %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {% block stationsTable %}
+                        {% endblock stationsTable %}
+                    </div>
+                </div>
+            </div>
+        </article>
+    {% endblock content %}
+    </div>
 </body>
 <footer>
 
