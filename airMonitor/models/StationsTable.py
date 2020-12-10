@@ -2,6 +2,7 @@ import json
 import datetime
 
 from airMonitor.models.SHMU import ObsNmsko1H, Si
+from airMonitor.models.Station import Station
 
 
 def _get_column(column, list_of_tuples):
@@ -113,7 +114,7 @@ class StationsTable:
         return values_dict
 
     def load_data(self):
-        stations_raw = list(Si.objects.values_list('id', 'name'))
+        stations_raw = [(x.get_station().id, x.get_station().name) for x in Station.all()]
         stations = {id_: {'name': self._REAL_STATION_NAMES[name]} for id_, name in stations_raw}
         time_range = (datetime.datetime(2020, 3, 30, 1), datetime.datetime(2020, 3, 31, 0))
         # time_range = (datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(hours=self._HOUR_RANGE))
