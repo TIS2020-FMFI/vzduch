@@ -4,35 +4,58 @@
     <title>GrafiGraf</title>
 {% endblock title %}
 {% block chart %}
+<div>
+    <input type="radio" id="noLines" name="lines" value="noLines">
+    <label for="noLines">No Lines</label>
+    <input type="radio" id="withTension" name="lines" value="withTension">
+    <label for="withTension">Lines With Tension</label>
+    <input type="radio" id="withoutTension" name="lines" value="withoutTension" checked>
+    <label for="withoutTension">Lines Without Tension</label>
+</div>
+
 <div id="container"></div>
-    <div style="width:50%;">
-		<canvas id="canvas"></canvas>
+    <div style="width:50%;height:500px;">
+		<canvas id="canvas" aria-label="ZL_CHART" role="img"></canvas>
 	</div>
   <script>
-    let chart = new ChartWrapper(JSON.parse("{{data|escapejs}}"));
+    const chart = new ChartWrapper(JSON.parse("{{data|escapejs}}"));
+
+
     document.getElementById("id_stations").onchange = function (){
          let sel = document.getElementById('id_stations');
          let opt = sel.options[sel.selectedIndex];
          chart.setStation(opt.text);
-         chart.drawChart();
+         chart.updateChart();
     }
     document.getElementById("id_days").onchange = function (){
-         console.log("Ahoj");
          let sel = document.getElementById('id_days');
          let opt = sel.options[sel.selectedIndex];
          chart.setDays(opt.text);
-         chart.drawChart();
+         chart.updateChart();
+    }
+    document.getElementById("noLines").onclick = function (){
+        chart.showLine(false);
+        chart.updateChart();
+    }
+    document.getElementById("withTension").onclick = function (){
+        chart.showTension(true);
+        chart.drawChart();
+    }
+    document.getElementById("withoutTension").onclick = function (){
+        chart.showTension(false);
+        chart.drawChart();
     }
 
+
     window.onload = function() {
+        let sel = document.getElementById('id_stations');
+        let opt = sel.options[sel.selectedIndex];
+        chart.setStation(opt.text);
+        sel = document.getElementById('id_days');
+        opt = sel.options[sel.selectedIndex];
+        chart.setDays(opt.text);
         chart.drawChart();
     };
-    /*let s1 = document.getElementById('id_stations');
-    let o1 = s1.options[s1.selectedIndex];
-    let s2 = document.getElementById('id_hours');
-    // let o2 = s2.options[s2.selectedIndex];
-    // chart.stationName = o1.text;
-    // chart.hours = o2.text;*/
-    chart.drawChart();
+
     </script>
 {% endblock chart %}
