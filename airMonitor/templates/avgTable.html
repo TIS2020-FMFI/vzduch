@@ -25,8 +25,8 @@
                     for (let k = 1; k <= 5; k++) {
                         if (!isNaN(added_values[k - 1])) {
                             let nums = added_values.slice(0, k).filter(n => !isNaN(n));
-                            document.getElementById('avg_' + k + 'h').value =
-                                average(nums.concat(hourly_values.slice(0, (12 - nums.length))));
+                            let avg = average(nums.concat(hourly_values.slice(0, (12 - nums.length))))
+                            document.getElementById('avg_' + k + 'h').value = avg;
                         } else {
                             document.getElementById('hour_' + k + 'h').value = '';
                             document.getElementById('avg_' + k + 'h').value = '';
