@@ -1,4 +1,5 @@
 import datetime
+import random
 
 from django.conf import settings
 from django.shortcuts import render
@@ -49,6 +50,12 @@ class HomeView(View):
                 data.add_data(z.si.name, i, z.__dict__[i])
             key = f"{z.date.day}.{z.date.month}.\n{str(z.date.hour).zfill(2)}:{str(z.date.minute).zfill(2)}"
             data.add_label(key)
+
+        pm10 = data.get_values("pm10")
+        dataset = pm10["data"]
+        for station in dataset:
+            for value in dataset[station]:
+                data.add_data(station, "avg", random.randint(1, 10) if value is None else value - 5)
 
         d = date + datetime.timedelta(days=1)
         d = datetime.datetime(d.year, d.month, d.day)
