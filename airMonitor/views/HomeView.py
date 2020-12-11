@@ -36,7 +36,9 @@ class HomeView(View):
 
         date = datetime.datetime.now()
         if date_form.is_valid():
-            date = date_form.cleaned_data.get("date")
+            date = date_form.cleaned_data.get("date") if date_form.cleaned_data.get("date") is not None else date
+
+        print(date)
 
         zl = ObsNmsko1H.objects.all().filter(date__range=[date - datetime.timedelta(days=7),
                                                           date + datetime.timedelta(days=1)])
@@ -51,11 +53,14 @@ class HomeView(View):
             key = f"{z.date.day}.{z.date.month}.\n{str(z.date.hour).zfill(2)}:{str(z.date.minute).zfill(2)}"
             data.add_label(key)
 
-        pm10 = data.get_values("pm10")
-        dataset = pm10["data"]
-        for station in dataset:
-            for value in dataset[station]:
-                data.add_data(station, "avg", random.randint(1, 10) if value is None else value - 5)
+        try:
+            pm10 = data.get_values("pm10")
+            dataset = pm10["data"]
+            for station in dataset:
+                for value in dataset[station]:
+                    data.add_data(station, "avg", random.randint(1, 10) if value is None else value - 5)
+        except:
+            pass
 
         d = date + datetime.timedelta(days=1)
         d = datetime.datetime(d.year, d.month, d.day)
