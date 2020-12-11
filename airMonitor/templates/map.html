@@ -13,7 +13,7 @@
     <script src="{% static 'js/custom/Station.js' %}"></script>
     <script src="{% static 'js/custom/MapWrapper.js' %}"></script>
 
-    <div id="map" style="height: 360px;width: 50%;"></div>
+    <div id="map" style="height: 360px;width: 100%;"></div>
     <script>
         let mapWrapper = new MapWrapper(JSON.parse("{{ stations|escapejs }}"));
         mapWrapper.drawAllStations();

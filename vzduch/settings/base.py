@@ -165,7 +165,8 @@ COLORS = {
     2: ["light green", "#92d050"],
     3: ["yellow", "#ffff00"],
     4: ["orange", "#ffc000"],
-    5: ["red", "#ff0000"]
+    5: ["red", "#ff0000"],
+    6: ["light green", "#99ffcc"]
 }
 
 DATA_COLORS = {
@@ -175,5 +176,6 @@ DATA_COLORS = {
     "green": "rgb(75, 192, 192)",
     "blue": "rgb(54, 162, 235)",
     "purple": "rgb(153, 102, 255)",
+    "light green": "rgb(153, 255, 204)",
     "grey": "rgb(201, 203, 207)"
 }
