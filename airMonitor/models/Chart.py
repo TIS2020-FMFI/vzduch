@@ -9,7 +9,7 @@ class Chart:
         self._datasets = []
         self.load_defaults("airMonitor/static/default_chart.json")
         self._labels = list()
-        self._data_colors = ["red", "orange", "yellow", "green", "blue", "purple"]
+        self._data_colors = list(settings.DATA_COLORS.keys())
 
     def load_defaults(self, path):
         with open(path, "r") as file:
@@ -45,3 +45,8 @@ class Chart:
             "data": {station: [data, ]},
             "fill": False
         })
+
+    def get_values(self, zl):
+        for data in self._datasets:
+            if data["label"] == zl:
+                return data
