@@ -12,6 +12,7 @@ class ChartWrapper{
             let d = data["data"]["datasets"][k];
             this.zl.push(new ZL(d["label"], d["data"], d["fill"], d["backgroundColor"]))
         }
+        this.avg_ahead = 0;
 
         // All labels
         this.labels = this.data["data"]["labels"];
@@ -60,7 +61,13 @@ class ChartWrapper{
     updateChart(){
         let dataset = []
         for(let z in this.zl){
-            let data = this.zl[z].get(this.stationName, this.hours)
+            let data;
+            if(this.zl[z].name === "avg"){
+                data = this.zl[z].get(this.stationName, this.hours + this.avg_ahead)
+            }
+            else{
+                data = this.zl[z].get(this.stationName, this.hours)
+            }
             if(!this.show_line) {
                 data["showLine"] = this.show_line;
             }
@@ -146,7 +153,6 @@ class ChartWrapper{
 
             // ToDo Draw lines for pm10
 
-
         }
         if(visibleLabels.length === 2){
             if(!visibleLabels.includes("pm10")){
@@ -191,15 +197,18 @@ class ChartWrapper{
         return -1;
     }
 
-    addAverageValue(stationName, value){
+    addAverageValue(stationName, hour, value){
         let i = this.getZlIndex("avg");
-        this.zl[i].addValue(stationName, value);
+        if(this.zl[i].addValue(stationName, hour, value)){
+            this.avg_ahead += 1;
+        }
     }
 
 
     popAverageValue(stationName){
         let i = this.getZlIndex("avg");
         this.zl[i].pop(stationName);
+        this.avg_ahead -= 1;
     }
 
 }
