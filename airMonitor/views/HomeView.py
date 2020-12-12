@@ -30,9 +30,9 @@ class HomeView(View):
 
 
         if POST_DATA is not None:
-            date_form = DateForm(POST_DATA)
+            date_form = DateForm(POST_DATA, auto_id=False)
         else:
-            date_form = DateForm()
+            date_form = DateForm(auto_id=False)
 
         date = datetime.datetime.now()
         if date_form.is_valid():
