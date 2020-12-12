@@ -15,7 +15,7 @@ class Station:
         return result
 
     def __init__(self, name, color_name=None, color_code=None, zl=None):
-        self._station = Si.objects.all().filter(name=name).first()
+        self.station = Si.objects.all().filter(name=name).first()
         self.color_name = color_name
         self.color_code = color_code
         self.zl = zl
@@ -28,16 +28,16 @@ class Station:
         self.zl = zl
 
     def get_station(self):
-        return self._station
+        return self.station
 
     def __repr__(self):
         return self.__str__()
 
     def __str__(self):
         return json.dumps({
-            "name": self._station.name,
-            "lat": self._station.lat,
-            "lon": self._station.lon,
+            "name": self.station.name,
+            "lat": self.station.lat,
+            "lon": self.station.lon,
             "zl": self.zl,
             "color_name": self.color_name,
             "color_code": self.color_code
