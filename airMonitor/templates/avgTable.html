@@ -30,9 +30,13 @@
                             let nums = added_values.slice(0, k).filter(n => !isNaN(n));
                             let avg = average(nums.concat(hourly_values.slice(0, (12 - nums.length))))
                             document.getElementById('avg_' + k + 'h').value = avg;
+                            chart.addAverageValue(chart.stationName, k - 1, avg);
+                            chart.updateChart();
                         } else {
                             document.getElementById('hour_' + k + 'h').value = '';
                             document.getElementById('avg_' + k + 'h').value = '';
+                            chart.removeAverageValue(chart.stationName, k - 1);
+                            chart.updateChart();
                         }
                     }
                 });
