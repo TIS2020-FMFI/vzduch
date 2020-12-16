@@ -46,12 +46,19 @@ class HomeView(View):
             key = f"{z.date.day}.{z.date.month}.\n{str(z.date.hour).zfill(2)}:{str(z.date.minute).zfill(2)}"
             data.add_label(key)
 
-        avgTable = AvgTable()
-        avgTableData = avgTable.prepare_data(data.get_values("pm10")["data"])
 
-        for station in avgTableData['hours']:
-            for value in avgTableData['averages'][station]:
-                data.add_data(station, "avg", value)
+        avgTableData = dict()
+
+        try:
+            avgTable = AvgTable()
+            avgTableData = avgTable.prepare_data(data.get_values("pm10")["data"])
+
+            for station in avgTableData['hours']:
+                for value in avgTableData['averages'][station]:
+                    data.add_data(station, "avg", value)
+
+        except:
+            pass
 
         d = date + datetime.timedelta(days=1)
         d = datetime.datetime(d.year, d.month, d.day)
