@@ -6,7 +6,7 @@ document.getElementById("id_stations").onchange = function (){
      let opt = sel.options[sel.selectedIndex];
      chart.setStation(opt.text);
      chart.updateChart();
-     avgTable.updateTable(opt.value);
+     avgTable.updateTable(opt.text);
 
 }
 

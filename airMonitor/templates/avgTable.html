@@ -3,12 +3,11 @@
 {% block avgTable %}
     <div id="averageTable"></div>
     <script>
-
-        let avgTable = new AverageTable(JSON.parse("{{ table|escapejs }}"));
+        let avgTable = new AverageTable(JSON.parse("{{ pm_dataset|escapejs }}"));
 
         let sel = document.getElementById('id_stations');
         let opt = sel.options[sel.selectedIndex];
-        avgTable.setStation(sel.value);
+        avgTable.setStation(opt.text);
 
         let hourly_values = avgTable.getHourValues();
         let average_values = avgTable.getAverageValues();
@@ -28,14 +27,18 @@
                     for (let k = 1; k <= 5; k++) {
                         if (!isNaN(added_values[k - 1])) {
                             let nums = added_values.slice(0, k).filter(n => !isNaN(n));
-                            let avg = average(nums.concat(hourly_values.slice(0, (12 - nums.length))))
+                            let avg = average(nums.concat(hourly_values.slice(nums.length + 1, hourly_values.length)));
                             document.getElementById('avg_' + k + 'h').value = avg;
-                            chart.addAverageValue(chart.stationName, k - 1, avg);
+
+                            chart.addValue(chart.stationName, k - 1, 'avg', avg);
+                            chart.addValue(chart.stationName, k - 1, 'pm10', nums[k-1]);
                             chart.updateChart();
                         } else {
                             document.getElementById('hour_' + k + 'h').value = '';
                             document.getElementById('avg_' + k + 'h').value = '';
-                            chart.removeAverageValue(chart.stationName, k - 1);
+
+                            chart.removeValue(chart.stationName, k - 1, 'avg');
+                            chart.removeValue(chart.stationName, k - 1, 'pm10');
                             chart.updateChart();
                         }
                     }
@@ -52,7 +55,7 @@
 
             }
             total = total / vals.length;
-            return Math.round((total + Number.EPSILON) * 100) / 100;
+            return total.toFixed(3);
         }
 
         function isNumber(value) {
