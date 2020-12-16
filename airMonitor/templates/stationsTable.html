@@ -1,11 +1,17 @@
 {% extends 'avgTable.html' %}
 {% load static %}
 {% block stationsTable %}
+    <label id="stTableParamsLabel" for="stationsTableParams">Display:</label>
     <select id="stationsTableParams" onchange="onSelectParameter()">
-        <option value="max" selected="selected">Maximálne hodnoty</option>
-        <option value="hour">Hodinové hodnoty</option>
-        <option value="nulls">Výpadky</option>
+        <option value="max" selected="selected">Maximum values</option>
+        <option value="hour">Hour values</option>
+        <option value="nulls">Outages</option>
     </select>
+
+    <label id="stTableSliderLabel" for="stationsTableSlider">Hour (from now): 0</label>
+    <input id="stationsTableSlider" max="23" min="0" type="range" value="0" disabled
+           oninput="onMoveSlider()" onchange="onMoveSlider()"
+           onmouseup="onSelectHour()" ontouchend="onSelectHour()" onkeyup="onSelectHour()"/>
 
     <table id="stationsTable" style="width:100%">
     </table>
@@ -15,7 +21,7 @@
         let tableValues = JSON.parse("{{ stations_table.tbody|escapejs }}");
         const stringForNullValue = "";
         const tableHeadersTextMap = {
-            'name': 'Stanica',
+            'name': 'Station',
             'hg': 'HG',
             'pm10': 'PM' + '10'.sub(),
             'pm2_5': 'PM' + '2.5'.sub(),
@@ -30,6 +36,7 @@
         };
         const nullsOrangeLimit = 2;
         const nullsRedLimit = 12;
+        const nullsMax = 24;
         const limits = {
             'pm10': [180, 100, 40, 20],
             'pm2_5': [140, 70, 25, 14],
@@ -42,11 +49,12 @@
 
         function getColorByTableValue(parameter, material, value) {
             if (parameter === 'nulls') {
+                if (value === nullsMax) return 'WhiteSmoke'
                 if (value >= nullsRedLimit) return 'Red'
-                else if (value >= nullsOrangeLimit) return 'Orange'
-                else return 'White'
+                if (value >= nullsOrangeLimit) return 'Orange'
+                return 'White'
             }
-            if ( ! (material in limits) || value == null) {
+            if (( ! (material in limits)) || value == null) {
                 return 'White'
             }
             for (let i in limits[material]) {
@@ -61,23 +69,28 @@
             for (let i in tableHeaders) {
                 let th = document.createElement('th');
                 let text = tableHeaders[i];
-                th.innerHTML = tableHeadersTextMap[text];
+                th.innerHTML = (text in tableHeadersTextMap) ? tableHeadersTextMap[text] : text;
                 th.style.border = '1px solid black';
+                th.style.padding = '2px';
+                th.style.textAlign = (i > 0) ? 'center' : 'left';
                 tr.appendChild(th);
             }
             thead.appendChild(tr);
             return thead;
         }
 
-        function createStationsTableBody(parameter) {
+        function createStationsTableBody(parameter, hour) {
             let tbody = document.createElement('tbody');
             for (let i in tableValues[parameter]) {
                 let tr = document.createElement('tr');
                 for (let j in tableHeaders) {
                     let td = document.createElement('td');
-                    let value = tableValues[parameter][i][tableHeaders[j]];
+                    let tableValue = tableValues[parameter][i][tableHeaders[j]];
+                    let value = (parameter === "hour" && j > 0) ? tableValue[hour] : tableValue;
                     td.appendChild(document.createTextNode((value == null) ? stringForNullValue : value));
                     td.style.border = '1px solid black';
+                    td.style.padding = '2px';
+                    td.style.textAlign = (j > 0) ? 'center' : 'left';
                     td.style.backgroundColor = getColorByTableValue(parameter, tableHeaders[j], value);
                     tr.appendChild(td);
                 }
@@ -86,20 +99,39 @@
             return tbody;
         }
 
-        function loadStationsTableContent(selectedParameter = "max") {
+        function loadStationsTableContent(selectedParameter = "max", selectedHour = 0) {
             let table = document.getElementById("stationsTable");
+            table.innerHTML = "";
             let thead = createStationsTableHeader();
             table.appendChild(thead);
-            let tbody = createStationsTableBody(selectedParameter);
+            let tbody = createStationsTableBody(selectedParameter, selectedHour);
             table.appendChild(tbody);
         }
 
         function onSelectParameter() {
             let parameter = document.getElementById("stationsTableParams").value;
-            document.getElementById("stationsTable").innerHTML = "";
-            loadStationsTableContent(parameter);
+            let slider = document.getElementById("stationsTableSlider");
+            if (parameter === "hour") {
+                slider.disabled = false;
+                document.getElementById("stTableSliderLabel").style.color = "Black";
+            } else {
+                slider.disabled = true;
+                document.getElementById("stTableSliderLabel").style.color = "Gray";
+            }
+            loadStationsTableContent(parameter, slider.value);
         }
 
+        function onSelectHour() {
+            let selectedHour = document.getElementById("stationsTableSlider").value;
+            loadStationsTableContent("hour", selectedHour);
+        }
+
+        function onMoveSlider() {
+            let hour = document.getElementById("stationsTableSlider").value;
+            document.getElementById("stTableSliderLabel").innerText = `Hour (from now): ${-hour}`;
+        }
+
+        document.getElementById("stTableSliderLabel").style.color = "Gray";
         loadStationsTableContent();
     </script>
 {% endblock stationsTable %}

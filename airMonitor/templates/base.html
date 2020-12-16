@@ -22,9 +22,7 @@
             <header class="header">
                 <div class="header-block header-block-nav">
                     <a href='/vzduch'> Vzduch</a>
-
                 </div>
-
             </header>
             <div class="mobile-menu-handle"></div>
             {% block content %}
@@ -42,16 +40,15 @@
                                     {% block chart %}
                                     {% endblock chart %}
                                 </div>
-                                <div class="card-block">
-
-                                    {% block avgTable %}
-                                    {% endblock avgTable %}
-                                </div>
                             </div>
                             <div class="col-md-6">
                                 {% block stationsTable %}
                                 {% endblock stationsTable %}
                             </div>
+                        </div>
+                        <div class="card-block">
+                            {% block avgTable %}
+                            {% endblock avgTable %}
                         </div>
                     </div>
                 </article>

@@ -1,7 +1,7 @@
 import json
 import datetime
 
-from airMonitor.models.SHMU import ObsNmsko1H, Si
+from airMonitor.models.SHMU import ObsNmsko1H
 from airMonitor.models.Station import Station
 
 
@@ -9,7 +9,7 @@ def _get_column(column, list_of_tuples):
     return list(map(lambda x: x[column], list_of_tuples))
 
 
-def _max(list_):
+def _max_with_nulls(list_):
     list_ = [val for val in list_ if val is not None]
     return max(list_) if len(list_) > 0 else None
 
@@ -58,20 +58,7 @@ class StationsTable:
             'TOPOLNIKY,ASZOD,EMEP': 'Topoľníky, Aszód, EMEP',
             'STARINA,VODNANADRZ,EMEP': 'Starina, Vodná nádrž, EMEP',
             'STARALESNA,AUSAV,EMEP': 'Stará Lesná, AÚ SAV, EMEP',
-            'KOLONICKESEDLO': 'Kolonické sedlo',
-            'NMSKOID99126': 'NMSKOID99126',
-            'NMSKOID99130': 'NMSKOID99130',
-            'NMSKOID99223': 'NMSKOID99223',
-            'NMSKOID99350': 'NMSKOID99350',
-            'NMSKOID99501': 'NMSKOID99501',
-            'NMSKOID99502': 'NMSKOID99502',
-            'NMSKOID99503': 'NMSKOID99503',
-            'NMSKOID99701': 'NMSKOID99701',
-            'NMSKOID99702': 'NMSKOID99702',
-            'NMSKOID99703': 'NMSKOID99703',
-            'NMSKOID99801': 'NMSKOID99801',
-            'NMSKOID99802': 'NMSKOID99802',
-            'NMSKOID99808': 'NMSKOID99808'
+            'KOLONICKESEDLO': 'Kolonické sedlo'
         }
 
     def _convert_to_dict(self, values):  # values = [(id, *polluting_materials)]
@@ -85,8 +72,8 @@ class StationsTable:
             for material in values_dict[id_].keys():
                 measured_values = values_dict[id_][material]
                 values_dict[id_][material] = [
-                    measured_values[0],
-                    _max(measured_values),
+                    measured_values[:] + [None] * (self._HOUR_RANGE - len(measured_values)),
+                    _max_with_nulls(measured_values),
                     self._HOUR_RANGE - len(measured_values) + measured_values.count(None)
                 ]
         return values_dict
@@ -115,12 +102,13 @@ class StationsTable:
 
     def load_data(self):
         stations_raw = [(x.get_station().id, x.get_station().name) for x in Station.all()]
-        stations = {id_: {'name': self._REAL_STATION_NAMES[name]} for id_, name in stations_raw}
-        time_range = (datetime.datetime(2020, 3, 30, 1), datetime.datetime(2020, 3, 31, 0))
+        stations = {id_: {'name': self._REAL_STATION_NAMES[name]} if name in self._REAL_STATION_NAMES else name
+                    for id_, name in stations_raw}
+        time_range = (datetime.datetime(2020, 3, 30, 1), datetime.datetime(2020, 3, 31, 0))  # test
         # time_range = (datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(hours=self._HOUR_RANGE))
         measured_values_raw = list(ObsNmsko1H.objects.filter(date__range=time_range).order_by('-date')
                                    .values_list('si', *self._POLLUTING_MATERIALS))
-        measured_values = self._convert_to_dict(measured_values_raw)  # {id: {material: [hour, max, nulls]}}
+        measured_values = self._convert_to_dict(measured_values_raw)  # {id: {material: [[hour], max, nulls]}}
         stations_with_values = self._join_stations_and_values(stations, measured_values)
         data = self._create_table_data(list(stations_with_values.values()))
         table_header = ['name'] + list(self._POLLUTING_MATERIALS)

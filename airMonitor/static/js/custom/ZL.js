@@ -14,6 +14,9 @@ class ZL{
         this.added_values = {}
         for(let station in dict){
             this.added_values[station] = [];
+            for(let i = 0; i < 5; i++){
+                this.added_values[station].push(null);
+            }
         }
     }
 
@@ -23,33 +26,19 @@ class ZL{
         if(n > d.length){
             n = d.length
         }
-        for(let value in this.added_values[stationName]){
-            d.push(value);
-        }
         return {"label": this.name,
                 "fill": this.fill,
                 "backgroundColor": this.bg_color,
                 "borderColor": this.bg_color,
-                "data": d.slice(d.length - n, d.length )} ;
+                "data": d.slice(d.length - n, d.length ).concat(this.added_values[stationName])} ;
     }
 
     addValue(stationName, hour, value){
-        /*console.log("                                      ");
-        console.log(this.added_values[stationName].length === hour);
-        console.log(this.added_values[stationName]);
-        console.log(hour);
-        console.log("                                      ");*/
-        if(this.added_values[stationName].length === hour){
-            this.added_values[stationName][hour - 1] = value;
-            return false;
-        }
-        console.log("pushujem");
-        this.added_values[stationName].push(value);
-        return true;
+        this.added_values[stationName][hour] = value
     }
 
-    pop(stationName){
-        this.added_values[stationName].pop()
+    remove(stationName, hour){
+        this.added_values[stationName][hour] = null;
     }
 
 }

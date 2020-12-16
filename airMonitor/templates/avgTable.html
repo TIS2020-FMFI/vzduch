@@ -12,8 +12,6 @@
         let hourly_values = avgTable.getHourValues();
         let average_values = avgTable.getAverageValues();
 
-        console.log('h', hourly_values);
-        console.log('a', average_values);
 
         let table = avgTable.getTable();
         document.getElementById("averageTable").appendChild(table);
@@ -32,13 +30,13 @@
                             console.log("hourly", hourly_values);
                             let avg = average(nums.concat(hourly_values.slice(nums.length+1, hourly_values.length)));
                             document.getElementById('avg_' + k + 'h').value = avg;
-
-                            {#opt = sel.options[sel.selectedIndex];#}
-                            {#chart.addAverageValue(opt.text, i, avg);#}
-                            {#chart.updateChart();#}
+                            chart.addAverageValue(chart.stationName, k - 1, avg);
+                            chart.updateChart();
                         } else {
                             document.getElementById('hour_' + k + 'h').value = '';
                             document.getElementById('avg_' + k + 'h').value = '';
+                            chart.removeAverageValue(chart.stationName, k - 1);
+                            chart.updateChart();
                         }
                     }
                 });

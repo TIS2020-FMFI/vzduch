@@ -1,11 +1,18 @@
 {% extends 'chart.html' %}
 {% load static %}
 {% block dateForm %}
-<form action="" method="post" id="dateForm">
-    {% csrf_token %}
-    {{ dateForm }}
-    <input type="submit" value="Submit">
-</form>
+
+    <div class="form-inline">
+        <form action="" method="post" id="dateForm">
+            {% csrf_token %}
+            {% for field in dateForm %}
+                {{ field }}
+            {% endfor %}
+            <input type="submit" value="Submit" class="btn btn-pill-right btn-secondary"
+                   style="padding-bottom: 5px;padding-top: 5px;padding-right: 15px;font-size: 15px">
+        </form>
+    </div>
+
 {% endblock dateForm %}
 {% block map %}
     <link rel="stylesheet" href="{% static 'js/leaflet/leaflet.css' %}"/>
