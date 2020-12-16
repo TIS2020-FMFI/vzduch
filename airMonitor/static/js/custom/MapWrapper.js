@@ -20,14 +20,12 @@ class MapWrapper{
             }).addTo(this.map);
     }
     increaseSize(){
-        console.log("increasing");
         for(let s in this.stations){
             s.increaseSize();
         }
     }
 
     decreaseSize(){
-        console.log("increasing");
         for(let s in this.stations){
             s.decreaseSize();
         }

@@ -1,4 +1,4 @@
-class ChartWrapper{
+class ChartWrapper {
     constructor(data) {
         this.data = data;
 
@@ -35,21 +35,25 @@ class ChartWrapper{
         this.chart = new Chart(this.ctx, this.data);
     }
 
-    getChart(){
+    getChart() {
         this.updateChart();
         return this.chart;
     }
-    setStation(station){
-         this.stationName = station;
+
+    setStation(station) {
+        this.stationName = station;
     }
-    setDays(days){
-         this.days = days;
-         this.setHours();
+
+    setDays(days) {
+        this.days = days;
+        this.setHours();
     }
-    setHours(){
+
+    setHours() {
         this.hours = this.days * 24;
     }
-    drawChart(){
+
+    drawChart() {
         this.getChart();
         window.myLine = this.chart;
     }
@@ -57,29 +61,27 @@ class ChartWrapper{
     /***
      *  Function that collect all data and updated chart according to them
      */
-    updateChart(){
+    updateChart() {
         let dataset = []
-        for(let z in this.zl){
+        for (let z in this.zl) {
             let data;
             data = this.zl[z].get(this.stationName, this.hours)
-            if(!this.show_line) {
+            if (!this.show_line) {
                 data["showLine"] = this.show_line;
             }
             dataset.push(data);
         }
         this.data["data"]["datasets"] = dataset;
-        if(this.hours - 6 > this.labels.length){
+        if (this.hours - 6 > this.labels.length) {
             this.data["data"]["labels"] = this.labels;
-        }
-        else {
+        } else {
             this.data["data"]["labels"] = this.labels.slice(this.labels.length - this.hours - 6,
                 this.labels.length);
         }
 
-        if(this.tension){
+        if (this.tension) {
             this.data["options"]["elements"]["line"]["tension"] = 0.5;
-        }
-        else{
+        } else {
             this.data["options"]["elements"]["line"]["tension"] = 0;
         }
         this.chart.update({
@@ -92,7 +94,7 @@ class ChartWrapper{
      * @param show - boolean that says whether to show lines or not
      */
 
-    showLine(show){
+    showLine(show) {
         this.show_line = show;
     }
 
@@ -100,7 +102,7 @@ class ChartWrapper{
      * @param show - boolean that says whether to show tension or not
      */
 
-    showTension(show){
+    showTension(show) {
         this.show_line = true;
         this.tension = show;
     }
@@ -118,7 +120,7 @@ class ChartWrapper{
 
         meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
 
-        if(this.chart.getVisibleDatasetCount() <= 3){
+        if (this.chart.getVisibleDatasetCount() <= 3) {
             chart.processLabels()
         }
 
@@ -134,30 +136,33 @@ class ChartWrapper{
      *
      */
 
-    processLabels(){
+    processLabels() {
         let visibleLabels = this.getVisibleZl();
-        if(visibleLabels.length === 3){
-            if(!visibleLabels.includes("pm10")){
+        if (visibleLabels.length === 3) {
+            if (!visibleLabels.includes("pm10")) {
                 return;
-            }if(!visibleLabels.includes("pm2_5")){
+            }
+            if (!visibleLabels.includes("pm2_5")) {
                 return;
-            }if(!visibleLabels.includes("avg")){
+            }
+            if (!visibleLabels.includes("avg")) {
                 return;
             }
 
             // ToDo Draw lines for pm10
 
         }
-        if(visibleLabels.length === 2){
-            if(!visibleLabels.includes("pm10")){
+        if (visibleLabels.length === 2) {
+            if (!visibleLabels.includes("pm10")) {
                 return;
-            }if(!visibleLabels.includes("pm2_5")) {
+            }
+            if (!visibleLabels.includes("pm2_5")) {
                 return;
             }
             // ToDo Draw lines for pm 10
         }
 
-        if(visibleLabels.length === 1){
+        if (visibleLabels.length === 1) {
             let zl = visibleLabels[0];
             // ToDo Draw lines for zl
         }
@@ -172,34 +177,32 @@ class ChartWrapper{
      * @returns array - array of names of zl that are still selected on chart
      */
 
-    getVisibleZl(){
+    getVisibleZl() {
         let result = []
-        for(let i = 0; i < this.zl.length; i++){
-            if(this.chart.isDatasetVisible(i)){
+        for (let i = 0; i < this.zl.length; i++) {
+            if (this.chart.isDatasetVisible(i)) {
                 result.push(this.zl[i]["name"]);
             }
         }
         return result;
     }
 
-    getZlIndex(name){
-        for(let i = 0; i < this.zl.length; i++){
-            if(this.zl[i].name === name){
+    getZlIndex(name) {
+        for (let i = 0; i < this.zl.length; i++) {
+            if (this.zl[i].name === name) {
                 return i;
             }
         }
         return -1;
     }
 
-    addAverageValue(stationName, hour, value){
-        let i = this.getZlIndex("avg");
+    addValue(stationName, hour, zl, value) {
+        let i = this.getZlIndex(zl);
         this.zl[i].addValue(stationName, hour, value)
     }
 
-
-    removeAverageValue(stationName, hour){
-        let i = this.getZlIndex("avg");
+    removeValue(stationName, hour, zl) {
+        let i = this.getZlIndex(zl);
         this.zl[i].remove(stationName, hour);
     }
-
 }

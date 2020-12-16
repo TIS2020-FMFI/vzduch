@@ -40,8 +40,6 @@ class HomeView(View):
 
         stations = add_colors(stations, zl.filter(date__range=[date, date + datetime.timedelta(days=1)]))
 
-        # ToDo dopocitat pre kazdu stanicu klzavy priemer a pridat to ako dalsiu zl s tym ze nazov bude mat avg
-
         for z in zl:
             for i in settings.ZL_LIMIT:
                 data.add_data(z.si.name, i, z.__dict__[i])
@@ -50,9 +48,6 @@ class HomeView(View):
 
         avgTable = AvgTable()
         avgTableData = avgTable.prepare_data(data.get_values("pm10")["data"])
-
-        print(avgTableData['hours']['BRATISLAVA,JESENIOVA'])
-        print(avgTableData['averages']['BRATISLAVA,JESENIOVA'])
 
         for station in avgTableData['hours']:
             for value in avgTableData['averages'][station]:

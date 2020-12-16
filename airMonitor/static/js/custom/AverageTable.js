@@ -1,4 +1,4 @@
-class AverageTable{
+class AverageTable {
     constructor(data) {
         this.data = data;
         this.station = null;
@@ -8,7 +8,6 @@ class AverageTable{
     }
 
     setStation(station) {
-        console.log(station);
         this.station = station;
     }
 
@@ -22,62 +21,31 @@ class AverageTable{
 
     getHourValues() {
         let tmp = this.hourly_values[this.station];
-        return this.station !== null ? tmp.slice(tmp.length-13, tmp.length) : [];
+        return this.station !== null ? tmp.slice(tmp.length - 13, tmp.length) : [];
     }
 
     getAverageValues() {
         let tmp = this.average_values[this.station];
-        return this.station !== null ? tmp.slice(tmp.length-13, tmp.length) : [];
+        return this.station !== null ? tmp.slice(tmp.length - 13, tmp.length) : [];
     }
-
-    // countAverage() {
-    //     for (const key in this.data) {
-    //
-    //         this.average_values[key] = [];
-    //
-    //         let len = this.data[key].length;
-    //         let tmp_arr = this.data[key].slice(len-12, len);
-    //         for (let i = len-12; i >= 0; i--) {
-    //             this.average_values[key].unshift(this.average(tmp_arr));
-    //             tmp_arr.pop();
-    //             tmp_arr.unshift(this.data[key][i-1]);
-    //         }
-    //
-    //     }
-    //     console.log('averages', this.average_values.length);
-    // }
-
-
-    // average(values) {
-    //     let sum = 0;
-    //     for (let i = 0; i < values.length; i ++) {
-    //         if (values[i] !== null) {
-    //             sum += values[i];
-    //         }
-    //     }
-    //     return sum !== 0 ? (sum/values.length).toFixed(3) : null;
-    // }
-
-
 
     updateTable(station_id) {
         this.setStation(station_id);
         hourly_values = this.getHourValues();
-        average_values =  this.getAverageValues();
+        average_values = this.getAverageValues();
 
         let rows = document.getElementsByClassName('valueRows');
 
-        for (let i = 0; i < (rows[0].children.length-1); i++) {
+        for (let i = 0; i < (rows[0].children.length - 1); i++) {
             if (i > 12) {
-                rows[0].children[i+1].children[0].value = '';
-                rows[1].children[i+1].children[0].value = '';
+                rows[0].children[i + 1].children[0].value = '';
+                rows[1].children[i + 1].children[0].value = '';
             } else {
-                rows[0].children[i+1].innerHTML =
+                rows[0].children[i + 1].innerHTML =
                     hourly_values[i] !== -1 ? hourly_values[i].toFixed(3) : '';
-                rows[1].children[i+1].innerHTML = average_values[i].toFixed(3);
+                rows[1].children[i + 1].innerHTML = average_values[i].toFixed(3);
             }
         }
-
     }
 
     getTable() {
@@ -138,7 +106,7 @@ class AverageTable{
                     continue;
                 }
 
-                 if ( i === 0 ) {
+                if (i === 0) {
                     td.appendChild(document.createTextNode(hourly_values[j] !== null ? hourly_values[j].toFixed(3) : ''));
                 } else {
                     td.appendChild(document.createTextNode(average_values[j] !== null ? average_values[j].toFixed(3) : ''));
