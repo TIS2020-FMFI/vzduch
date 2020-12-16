@@ -24,10 +24,7 @@ class HomeView(View):
 
         stations_table = StationsTable().load_data()
 
-        t = AvgTable()
-        table = t.load_data()
         stations = Station.all()
-
 
         if POST_DATA is not None:
             date_form = DateForm(POST_DATA)
@@ -37,8 +34,6 @@ class HomeView(View):
         date = datetime.datetime.now()
         if date_form.is_valid():
             date = date_form.cleaned_data.get("date") if date_form.cleaned_data.get("date") is not None else date
-
-        print(date)
 
         zl = ObsNmsko1H.objects.all().filter(date__range=[date - datetime.timedelta(days=7),
                                                           date + datetime.timedelta(days=1)])
@@ -53,14 +48,15 @@ class HomeView(View):
             key = f"{z.date.day}.{z.date.month}.\n{str(z.date.hour).zfill(2)}:{str(z.date.minute).zfill(2)}"
             data.add_label(key)
 
-        try:
-            pm10 = data.get_values("pm10")
-            dataset = pm10["data"]
-            for station in dataset:
-                for value in dataset[station]:
-                    data.add_data(station, "avg", random.randint(1, 10) if value is None else value - 5)
-        except:
-            pass
+        avgTable = AvgTable()
+        avgTableData = avgTable.prepare_data(data.get_values("pm10")["data"])
+
+        print(avgTableData['hours']['BRATISLAVA,JESENIOVA'])
+        print(avgTableData['averages']['BRATISLAVA,JESENIOVA'])
+
+        for station in avgTableData['hours']:
+            for value in avgTableData['averages'][station]:
+                data.add_data(station, "avg", value)
 
         d = date + datetime.timedelta(days=1)
         d = datetime.datetime(d.year, d.month, d.day)
@@ -73,7 +69,7 @@ class HomeView(View):
         return render(request, "final.html", {
             "data": json.dumps(data.dict()),
             "stations": stations,
-            "table": json.dumps(table),
+            "pm_dataset": json.dumps(avgTableData),
             "stations_table": stations_table,
             "dateForm": date_form})
 
