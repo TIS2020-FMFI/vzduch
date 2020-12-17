@@ -87,7 +87,11 @@
                     let td = document.createElement('td');
                     let tableValue = tableValues[parameter][i][tableHeaders[j]];
                     let value = (parameter === "hour" && j > 0) ? tableValue[hour] : tableValue;
-                    td.appendChild(document.createTextNode((value == null) ? stringForNullValue : value));
+                    if (parameter === "nulls" && value === 24) {
+                        td.appendChild(document.createTextNode("-"));
+                    } else {
+                        td.appendChild(document.createTextNode((value == null) ? stringForNullValue : value));
+                    }
                     td.style.border = '1px solid black';
                     td.style.padding = '2px';
                     td.style.textAlign = (j > 0) ? 'center' : 'left';

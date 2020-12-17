@@ -70,7 +70,7 @@ class StationsTable:
         for id_ in values_dict.keys():
             values_dict[id_] = {self._POLLUTING_MATERIALS[i]: _get_column(i, values_dict[id_]) for i in range(n)}
             for material in values_dict[id_].keys():
-                measured_values = values_dict[id_][material]
+                measured_values = [None if x is None else round(x, 1) for x in values_dict[id_][material]]
                 values_dict[id_][material] = [
                     measured_values[:] + [None] * (self._HOUR_RANGE - len(measured_values)),
                     _max_with_nulls(measured_values),
