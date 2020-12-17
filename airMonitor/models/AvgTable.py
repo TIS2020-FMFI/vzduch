@@ -29,5 +29,5 @@ class AvgTable:
         for i in hour_values:
             if i is not None:
                 sum += i
-        ret = round(sum / 12, 3)
+        ret = round(sum / 12, 1)
         return ret if ret != 0 else None
