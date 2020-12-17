@@ -5,12 +5,14 @@ class ChartWrapper {
         // Set limits for all zl
         this.limits = data["limits"]
         data["limits"] = null;
+        this.metas = [];
 
         // Create all Zl and push them into zl array
         this.zl = [];
         for (let k in data["data"]["datasets"]) {
             let d = data["data"]["datasets"][k];
             this.zl.push(new ZL(d["label"], d["data"], d["fill"], d["backgroundColor"]))
+            this.metas.push(false);
         }
 
         // All labels
@@ -84,6 +86,11 @@ class ChartWrapper {
         } else {
             this.data["options"]["elements"]["line"]["tension"] = 0;
         }
+        for(let index = 0; index < this.metas.length; index++){
+            let ci = this.chart.chart;
+            let meta = ci.getDatasetMeta(index);
+            meta.hidden = meta.hidden === null ? this.metas[index] : null;
+        }
         this.chart.update({
             "lazy": true,
             "duration": 0,
@@ -119,6 +126,7 @@ class ChartWrapper {
         let meta = ci.getDatasetMeta(index);
 
         meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
+        chart.metas[index] = meta.hidden;
 
         if (this.chart.getVisibleDatasetCount() <= 3) {
             chart.processLabels()
