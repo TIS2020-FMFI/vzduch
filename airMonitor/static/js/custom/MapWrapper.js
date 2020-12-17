@@ -9,7 +9,7 @@ class MapWrapper{
         this.map = L.map('map', {
                 minZoom: 7.2,
                 zoom: 7.2,
-                maxZoom: 9,
+                maxZoom: 11,
                 center: [48.60, 19.30],
             });
         this.map.setMaxBounds([[49.70, 16.00],[47.60, 22.60]]);

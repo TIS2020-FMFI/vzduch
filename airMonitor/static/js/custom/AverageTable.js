@@ -42,15 +42,16 @@ class AverageTable {
                 rows[1].children[i + 1].children[0].value = '';
             } else {
                 rows[0].children[i + 1].innerHTML =
-                    hourly_values[i] !== -1 ? hourly_values[i].toFixed(3) : '';
-                rows[1].children[i + 1].innerHTML = average_values[i].toFixed(3);
+                    hourly_values[i] !== null ? hourly_values[i].toFixed(3) : '';
+                rows[1].children[i + 1].innerHTML =
+                    average_values[i] !== null ? average_values[i].toFixed(3) : '';
             }
         }
     }
 
     getTable() {
         let table = document.createElement('table');
-        table.style.width = '50%';
+        table.style.width = '64%';
         table.classList.add('table');
 
         let thead = document.createElement('thead');
@@ -95,6 +96,7 @@ class AverageTable {
                 if (j > 12) {
                     td.classList.add("input");
                     td.style.padding = '0';
+                    td.style.width = '70px';
                     let input = document.createElement('input');
                     input.id = i === 0 ? 'hour_' + (j - 12) + 'h' : 'avg_' + (j - 12) + 'h';
                     input.type = "text";
@@ -111,11 +113,8 @@ class AverageTable {
                 } else {
                     td.appendChild(document.createTextNode(average_values[j] !== null ? average_values[j].toFixed(3) : ''));
                 }
-                td.style.border = '1px solid black';
-                td.style.width = '50px';
                 tr.appendChild(td);
             }
-
             tbody.appendChild(tr);
         }
 
