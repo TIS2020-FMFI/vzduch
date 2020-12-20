@@ -30,6 +30,48 @@ class ChartWrapper {
 
         // Custom handler
         this.data["options"]["legend"]["onClick"] = this.legendHandler;
+        this.data["options"]["horizontalLine"] = null;
+
+
+        // Plugin to print out horizontal lines
+        this.horizonalLinePlugin = {
+            afterDraw: function(chartInstance) {
+                let yScale = chartInstance.scales["y-axis-0"];
+                let canvas = chartInstance.chart;
+                let ctx = canvas.ctx;
+                let index;
+                let line;
+                let style;
+                let yValue;
+
+                if (chartInstance.options.horizontalLine) {
+                  for (index = 0; index < chartInstance.options.horizontalLine.length; index++) {
+                    line = chartInstance.options.horizontalLine[index];
+
+                    style = line.style;
+                    yValue = yScale.getPixelForValue(line.y);
+                    if(yValue < 50){
+                        continue;
+                    }
+
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    for(let i = 50; i <= canvas.width; i += 10){
+                        if((i / 10) % 2  === 1){
+                            ctx.moveTo(i, yValue);
+                        }
+                        else{
+                            ctx.lineTo(i, yValue);
+                        }
+                    }
+                    ctx.strokeStyle = style;
+                    ctx.stroke();
+                  }
+                }
+              }
+            };
+        Chart.pluginService.register(this.horizonalLinePlugin);
+
 
         // ChartJs item
         this.canvas = document.getElementById('canvas');
@@ -131,6 +173,9 @@ class ChartWrapper {
         if (this.chart.getVisibleDatasetCount() <= 3) {
             chart.processLabels()
         }
+        else{
+            chart.data.options.horizontalLine = null;
+        }
 
         ci.update({
             "duration": 0,
@@ -147,35 +192,55 @@ class ChartWrapper {
     processLabels() {
         let visibleLabels = this.getVisibleZl();
         if (visibleLabels.length === 3) {
-            if (!visibleLabels.includes("pm10")) {
+            if (!visibleLabels.includes("pm10") || !visibleLabels.includes("pm2_5") || !visibleLabels.includes("avg")) {
+                chart.data.options.horizontalLine = null;
                 return;
             }
-            if (!visibleLabels.includes("pm2_5")) {
-                return;
-            }
-            if (!visibleLabels.includes("avg")) {
-                return;
-            }
-
-            // ToDo Draw lines for pm10
-
+            chart.data.options.horizontalLine = [{
+                "y": this.limits.pm10["4"],
+                "style": "rgba(255, 0, 0, .4)"
+            }, {
+                "y": this.limits.pm10["3"],
+                "style": "rgba(255, 159, 64, .4)"
+            }];
+            return;
         }
         if (visibleLabels.length === 2) {
-            if (!visibleLabels.includes("pm10")) {
+            if (!visibleLabels.includes("pm10") && !visibleLabels.includes("pm2_5")) {
+                chart.data.options.horizontalLine = null;
                 return;
             }
-            if (!visibleLabels.includes("pm2_5")) {
+            if (!visibleLabels.includes("pm10") && !visibleLabels.includes("avg")) {
+                chart.data.options.horizontalLine = null;
                 return;
             }
-            // ToDo Draw lines for pm 10
+            if (!visibleLabels.includes("avg") && !visibleLabels.includes("pm2_5")) {
+                chart.data.options.horizontalLine = null;
+                return;
+            }
+            chart.data.options.horizontalLine = [{
+                "y": this.limits.pm10["4"],
+                "style": "rgba(255, 0, 0, .4)"
+            }, {
+                "y": this.limits.pm10["3"],
+                "style": "rgba(255, 159, 64, .4)"
+            }];
+            return;
         }
 
         if (visibleLabels.length === 1) {
             let zl = visibleLabels[0];
-            // ToDo Draw lines for zl
+            if(zl === "avg"){
+                zl = "pm10";
+            }
+            chart.data.options.horizontalLine = [{
+                "y": this.limits[zl]["4"],
+                "style": "rgba(255, 0, 0, .4)"
+            }, {
+                "y": this.limits[zl]["3"],
+                "style": "rgba(255, 159, 64, .4)"
+            }];
         }
-
-        // limits are in this.limits
 
     }
 
