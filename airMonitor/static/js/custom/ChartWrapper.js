@@ -2,16 +2,16 @@ class ChartWrapper {
     constructor(data) {
         this.data = data;
 
-        // Set limits for all zl
+        // Set limits for all pollutant
         this.limits = data["limits"]
         data["limits"] = null;
         this.metas = [];
 
-        // Create all Zl and push them into zl array
-        this.zl = [];
+        // Create all pollutant and push them into pollutant array
+        this.pollutants = [];
         for (let k in data["data"]["datasets"]) {
             let d = data["data"]["datasets"][k];
-            this.zl.push(new ZL(d["label"], d["data"], d["fill"], d["backgroundColor"]))
+            this.pollutants.push(new Pollutants(d["label"], d["data"], d["fill"], d["backgroundColor"]))
             this.metas.push(false);
         }
 
@@ -107,9 +107,9 @@ class ChartWrapper {
      */
     updateChart() {
         let dataset = []
-        for (let z in this.zl) {
+        for (let z in this.pollutants) {
             let data;
-            data = this.zl[z].get(this.stationName, this.hours)
+            data = this.pollutants[z].get(this.stationName, this.hours)
             if (!this.show_line) {
                 data["showLine"] = this.show_line;
             }
@@ -185,12 +185,12 @@ class ChartWrapper {
 
     /***
      *
-     *  Function for processing which zl are selected and draw lines depending on their limits
+     *  Function for processing which pollutant are selected and draw lines depending on their limits
      *
      */
 
     processLabels() {
-        let visibleLabels = this.getVisibleZl();
+        let visibleLabels = this.getVisiblePollutants();
         if (visibleLabels.length === 3) {
             if (!visibleLabels.includes("pm10") || !visibleLabels.includes("pm2_5") || !visibleLabels.includes("avg")) {
                 chart.data.options.horizontalLine = null;
@@ -229,15 +229,15 @@ class ChartWrapper {
         }
 
         if (visibleLabels.length === 1) {
-            let zl = visibleLabels[0];
-            if(zl === "avg"){
-                zl = "pm10";
+            let pollutant = visibleLabels[0];
+            if(pollutant === "avg"){
+                pollutant = "pm10";
             }
             chart.data.options.horizontalLine = [{
-                "y": this.limits[zl]["4"],
+                "y": this.limits[pollutant]["4"],
                 "style": "rgba(255, 0, 0, .4)"
             }, {
-                "y": this.limits[zl]["3"],
+                "y": this.limits[pollutant]["3"],
                 "style": "rgba(255, 159, 64, .4)"
             }];
         }
@@ -245,37 +245,37 @@ class ChartWrapper {
     }
 
     /***
-     * Get array of selected zl
+     * Get array of selected pollutant
      *
-     * @returns array - array of names of zl that are still selected on chart
+     * @returns array - array of names of pollutant that are still selected on chart
      */
 
-    getVisibleZl() {
+    getVisiblePollutants() {
         let result = []
-        for (let i = 0; i < this.zl.length; i++) {
+        for (let i = 0; i < this.pollutants.length; i++) {
             if (this.chart.isDatasetVisible(i)) {
-                result.push(this.zl[i]["name"]);
+                result.push(this.pollutants[i]["name"]);
             }
         }
         return result;
     }
 
-    getZlIndex(name) {
-        for (let i = 0; i < this.zl.length; i++) {
-            if (this.zl[i].name === name) {
+    getPollutantIndex(name) {
+        for (let i = 0; i < this.pollutants.length; i++) {
+            if (this.pollutants[i].name === name) {
                 return i;
             }
         }
         return -1;
     }
 
-    addValue(stationName, hour, zl, value) {
-        let i = this.getZlIndex(zl);
-        this.zl[i].addValue(stationName, hour, value)
+    addValue(stationName, hour, pollutant, value) {
+        let i = this.getPollutantIndex(pollutant);
+        this.pollutants[i].addValue(stationName, hour, value)
     }
 
-    removeValue(stationName, hour, zl) {
-        let i = this.getZlIndex(zl);
-        this.zl[i].remove(stationName, hour);
+    removeValue(stationName, hour, pollutant) {
+        let i = this.getPollutantIndex(pollutant);
+        this.pollutants[i].remove(stationName, hour);
     }
 }

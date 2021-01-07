@@ -1,4 +1,4 @@
-class ZL{
+class Pollutants{
     /***
      * @param name - name of the zl
      * @param dict - data in form of dict that contains station name as key
@@ -22,7 +22,7 @@ class ZL{
 
     get(stationName, number){
         let d = this.data[stationName];
-        let n = number;
+        let n = number + 1;
         if(n > d.length){
             n = d.length
         }
