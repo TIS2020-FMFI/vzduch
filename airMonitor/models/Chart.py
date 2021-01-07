@@ -88,6 +88,26 @@ class Chart:
                         outage_data[station][pollutant] += 1
         return outage_data
 
+    def get_maximal_values(self, day):
+        maximal_values = dict()
+        for date in self._data:
+            if date.split(".")[0] != day:
+                continue
+
+            for station in self._stations:
+                if station not in maximal_values:
+                    maximal_values[station] = dict()
+                for pollutant in self._pollutant:
+                    if pollutant not in maximal_values[station]:
+                        maximal_values[station][pollutant] = 0
+                    if station  in self._data[date][pollutant]:
+                        if self._data[date][pollutant][station] is None:
+                            continue
+                        maximal_values[station][pollutant] = max(self._data[date][pollutant][station],
+                                                                 maximal_values[station][pollutant])
+
+        return maximal_values
+
     def _generate_datasets(self):
         self._datasets = []
         for pollutant in self._pollutant:
