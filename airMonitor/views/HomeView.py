@@ -1,11 +1,12 @@
 import datetime
-import random
+import json
+import logging
 
 from django.conf import settings
 from django.shortcuts import render
 from django.views import View
 
-import json
+
 
 from airMonitor.forms.DateForm import DateForm
 from airMonitor.models.Chart import Chart
@@ -16,6 +17,8 @@ from airMonitor.models.StationsTable import StationsTable
 from airMonitor.services.common import add_colors
 
 POST_DATA = None
+
+logger = logging.getLogger("django")
 
 
 class HomeView(View):
@@ -36,29 +39,30 @@ class HomeView(View):
             date = date_form.cleaned_data.get("date") if date_form.cleaned_data.get("date") is not None else date
 
         zl = ObsNmsko1H.objects.all().filter(date__range=[date - datetime.timedelta(days=7),
-                                                          date + datetime.timedelta(days=1)])
+                                                          date + datetime.timedelta(days=1)]).order_by("date")
 
         stations = add_colors(stations, zl.filter(date__range=[date, date + datetime.timedelta(days=1)]))
 
         for z in zl:
-            for i in settings.ZL_LIMIT:
-                data.add_data(z.si.name, i, z.__dict__[i])
             key = f"{z.date.day}.{z.date.month}.\n{str(z.date.hour).zfill(2)}:{str(z.date.minute).zfill(2)}"
-            data.add_label(key)
+            for i in settings.POLLUTANTS:
+                data.add_data(station=z.si.name, pollutant=i, data=z.__dict__[i], date=key)
 
-
-        avgTableData = dict()
+        avg_table_data = dict()
+        try:
+            avg_table = AvgTable()
+            avg_table_data = avg_table.prepare_data(data.get_values("pm10")["data"])
+            for station in avg_table_data['hours']:
+                for value in avg_table_data['averages'][station]:
+                    data.add_data(station=station, pollutant="avg", data=value, date=None)
+        except Exception as ex:
+            logger.error(ex)
 
         try:
-            avgTable = AvgTable()
-            avgTableData = avgTable.prepare_data(data.get_values("pm10")["data"])
-
-            for station in avgTableData['hours']:
-                for value in avgTableData['averages'][station]:
-                    data.add_data(station, "avg", value)
-
-        except:
-            pass
+            data.normalize_data()
+        except KeyError as ex:
+            logger.error("No pollutant named " + ex.args[0])
+        data.add_colors()
 
         d = date + datetime.timedelta(days=1)
         d = datetime.datetime(d.year, d.month, d.day)
@@ -71,7 +75,7 @@ class HomeView(View):
         return render(request, "final.html", {
             "data": json.dumps(data.dict()),
             "stations": stations,
-            "pm_dataset": json.dumps(avgTableData),
+            "pm_dataset": json.dumps(avg_table_data),
             "stations_table": stations_table,
             "dateForm": date_form})
 
