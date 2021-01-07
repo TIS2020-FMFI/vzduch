@@ -25,13 +25,11 @@ class Chart:
         k = 0
         for index in range(len(self._datasets)):
             pollutant = self._datasets[index]["label"]
-            print(pollutant)
             if pollutant in settings.POLLUTANTS:
                 color_index = settings.POLLUTANTS.index(pollutant)
             else:
                 color_index = len(settings.POLLUTANTS) + k
                 k += 1
-            print(color_index)
             self._datasets[index]["backgroundColor"] = settings.DATA_COLORS[self._data_colors[color_index]]
             self._datasets[index]["borderColor"] = settings.DATA_COLORS[self._data_colors[color_index]]
 
@@ -100,12 +98,11 @@ class Chart:
                 for pollutant in self._pollutant:
                     if pollutant not in maximal_values[station]:
                         maximal_values[station][pollutant] = 0
-                    if station  in self._data[date][pollutant]:
+                    if station in self._data[date][pollutant]:
                         if self._data[date][pollutant][station] is None:
                             continue
                         maximal_values[station][pollutant] = max(self._data[date][pollutant][station],
                                                                  maximal_values[station][pollutant])
-
         return maximal_values
 
     def _generate_datasets(self):
