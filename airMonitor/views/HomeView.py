@@ -23,12 +23,6 @@ logger = logging.getLogger("django")
 
 class HomeView(View):
     def get(self, request):
-        data = Chart()
-
-        stations_table = StationsTable().load_data()
-
-        stations = Station.all()
-
         if POST_DATA is not None:
             date_form = DateForm(POST_DATA, auto_id=False)
         else:
@@ -37,6 +31,12 @@ class HomeView(View):
         date = datetime.datetime.now()
         if date_form.is_valid():
             date = date_form.cleaned_data.get("date") if date_form.cleaned_data.get("date") is not None else date
+
+        data = Chart()
+
+        stations_table = StationsTable().load_data()
+
+        stations = Station.all()
 
         zl = ObsNmsko1H.objects.all().filter(date__range=[date - datetime.timedelta(days=7),
                                                           date + datetime.timedelta(days=1)]).order_by("date")
@@ -63,6 +63,8 @@ class HomeView(View):
         except KeyError as ex:
             logger.error("No pollutant named " + ex.args[0])
         data.add_colors()
+
+        data.get_maximal_values("2")
 
         d = date + datetime.timedelta(days=1)
         d = datetime.datetime(d.year, d.month, d.day)
