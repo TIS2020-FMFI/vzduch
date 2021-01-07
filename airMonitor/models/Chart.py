@@ -70,6 +70,24 @@ class Chart:
             if data["label"] == zl:
                 return data
 
+    def get_outages(self, day):
+        outage_data = dict()
+        for date in self._data:
+            if date.split(".")[0] != day:
+                continue
+
+            for station in self._stations:
+                if station not in outage_data:
+                    outage_data[station] = dict()
+                for pollutant in self._pollutant:
+                    if pollutant not in outage_data[station]:
+                        outage_data[station][pollutant] = 0
+                    if station not in self._data[date][pollutant]:
+                        outage_data[station][pollutant] += 1
+                    elif self._data[date][pollutant][station] is None:
+                        outage_data[station][pollutant] += 1
+        return outage_data
+
     def _generate_datasets(self):
         self._datasets = []
         for pollutant in self._pollutant:
