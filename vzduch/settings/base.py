@@ -120,7 +120,26 @@ USE_TZ = True
 
 STATIC_URL = 'airMonitor/statics/'
 
-ZL_LIMIT = {
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'airMonitor/logs/error.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
+POLLUTANTS_LIMIT = {
     "pm10": {
         1: 20,
         2: 40,
@@ -159,6 +178,8 @@ ZL_LIMIT = {
     }
 }
 
+POLLUTANTS = ["pm10", "pm2_5", "so2", "no2", "co", "o3"]
+
 COLORS = {
     0: ["gray", "#efefef"],
     1: ["green", "#00b050"],
@@ -179,3 +200,6 @@ DATA_COLORS = {
     "light green": "rgb(153, 255, 204)",
     "grey": "rgb(201, 203, 207)"
 }
+
+GUST_PATH = os.getcwd() + '/airMonitor/static/air/GUST'
+VEIND_PATH = os.getcwd() + '/airMonitor/static/air/VEIND'
