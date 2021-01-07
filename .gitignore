@@ -3,3 +3,4 @@
 __pycache__/
 vzduch/__pycache__/*
 ./airMonitor/logs/*
+airMonitor/logs/*
