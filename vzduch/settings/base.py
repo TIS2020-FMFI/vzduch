@@ -201,5 +201,5 @@ DATA_COLORS = {
     "grey": "rgb(201, 203, 207)"
 }
 
-GUST_PATH = os.getcwd() + '/airMonitor/static/air/GUST'
-VEIND_PATH = os.getcwd() + '/airMonitor/static/air/VEIND'
+GUST_PATH = BASE_DIR / 'airMonitor/static/air/GUST'
+VEIND_PATH = BASE_DIR / 'airMonitor/static/air/VEIND'
