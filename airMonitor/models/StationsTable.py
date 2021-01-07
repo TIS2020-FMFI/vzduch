@@ -6,15 +6,26 @@ from airMonitor.models.Station import Station
 
 
 def _get_column(column, list_of_tuples):
+    """Internal function for getting column from 2D array"""
     return list(map(lambda x: x[column], list_of_tuples))
 
 
 def _max_with_nulls(list_):
+    """Internal function for finding max value in list, which can contain None values"""
     list_ = [val for val in list_ if val is not None]
     return max(list_) if len(list_) > 0 else None
 
 
 class StationsTable:
+    """
+    Class used for loading data for table of stations on page
+
+    Methods
+    -------
+    load_data() : dict
+        Loads data from database
+    """
+
     def __init__(self):
         # order of polluting materials influences their order in table on page
         self._POLLUTING_MATERIALS = ('pm10', 'so2', 'o3', 'no2', 'pm2_5')
@@ -61,7 +72,48 @@ class StationsTable:
             'KOLONICKESEDLO': 'Kolonické sedlo'
         }
 
-    def _convert_to_dict(self, values):  # values = [(id, *polluting_materials)]
+    def _get_station_name(self, name):
+        """Internal function, gets real station name if known
+
+        Parameters
+        ----------
+        name : str
+            Station name
+
+        Returns
+        -------
+        str
+            Real station name if known else name given
+        """
+
+        return self._REAL_STATION_NAMES[name] if name in self._REAL_STATION_NAMES else name
+
+    def _get_stations(self):
+        """Internal function, gets station ids with responsive names from database
+
+        Returns
+        -------
+        dict[int, dict[str, str]]
+            Station ids with names
+        """
+
+        stations_raw = [(s.get_station().id, s.get_station().name) for s in Station.all()]
+        return {id_: {'name': self._get_station_name(name)} for id_, name in stations_raw}
+
+    def _convert_raw_values_to_dict(self, values):  # values = [(id, *polluting_materials)]
+        """Internal function, converts values from database to dictionary
+
+        Parameters
+        ----------
+        values : list[(int, ...)]
+            Measured values from database
+
+        Returns
+        -------
+        dict
+            Measured values as dictionary
+        """
+
         ids = set(map(lambda x: x[0], values))
         values_dict = {id_: [] for id_ in ids}
         for val in values:
@@ -76,9 +128,39 @@ class StationsTable:
                     _max_with_nulls(measured_values),
                     self._HOUR_RANGE - len(measured_values) + measured_values.count(None)
                 ]
-        return values_dict
+        return values_dict  # {id: {material: [[hour], max, nulls]}}
+
+    def _get_measured_values(self):
+        """Internal function, gets station id with responsive measured values from given period of time
+
+        Returns
+        -------
+        dict
+            Measured values
+        """
+
+        # time_range = (datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(hours=self._HOUR_RANGE))
+        time_range = (datetime.datetime(2020, 3, 30, 1), datetime.datetime(2020, 3, 31, 0))  # test
+        measured_values_raw = list(ObsNmsko1H.objects.filter(date__range=time_range).order_by('-date')
+                                   .values_list('si', *self._POLLUTING_MATERIALS))
+        return self._convert_raw_values_to_dict(measured_values_raw)
 
     def _join_stations_and_values(self, stations, values):
+        """Internal function, joins stations and measured values from database based on station id
+
+        Parameters
+        ----------
+        stations : dict[int, dict[str, str]]
+            Station names with ids
+        values : dict
+            Measured values with station ids
+
+        Returns
+        -------
+        list[dict]
+            List of station names with measured values
+        """
+
         stations_with_values = stations
         for id_ in stations.keys():
             for material in self._POLLUTING_MATERIALS:
@@ -86,9 +168,35 @@ class StationsTable:
                     stations_with_values[id_][material] = values[id_][material]  # reference to mutable!!!
                 else:
                     stations_with_values[id_][material] = [None, None, self._HOUR_RANGE]
-        return stations_with_values
+        return list(stations_with_values.values())
+
+    def _get_stations_with_values(self):
+        """Internal function, gets station names with responsive measured values
+
+        Returns
+        -------
+        list[dict]
+            List of station names with measured values
+        """
+
+        stations = self._get_stations()
+        measured_values = self._get_measured_values()
+        return self._join_stations_and_values(stations, measured_values)
 
     def _create_table_data(self, stations_values):
+        """Internal function, creates data for stations table
+
+        Parameters
+        ----------
+        stations_values : list[dict]
+            List of station names with measured values
+
+        Returns
+        -------
+        dict[str, Any]
+            Data for stations table
+        """
+
         values_dict = {}
         for i in range(len(self._PARAMETER_OPTIONS)):
             option = self._PARAMETER_OPTIONS[i]
@@ -101,15 +209,14 @@ class StationsTable:
         return values_dict
 
     def load_data(self):
-        stations_raw = [(x.get_station().id, x.get_station().name) for x in Station.all()]
-        stations = {id_: {'name': self._REAL_STATION_NAMES[name]} if name in self._REAL_STATION_NAMES else name
-                    for id_, name in stations_raw}
-        time_range = (datetime.datetime(2020, 3, 30, 1), datetime.datetime(2020, 3, 31, 0))  # test
-        # time_range = (datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(hours=self._HOUR_RANGE))
-        measured_values_raw = list(ObsNmsko1H.objects.filter(date__range=time_range).order_by('-date')
-                                   .values_list('si', *self._POLLUTING_MATERIALS))
-        measured_values = self._convert_to_dict(measured_values_raw)  # {id: {material: [[hour], max, nulls]}}
-        stations_with_values = self._join_stations_and_values(stations, measured_values)
-        data = self._create_table_data(list(stations_with_values.values()))
+        """Loads data from database from given period of time
+
+        Returns
+        -------
+        dict[str, Any]
+            Table data and table headers for stations table
+        """
+
+        table_data = self._create_table_data(self._get_stations_with_values())
         table_header = ['name'] + list(self._POLLUTING_MATERIALS)
-        return {'thead': json.dumps(table_header), 'tbody': json.dumps(data)}
+        return {'thead': json.dumps(table_header), 'tbody': json.dumps(table_data)}

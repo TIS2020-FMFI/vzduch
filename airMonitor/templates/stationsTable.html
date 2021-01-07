@@ -47,6 +47,13 @@
         };
         const colorsForLimits = ['Red', 'Orange', 'Yellow', 'YellowGreen', 'Green'];
 
+        /**
+         * Gets background coloring for given value.
+         * @param {string} parameter - Which parameter is selected ('hour', 'max', 'nulls').
+         * @param {string} material - Measured material.
+         * @param {number} value - Measured value.
+         * @return {string} Color name.
+         */
         function getColorByTableValue(parameter, material, value) {
             if (parameter === 'nulls') {
                 if (value === nullsMax) return 'WhiteSmoke'
@@ -63,6 +70,10 @@
             return colorsForLimits[colorsForLimits.length - 1]
         }
 
+        /**
+         * Creates stations table header.
+         * @return {HTMLTableSectionElement} Stations table header.
+         */
         function createStationsTableHeader() {
             let thead = document.createElement('thead');
             let tr = document.createElement('tr');
@@ -79,6 +90,12 @@
             return thead;
         }
 
+        /**
+         * Creates stations table body dependent on selected parameter and hour.
+         * @param {string} parameter - Which parameter is selected ('hour', 'max', 'nulls').
+         * @param {number} hour - Which hour is selected if parameter is 'hour'.
+         * @return {HTMLTableSectionElement} Stations table body.
+         */
         function createStationsTableBody(parameter, hour) {
             let tbody = document.createElement('tbody');
             for (let i in tableValues[parameter]) {
@@ -103,6 +120,11 @@
             return tbody;
         }
 
+        /**
+         * Replaces data in table with data corresponding to selected parameter and hour.
+         * @param {string} selectedParameter - Which parameter is selected ('hour', 'max', 'nulls').
+         * @param {number} selectedHour - Which hour is selected if parameter is 'hour'.
+         */
         function loadStationsTableContent(selectedParameter = "max", selectedHour = 0) {
             let table = document.getElementById("stationsTable");
             table.innerHTML = "";
@@ -112,6 +134,9 @@
             table.appendChild(tbody);
         }
 
+        /**
+         * Behaviour when parameter is selected.
+         */
         function onSelectParameter() {
             let parameter = document.getElementById("stationsTableParams").value;
             let slider = document.getElementById("stationsTableSlider");
@@ -125,11 +150,17 @@
             loadStationsTableContent(parameter, slider.value);
         }
 
+        /**
+         * Behaviour when hour is selected.
+         */
         function onSelectHour() {
             let selectedHour = document.getElementById("stationsTableSlider").value;
             loadStationsTableContent("hour", selectedHour);
         }
 
+        /**
+         * Behaviour when stations table hour slider has moved.
+         */
         function onMoveSlider() {
             let hour = document.getElementById("stationsTableSlider").value;
             document.getElementById("stTableSliderLabel").innerText = `Hour (from now): ${-hour}`;
