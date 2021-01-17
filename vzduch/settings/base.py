@@ -118,7 +118,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = 'airMonitor/statics/'
+STATIC_URL = 'airMonitor/statics/air/'
 
 LOGGING = {
     'version': 1,
@@ -201,5 +201,4 @@ DATA_COLORS = {
     "grey": "rgb(201, 203, 207)"
 }
 
-GUST_PATH = BASE_DIR / 'airMonitor/static/air/GUST'
-VEIND_PATH = BASE_DIR / 'airMonitor/static/air/VEIND'
+AIR_PATH = BASE_DIR / 'airMonitor/static/air'
