@@ -6,7 +6,7 @@ import datetime
 class Wind:
     def __init__(self):
         self.air_path = settings.AIR_PATH
-        self.forecast_days = 4
+        self.forecast_days = 1
 
 
     def load_data(self):
