@@ -9,7 +9,7 @@
     </select>
 
     <label id="stTableSliderLabel" for="stationsTableSlider">Hour (from now): 0</label>
-    <input id="stationsTableSlider" max="23" min="0" type="range" value="0" disabled
+    <input id="stationsTableSlider" max="24" min="0" type="range" value="0" disabled
            oninput="onMoveSlider()" onchange="onMoveSlider()"
            onmouseup="onSelectHour()" ontouchend="onSelectHour()" onkeyup="onSelectHour()"/>
 
@@ -36,7 +36,7 @@
         };
         const nullsOrangeLimit = 2;
         const nullsRedLimit = 12;
-        const nullsMax = 24;
+        const nullsMax = 25;
         const limits = {
             'pm10': [180, 100, 40, 20],
             'pm2_5': [140, 70, 25, 14],
@@ -104,7 +104,7 @@
                     let td = document.createElement('td');
                     let tableValue = tableValues[parameter][i][tableHeaders[j]];
                     let value = (parameter === "hour" && j > 0) ? tableValue[hour] : tableValue;
-                    if (parameter === "nulls" && value === 24) {
+                    if (parameter === "nulls" && value === nullsMax) {
                         td.appendChild(document.createTextNode("-"));
                     } else {
                         td.appendChild(document.createTextNode((value == null) ? stringForNullValue : value));
