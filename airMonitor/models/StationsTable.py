@@ -100,11 +100,12 @@ class StationsTable:
                 data['name'] = station_name
         return values_dict
 
-    def load_data(self):
+    def load_data(self, date):
         stations_raw = [(x.get_station().id, x.get_station().name) for x in Station.all()]
         stations = {id_: {'name': self._REAL_STATION_NAMES[name]} if name in self._REAL_STATION_NAMES else name
                     for id_, name in stations_raw}
-        time_range = (datetime.datetime(2020, 3, 30, 1), datetime.datetime(2020, 3, 31, 0))  # test
+        print(date)
+        time_range = (date, date + datetime.timedelta(hours=self._HOUR_RANGE))  # test
         # time_range = (datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(hours=self._HOUR_RANGE))
         measured_values_raw = list(ObsNmsko1H.objects.filter(date__range=time_range).order_by('-date')
                                    .values_list('si', *self._POLLUTING_MATERIALS))

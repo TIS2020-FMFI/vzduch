@@ -34,7 +34,7 @@ class HomeView(View):
 
         data = Chart()
 
-        stations_table = StationsTable().load_data()
+        stations_table = StationsTable().load_data(date)
 
         stations = Station.all()
 
