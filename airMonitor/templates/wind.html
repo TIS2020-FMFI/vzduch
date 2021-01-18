@@ -8,7 +8,6 @@
     <div id="air-view">
         <div id="time-select-div">
             <select id="time-select">
-                <option>14.11.2020</option>
             </select>
             <select id="step-select">
                 <option value="1" selected="selected">1 hod</option>
@@ -20,10 +19,10 @@
         </div>
         <div id="air-container">
             <div class="air-picture">
-                <img id="gust" src="{% static 'air/GUST/CLSU_RAF_MOD_XFU_00.png' %}" alt="">
+                <img id="gust" src="" alt="">
             </div>
             <div class="air-picture">
-                <img id="veind" src="{% static 'air/VEIND/CLPVEIND_MOD_XFU_00.png' %}" alt="">
+                <img id="veind" src="" alt="">
             </div>
         </div>
         <div id="arrow-buttons">
@@ -46,10 +45,28 @@
     const wind_data = JSON.parse(document.getElementById('wind').textContent);
     const gust_img = document.getElementById('gust');
     const veind_img = document.getElementById('veind');
+    const time_select = document.getElementById('time-select');
+
+    window.addEventListener('load', (e) => {
+        console.log(wind_data);
+        for (let i = 0; i < wind_data['SELECT_DATES'].length; i++) {
+            let option = document.createElement("option");
+            option.text = wind_data['SELECT_DATES'][i];
+            option.value = wind_data['DIR_DATES'][i];
+            option.selected = true;
+            time_select.appendChild(option);
+        }
+
+        let time = document.getElementById('time-select').value;
+        gust_img.src = wind_data['PATH'] + '/' + time + '/GUST/' + wind_data['PICTURES'][time]['GUST'][index];
+        veind_img.src =  wind_data['PATH'] + '/' + time + '/VEIND/' + wind_data['PICTURES'][time]['VEIND'][index];
+
+    }, false);
     let step = 0;
 
     let index = 0;
     function clicked(type) {
+        let time = document.getElementById('time-select').value;
         step = parseInt(document.getElementById('step-select').value);
         switch (type) {
             case 'first' : index = 0; break;
@@ -58,8 +75,9 @@
             case 'last' : index = 78; break;
             default: break;
         }
-        gust_img.src = 'airMonitor/statics/air/GUST/' + wind_data['gust'][index];
-        veind_img.src = 'airMonitor/statics/air/VEIND/' + wind_data['veind'][index];
+
+        gust_img.src =  wind_data['PATH'] + '/' + time + '/GUST/' + wind_data['PICTURES'][time]['GUST'][index];
+        veind_img.src =  wind_data['PATH'] + '/' + time + '/VEIND/' + wind_data['PICTURES'][time]['VEIND'][index];
     }
 </script>
 {% endblock gust %}

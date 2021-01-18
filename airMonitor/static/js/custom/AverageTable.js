@@ -42,16 +42,16 @@ class AverageTable {
                 rows[1].children[i + 1].children[0].value = '';
             } else {
                 rows[0].children[i + 1].innerHTML =
-                    hourly_values[i] !== null ? hourly_values[i].toFixed(3) : '';
+                    hourly_values[i] !== null ? hourly_values[i].toFixed(1) : '';
                 rows[1].children[i + 1].innerHTML =
-                    average_values[i] !== null ? average_values[i].toFixed(3) : '';
+                    average_values[i] !== null ? average_values[i].toFixed(1) : '';
             }
         }
     }
 
     getTable() {
         let table = document.createElement('table');
-        table.style.width = '64%';
+        table.style.width = '1%';
         table.classList.add('table');
 
         let thead = document.createElement('thead');
