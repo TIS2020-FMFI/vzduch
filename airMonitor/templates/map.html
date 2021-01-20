@@ -1,0 +1,28 @@
+{% extends 'chart.html' %}
+{% load static %}
+{% block dateForm %}
+
+    <div class="form-inline">
+        <form action="" method="post" id="dateForm">
+            {% csrf_token %}
+            {% for field in dateForm %}
+                {{ field }}
+            {% endfor %}
+            <input type="submit" value="Submit" class="btn btn-pill-right btn-secondary"
+                   style="padding-bottom: 5px;padding-top: 5px;padding-right: 15px;font-size: 15px">
+        </form>
+    </div>
+
+{% endblock dateForm %}
+{% block map %}
+    <link rel="stylesheet" href="{% static 'js/leaflet/leaflet.css' %}"/>
+    <script src="{% static 'js/leaflet/leaflet.js' %}"></script>
+    <script src="{% static 'js/custom/Station.js' %}"></script>
+    <script src="{% static 'js/custom/MapWrapper.js' %}"></script>
+
+    <div id="map" style="height: 360px;width: 100%;"></div>
+    <script>
+        let mapWrapper = new MapWrapper(JSON.parse("{{ stations|escapejs }}"));
+        mapWrapper.drawAllStations();
+    </script>
+{% endblock map %}

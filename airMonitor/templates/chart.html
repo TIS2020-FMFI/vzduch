@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>PollutionMonitor</title>
+{% endblock title %}
+{% block chart %}
+    <div class="form">
+        <div class="form-inline" style="width: 100%;text-align: justify-all;">
+            <div class="form-group" style="margin-bottom: 0;">
+                <input type="radio" id="noLines" name="lines" value="noLines">
+                <label for="noLines">No Lines</label>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <input type="radio" id="withTension" name="lines" value="withTension">
+                <label for="withTension">Lines With Tension</label>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <input type="radio" id="withoutTension" name="lines" value="withoutTension" checked>
+                <label for="withoutTension">Lines Without Tension</label>
+            </div>
+        </div>
+        <div class="form-inline">
+            <div class="form-group" style="margin-bottom: 0;">
+                <label for="id_days">Days:</label>
+                <select name="days" id="id_days">
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label for="id_stations">Stations:</label>
+                <select name="stations" id="id_stations">
+                    {% for station in stations %}
+                        <option value={{ station.station.id }}>{{ station.station.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div style="width:100%;height:400px;">
+		<canvas id="canvas" aria-label="ZL_CHART" role="img"></canvas>
+	</div>
+  <script>
+    const chart = new ChartWrapper(JSON.parse("{{data|escapejs}}"));
+    </script>
+    <script src="{% static 'js/custom/listeners.js' %}"></script>
+{% endblock chart %}
