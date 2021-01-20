@@ -201,5 +201,4 @@ DATA_COLORS = {
     "grey": "rgb(201, 203, 207)"
 }
 
-GUST_PATH = BASE_DIR / 'airMonitor/static/air/GUST'
-VEIND_PATH = BASE_DIR / 'airMonitor/static/air/VEIND'
+AIR_PATH = BASE_DIR / 'airMonitor/static/air/GUST'

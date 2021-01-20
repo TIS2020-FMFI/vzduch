@@ -3,10 +3,13 @@ from .base import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'SRV-MONDO',
+        'USER': 'oko109',
+        'PASSWORD': '',
+        'HOST': 'srv-mondo.kol.shmu.sk',
+        'PORT': ''
     }
 }
 
 
-GUST_PATH = BASE_DIR / '/airMonitor/static/air/GUST'
-VEIND_PATH = BASE_DIR / '/airMonitor/static/air/VEIND'
+AIR_PATH = '/data/users/nwp122/ala2/png/sk10'
