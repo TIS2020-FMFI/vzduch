@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{% static 'css/modularAdmin/vendor.css' %}">
 
 </head>
-<body style="font-size: 1.35rem">
+<body style="font-size: 1rem">
 
     <div class="main-wrapper">
         <div class="app">
@@ -40,15 +40,16 @@
                                     {% block chart %}
                                     {% endblock chart %}
                                 </div>
+                                <div class="card-block">
+                                    {% block avgTable %}
+                                    {% endblock avgTable %}
+                                </div>
+
                             </div>
                             <div class="col-md-6">
                                 {% block stationsTable %}
                                 {% endblock stationsTable %}
                             </div>
-                        </div>
-                        <div class="card-block">
-                            {% block avgTable %}
-                            {% endblock avgTable %}
                         </div>
                     </div>
                 </article>
