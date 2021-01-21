@@ -39,7 +39,7 @@ def add_colors(stations, zl):
 def filter_list_stations(inp, station):
     result = []
     for r in inp:
-        if r.si == station:
+        if r.si.id == station:
             result.append(r)
     return result
 
