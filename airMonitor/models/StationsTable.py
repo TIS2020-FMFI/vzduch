@@ -1,7 +1,7 @@
 import json
 import datetime
 
-from airMonitor.models.SHMU import ObsNmsko1H
+# from airMonitor.models.SHMU import ObsNmsko1H
 from airMonitor.models.Station import Station
 
 
@@ -142,8 +142,10 @@ class StationsTable:
 
         # time_range = (datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(hours=self._HOUR_RANGE))
         time_range = (self.date, self.date + datetime.timedelta(hours=self._HOUR_RANGE)) # test
-        measured_values_raw = list(ObsNmsko1H.objects.filter(date__range=time_range).order_by('-date')
-                                   .values_list('si', *self._POLLUTING_MATERIALS))
+        measured_values_raw = []
+
+            # list(ObsNmsko1H.objects.filter(date__range=time_range).order_by('-date')
+            #                        .values_list('si', *self._POLLUTING_MATERIALS))
         return self._convert_raw_values_to_dict(measured_values_raw)
 
     def _join_stations_and_values(self, stations, values):
