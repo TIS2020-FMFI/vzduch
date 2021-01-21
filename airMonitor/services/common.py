@@ -15,6 +15,9 @@ def add_colors(stations, zl):
 
         for pollutant in settings.POLLUTANTS:
             for j in range(1, 5):
+                if pollutant not in max_pollutants:
+                    max_pollutants[pollutant] = 0
+                    break
                 if max_pollutants[pollutant] == -1:
                     max_pollutants[pollutant] = 0
                     break
