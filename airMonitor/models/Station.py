@@ -38,6 +38,9 @@ class Station:
             self.changes = data[15]
             self.ue = data[16]
 
+        def __str__(self):
+            return self.name
+
     def __init__(self, si, color_name=None, color_code=None, zl=None):
 
         self.station = si
