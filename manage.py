@@ -9,8 +9,6 @@ from airMonitor.services.tunnel import Tunnel
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'vzduch.settings.prod')
-
-    Tunnel.initialize("oko109", "VlfasTP96A")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -19,6 +17,8 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+    print("starting")
+    Tunnel.initialize("oko109", "VlfasTP96A")
     execute_from_command_line(sys.argv)
 
 
