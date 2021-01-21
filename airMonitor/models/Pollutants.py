@@ -11,8 +11,8 @@ class Pollutant:
         from_date = from_date.date()
         to_date = to_date.date()
         connection = Database.get_connection()
-        data = pd.read_sql_query(f"SELECT * FROM si.obs_nmsko_1h WHERE si.obs_nmsko_1h.date >= {from_date} and si.obs_nmsko_1h.date <= {to_date}" +
-                                 f" and si.obs_nmsko_1h.si_id in ({', '.join([str(x) for x  in stations_id])})", connection)
+        data = pd.read_sql_query(f"SELECT * FROM obs.obs_nmsko_1h WHERE obs.obs_nmsko_1h.date >= {from_date} and obs.obs_nmsko_1h.date <= {to_date}" +
+                                 f" and obs.obs_nmsko_1h.si_id in ({', '.join([str(x) for x  in stations_id])})", connection)
         for pollutant in data.itertuples():
             result.append(Pollutant(pollutant))
         return result
