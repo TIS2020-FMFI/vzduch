@@ -78,9 +78,9 @@ class HomeView(View):
             data.add_label(key)
 
         return render(request, "final.html", {
-            "data": json.dumps(data.dict()),
+            "data": json.dumps(data.dict()).replace("NaN", "null"),
             "stations": stations,
-            "pm_dataset": json.dumps(avg_table_data),
+            "pm_dataset": json.dumps(avg_table_data).replace("NaN", "null"),
             "stations_table": stations_table,
             "dateForm": date_form})
 
