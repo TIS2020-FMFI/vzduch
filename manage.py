@@ -10,7 +10,7 @@ def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'vzduch.settings.prod')
 
-    Tunnel.initialize("oko109", "ShmuHeslo1.")
+    Tunnel.initialize("oko109", "VlfasTP96A")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
