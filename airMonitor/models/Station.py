@@ -11,7 +11,7 @@ class Station:
     def all():
         result = dict()
         connection = Database.get_connection()
-        for station in pd.read_sql_query("SELECT * FROM si WHERE ci = 78", connection):
+        for station in pd.read_sql_query("SELECT * FROM si.si WHERE ci = 78", connection):
             print(station)
             #result.append(Station(station.name))
         return result

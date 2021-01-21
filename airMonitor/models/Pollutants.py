@@ -9,8 +9,8 @@ class Pollutant:
     def all(from_date, to_date, stations_id):
         result = dict()
         connection = Database.get_connection()
-        data = pd.read_sql_query(f"SELECT * FROM obs_nmsko_1h WHERE date >= {from_date} and date <= {to_date}" +
-                                           f" and si_id in ({', '.join(stations_id)})", connection)
+        data = pd.read_sql_query(f"SELECT * FROM si.obs_nmsko_1h WHERE si.obs_nmsko_1h.date >= {from_date} and si.obs_nmsko_1h.date <= {to_date}" +
+                                           f" and si.obs_nmsko_1h.si_id in ({', '.join(stations_id)})", connection)
         for pollutant in data:
             print(pollutant)
             # result.append(Station(station.name))
