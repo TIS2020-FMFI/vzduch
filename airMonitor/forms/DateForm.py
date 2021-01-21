@@ -1,9 +1,11 @@
 from django import forms
 from django.forms import Form
 
-from airMonitor.models.SHMU import ObsNmsko1H
+# from airMonitor.models.SHMU import ObsNmsko1H
 
-YEARS = set(x.year for x in ObsNmsko1H.objects.values_list('date', flat=True))
+# YEARS = set(x.year for x in ObsNmsko1H.objects.values_list('date', flat=True))
+
+YEARS = set(range(2018, 2050))
 
 
 class DateForm(Form):

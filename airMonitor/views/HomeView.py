@@ -12,7 +12,7 @@ from airMonitor.forms.DateForm import DateForm
 from airMonitor.models import Pollutants
 from airMonitor.models.Chart import Chart
 from airMonitor.models.Pollutants import Pollutant
-from airMonitor.models.SHMU import ObsNmsko1H
+# from airMonitor.models.SHMU import ObsNmsko1H
 from airMonitor.models.Station import Station
 from airMonitor.models.AvgTable import AvgTable
 from airMonitor.models.StationsTable import StationsTable
