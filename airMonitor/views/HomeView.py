@@ -39,15 +39,12 @@ class HomeView(View):
         stations_table = StationsTable().load_data(date)
 
         stations = Station.all()
-        stations_id = [x.get_station().id for x in stations]
 
         zl = Pollutant.all(from_date=date - datetime.timedelta(days=7), to_date=date + datetime.timedelta(days=1),
-                           stations_id=stations_id)
-            # ObsNmsko1H.objects.all().filter(date__range=[date - datetime.timedelta(days=7),
-            #                                               date + datetime.timedelta(days=1)]).order_by("date")
+                           stations=stations)
 
         stations = add_colors(stations, Pollutant.all(from_date=date, to_date=date + datetime.timedelta(days=1),
-                                                      stations_id=stations_id))
+                                                      stations=stations))
 
         for z in zl:
             key = f"{z.date.day}.{z.date.month}.\n{str(z.date.hour).zfill(2)}:{str(z.date.minute).zfill(2)}"
