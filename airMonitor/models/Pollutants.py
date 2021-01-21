@@ -6,23 +6,26 @@ from airMonitor.services.database import Database
 class Pollutant:
 
     @staticmethod
-    def all(from_date, to_date, stations_id):
+    def all(from_date, to_date, stations):
         result = list()
         try:
             from_date = from_date.date()
             to_date = to_date.date()
         except:
             pass
+
+        stations_id = ', '.join([str(x.get_station().id) for x in stations])
+        stations_dict = {x.get_station().id: x.get_station() for x in stations}
         connection = Database.get_connection()
-        data = pd.read_sql_query(f"SELECT * FROM obs.obs_nmsko_1h WHERE obs.obs_nmsko_1h.date >= {from_date} and obs.obs_nmsko_1h.date <= {to_date}" +
-                                 f" and obs.obs_nmsko_1h.si_id in ({', '.join([str(x) for x  in stations_id])})", connection)
+        data = pd.read_sql_query(f"SELECT * FROM obs.obs_nmsko_1h AS obs WHERE obs.date >= {from_date} and obs.date <= {to_date}" +
+                                 f" and obs.si_id in ({stations_id})", connection)
         for pollutant in data.itertuples():
-            result.append(Pollutant(pollutant))
+            result.append(Pollutant(pollutant, stations_dict[pollutant[2]]))
         return result
 
-    def __init__(self, data):
+    def __init__(self, data, station):
         self.obs_id = data[1]
-        self.si = data[2]
+        self.si = station
         self.date = data[3]
         self.ta_2m = data[4]
         self.pa_avg = data[5]
