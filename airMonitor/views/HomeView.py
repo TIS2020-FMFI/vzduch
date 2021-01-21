@@ -39,7 +39,7 @@ class HomeView(View):
         stations_table = StationsTable().load_data(date)
 
         stations = Station.all()
-        stations_id = [x.id for x in stations]
+        stations_id = [x.get_station().id for x in stations]
 
         zl = Pollutant.all(from_date=date - datetime.timedelta(days=7), to_date=date + datetime.timedelta(days=1),
                            stations_id=stations_id)

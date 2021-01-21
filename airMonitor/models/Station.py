@@ -6,38 +6,41 @@ from airMonitor.services.database import Database
 
 
 class Station:
-
+    stations = []
     @staticmethod
     def all():
-        result = dict()
+        if len(Station.stations) != 0:
+            return Station.stations
+        result = list()
         connection = Database.get_connection()
-        for station in pd.read_sql_query("SELECT * FROM si.si WHERE ci = 78", connection):
-            print(station)
-            #result.append(Station(station.name))
+        data = pd.read_sql_query("SELECT * FROM si.si WHERE ci = 78", connection)
+        for station in data.itertuples():
+            result.append(Station(Station.Si(station)))
+        Station.stations = result
         return result
 
     class Si:
         def __init__(self, data):
-            self.id = None
-            self.ci = None
-            self.ii = None
-            self.name = None
-            self.cccc = None
-            self.cc = None
-            self.iso_cc = None
-            self.lat = None
-            self.lon = None
-            self.elev = None
-            self.info = None
-            self.vtime = None
-            self.mtime = None
-            self.changed_id = None
-            self.changes = None
-            self.ue = None
+            self.id = data[1]
+            self.ci = data[2]
+            self.ii = data[3]
+            self.name = data[4]
+            self.cccc = data[5]
+            self.cc = data[6]
+            self.iso_cc = data[7]
+            self.lat = data[8]
+            self.lon = data[9]
+            self.elev = data[10]
+            self.info = data[11]
+            self.vtime = data[12]
+            self.mtime = data[13]
+            self.changed_id = data[14]
+            self.changes = data[15]
+            self.ue = data[16]
 
-    def __init__(self, data, color_name=None, color_code=None, zl=None):
+    def __init__(self, si, color_name=None, color_code=None, zl=None):
 
-        self.station = self.Si(data)
+        self.station = si
         self.color_name = color_name
         self.color_code = color_code
         self.zl = zl
