@@ -9,7 +9,9 @@ from django.views import View
 
 
 from airMonitor.forms.DateForm import DateForm
+from airMonitor.models import Pollutants
 from airMonitor.models.Chart import Chart
+from airMonitor.models.Pollutants import Pollutant
 from airMonitor.models.SHMU import ObsNmsko1H
 from airMonitor.models.Station import Station
 from airMonitor.models.AvgTable import AvgTable
@@ -37,9 +39,12 @@ class HomeView(View):
         stations_table = StationsTable().load_data(date)
 
         stations = Station.all()
+        stations_id = [x.id for x in stations]
 
-        zl = ObsNmsko1H.objects.all().filter(date__range=[date - datetime.timedelta(days=7),
-                                                          date + datetime.timedelta(days=1)]).order_by("date")
+        zl = Pollutant.all(from_date=date - datetime.timedelta(days=7), to_date=date + datetime.timedelta(days=1),
+                           stations_id=stations_id)
+            # ObsNmsko1H.objects.all().filter(date__range=[date - datetime.timedelta(days=7),
+            #                                               date + datetime.timedelta(days=1)]).order_by("date")
 
         stations = add_colors(stations, zl.filter(date__range=[date, date + datetime.timedelta(days=1)]))
 
