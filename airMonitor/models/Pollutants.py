@@ -13,31 +13,30 @@ class Pollutant:
         connection = Database.get_connection()
         data = pd.read_sql_query(f"SELECT * FROM si.obs_nmsko_1h WHERE si.obs_nmsko_1h.date >= {from_date} and si.obs_nmsko_1h.date <= {to_date}" +
                                  f" and si.obs_nmsko_1h.si_id in ({', '.join([str(x) for x  in stations_id])})", connection)
-        for pollutant in data:
-            print(pollutant)
-            # result.append(Station(station.name))
+        for pollutant in data.itertuples():
+            result.append(Pollutant(pollutant))
         return result
 
     def __init__(self, data):
-        self.obs_id = None
-        self.si = None
-        self.date = None
-        self.ta_2m = None
-        self.pa_avg = None
-        self.rh_avg = None
-        self.ws_avg = None
-        self.wd_avg = None
-        self.ws_max = None
-        self.wd_ws_max = None
-        self.pr_sum = None
-        self.hg = None
-        self.pm10 = None
-        self.pm2_5 = None
-        self.so2 = None
-        self.no = None
-        self.no2 = None
-        self.nox = None
-        self.co = None
-        self.ben = None
-        self.h2s = None
-        self.o3 = None
+        self.obs_id = data[1]
+        self.si = data[2]
+        self.date = data[3]
+        self.ta_2m = data[4]
+        self.pa_avg = data[5]
+        self.rh_avg = data[6]
+        self.ws_avg = data[7]
+        self.wd_avg = data[8]
+        self.ws_max = data[9]
+        self.wd_ws_max = data[10]
+        self.pr_sum = data[11]
+        self.hg = data[12]
+        self.pm10 = data[13]
+        self.pm2_5 = data[14]
+        self.so2 = data[15]
+        self.no = data[16]
+        self.no2 = data[17]
+        self.nox = data[18]
+        self.co = data[19]
+        self.ben = data[20]
+        self.h2s = data[21]
+        self.o3 = data[22]
