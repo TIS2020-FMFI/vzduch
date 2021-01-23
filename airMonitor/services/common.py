@@ -4,25 +4,43 @@ from django.conf import settings
 def add_colors(stations, zl):
     for i in range(len(stations)):
         mx = 0
-        z = zl.filter(si=stations[i].get_station()).first()
-        if z is not None:
-            pom = [[x, z.__dict__[x]] for x in settings.POLLUTANTS_LIMIT]
-            for k in range(len(pom)):
-                for j in range(1, 5):
-                    if pom[k][1] is None:
-                        pom[k][1] = 0
-                        break
-                    if pom[k][1] < settings.POLLUTANTS_LIMIT[pom[k][0]][j]:
-                        pom[k][1] = j
-                        break
-                    if j == 4:
-                        pom[k][1] = 5
-            mx = pom[0]
-            for k in pom:
-                if k[1] > mx[1]:
-                    mx = k
-            stations[i].set_zl(mx[0])
-            mx = mx[1]
+        rows = filter_list_stations(zl, stations[i].get_station().id)
+        max_pollutants = dict()
+        for row in rows:
+            for pollutant in settings.POLLUTANTS:
+                if pollutant not in max_pollutants:
+                    max_pollutants[pollutant] = -1
+                value = max_pollutants[pollutant]
+                max_pollutants[pollutant] = max(value, row.__dict__[pollutant])
 
+        for pollutant in settings.POLLUTANTS:
+            for j in range(1, 5):
+                if pollutant not in max_pollutants:
+                    max_pollutants[pollutant] = 0
+                    break
+                if max_pollutants[pollutant] == -1:
+                    max_pollutants[pollutant] = 0
+                    break
+                if max_pollutants[pollutant] < settings.POLLUTANTS_LIMIT[pollutant][j]:
+                    max_pollutants[pollutant] = j
+                    break
+                if j == 4:
+                    max_pollutants[pollutant] = 5
+        mx = settings.POLLUTANTS[0]
+        for pollutant in settings.POLLUTANTS:
+            if max_pollutants[pollutant] > max_pollutants[mx]:
+                mx = pollutant
+        stations[i].set_zl(mx)
+        mx = max_pollutants[mx]
         stations[i].set_color(settings.COLORS[mx][0], settings.COLORS[mx][1])
     return stations
+
+
+def filter_list_stations(inp, station):
+    result = []
+    for r in inp:
+        if r.si.id == station:
+            result.append(r)
+    return result
+
+

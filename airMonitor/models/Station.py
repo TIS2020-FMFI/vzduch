@@ -1,21 +1,49 @@
 import json
 
-from airMonitor.models.SHMU import Si
+import pandas as pd
 
-from django.db.models import Q
+from airMonitor.services.database import Database
 
 
 class Station:
-
+    stations = []
     @staticmethod
     def all():
-        result = []
-        for station in Si.objects.filter(ci=78).filter(~Q(lat=0.0)):
-            result.append(Station(station.name))
+        if len(Station.stations) != 0:
+            return Station.stations
+        result = list()
+        connection = Database.get_connection()
+        data = pd.read_sql_query("SELECT * FROM si.si WHERE ci = 78", connection)
+        for station in data.itertuples():
+            result.append(Station(Station.Si(station)))
+        Station.stations = result
         return result
 
-    def __init__(self, name, color_name=None, color_code=None, zl=None):
-        self.station = Si.objects.all().filter(name=name).first()
+    class Si:
+        def __init__(self, data):
+            self.id = data[1]
+            self.ci = data[2]
+            self.ii = data[3]
+            self.name = data[4]
+            self.cccc = data[5]
+            self.cc = data[6]
+            self.iso_cc = data[7]
+            self.lat = data[8]
+            self.lon = data[9]
+            self.elev = data[10]
+            self.info = data[11]
+            self.vtime = data[12]
+            self.mtime = data[13]
+            self.changed_id = data[14]
+            self.changes = data[15]
+            self.ue = data[16]
+
+        def __str__(self):
+            return self.name
+
+    def __init__(self, si, color_name=None, color_code=None, zl=None):
+
+        self.station = si
         self.color_name = color_name
         self.color_code = color_code
         self.zl = zl
