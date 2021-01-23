@@ -29,8 +29,9 @@ class StationsTable:
     def __init__(self):
         # order of polluting materials influences their order in table on page
         self._POLLUTING_MATERIALS = ('pm10', 'so2', 'o3', 'no2', 'pm2_5')
-        self._HOUR_RANGE = 24
+        self._HOUR_RANGE = 25
         self._PARAMETER_OPTIONS = ('hour', 'max', 'nulls')
+        self.date = None
         self._REAL_STATION_NAMES = {
             'BRATISLAVA,JESENIOVA': 'Bratislava, Jeséniova',
             'CHOPOK,EMEP': 'Chopok, EMEP',
@@ -140,7 +141,7 @@ class StationsTable:
         """
 
         # time_range = (datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(hours=self._HOUR_RANGE))
-        time_range = (datetime.datetime(2020, 3, 30, 1), datetime.datetime(2020, 3, 31, 0))  # test
+        time_range = (self.date, self.date + datetime.timedelta(hours=self._HOUR_RANGE)) # test
         measured_values_raw = list(ObsNmsko1H.objects.filter(date__range=time_range).order_by('-date')
                                    .values_list('si', *self._POLLUTING_MATERIALS))
         return self._convert_raw_values_to_dict(measured_values_raw)
@@ -208,15 +209,16 @@ class StationsTable:
                 data['name'] = station_name
         return values_dict
 
-    def load_data(self):
+    def load_data(self, date):
         """Loads data from database from given period of time
 
-        Returns
-        -------
-        dict[str, Any]
-            Table data and table headers for stations table
-        """
+                Returns
+                -------
+                dict[str, Any]
+                    Table data and table headers for stations table
+                """
 
+        self.date = date
         table_data = self._create_table_data(self._get_stations_with_values())
         table_header = ['name'] + list(self._POLLUTING_MATERIALS)
         return {'thead': json.dumps(table_header), 'tbody': json.dumps(table_data)}

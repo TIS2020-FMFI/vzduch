@@ -2,4 +2,3 @@ venv/*
 .idea/
 __pycache__/
 vzduch/__pycache__/*
-airMonitor/logs/*
