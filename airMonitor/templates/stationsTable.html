@@ -13,7 +13,7 @@
            oninput="onMoveSlider()" onchange="onMoveSlider()"
            onmouseup="onSelectHour()" ontouchend="onSelectHour()" onkeyup="onSelectHour()"/>
 
-    <table id="stationsTable" style="width:100%">
+    <table id="stationsTable" style="width:100%;">
     </table>
 
     <script>
@@ -168,5 +168,9 @@
 
         document.getElementById("stTableSliderLabel").style.color = "Gray";
         loadStationsTableContent();
+
+        window.addEventListener('load', (e) => {
+            document.getElementById("stationsTableParams").options[0].selected = true;
+        }, false);
     </script>
 {% endblock stationsTable %}

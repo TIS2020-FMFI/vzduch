@@ -141,5 +141,3 @@ class Chart:
             if date is None:
                 continue
             self._labels.append(date)
-
-
