@@ -2602,7 +2602,7 @@ span a {
     vertical-align: initial; }
 
 .header .header-block-nav {
-  margin-left: auto;
+  margin: auto;
   white-space: nowrap;
   padding-right: 15px; }
   @media (max-width: 767.98px) {
@@ -2613,7 +2613,10 @@ span a {
     clear: both;
     content: ""; }
   .header .header-block-nav a {
-    text-decoration: none; }
+    text-decoration: none;
+    padding: 6px 20px;
+    border: 1px solid #969696;
+    border-radius: 5px; }
   .header .header-block-nav ul {
     margin: 0;
     padding: 0;

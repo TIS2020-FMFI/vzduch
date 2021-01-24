@@ -61,11 +61,11 @@ class Chart:
             self._data[date][pollutant] = dict()
         self._data[date][pollutant][station] = data
 
-    def get_values(self, zl):
+    def get_values(self, pollutant):
         if len(self._datasets) == 0:
             self._generate_datasets()
         for data in self._datasets:
-            if data["label"] == zl:
+            if data["label"] == pollutant:
                 return data
 
     def get_outages(self, day):
@@ -141,5 +141,3 @@ class Chart:
             if date is None:
                 continue
             self._labels.append(date)
-
-
