@@ -7,7 +7,7 @@
 <div id="container">
     <div id="air-view">
         <div id="time-select-div">
-            <select id="time-select">
+            <select id="time-select" onchange="timeChange()">
             </select>
             <select id="step-select">
                 <option value="1" selected="selected">1 hod</option>
@@ -46,9 +46,13 @@
     const gust_img = document.getElementById('gust');
     const veind_img = document.getElementById('veind');
     const time_select = document.getElementById('time-select');
-
+    let time = time_select.value;
+    let step = 0;
+    let index = 0;
     window.addEventListener('load', (e) => {
-        console.log(wind_data);
+        index = wind_data['INDEX'];
+        if (index < 0) index = 0;
+
         for (let i = 0; i < wind_data['SELECT_DATES'].length; i++) {
             let option = document.createElement("option");
             option.text = wind_data['SELECT_DATES'][i];
@@ -57,16 +61,12 @@
             time_select.appendChild(option);
         }
 
-        let time = document.getElementById('time-select').value;
-        gust_img.src = wind_data['PATH'] + '/' + time + '/GUST/' + wind_data['PICTURES'][time]['GUST'][index];
-        veind_img.src =  wind_data['PATH'] + '/' + time + '/VEIND/' + wind_data['PICTURES'][time]['VEIND'][index];
-
+        time = time_select.value;
+        changePictures(time, index);
     }, false);
-    let step = 0;
 
-    let index = 0;
     function clicked(type) {
-        let time = document.getElementById('time-select').value;
+        time = time_select.value;
         step = parseInt(document.getElementById('step-select').value);
         switch (type) {
             case 'first' : index = 0; break;
@@ -75,9 +75,19 @@
             case 'last' : index = 78; break;
             default: break;
         }
-
-        gust_img.src =  wind_data['PATH'] + '/' + time + '/GUST/' + wind_data['PICTURES'][time]['GUST'][index];
-        veind_img.src =  wind_data['PATH'] + '/' + time + '/VEIND/' + wind_data['PICTURES'][time]['VEIND'][index];
+        changePictures(time, index);
     }
+
+    function timeChange() {
+        time = time_select.value;
+        index = 0;
+        changePictures(time, index);
+    }
+
+    function changePictures(time, index) {
+        gust_img.src = "{% static 'air/' %}" + time + '/GUST/' + wind_data['PICTURES'][time]['GUST'][index];
+        veind_img.src =  "{% static 'air/' %}" + time + '/VEIND/' + wind_data['PICTURES'][time]['VEIND'][index];
+    }
+
 </script>
 {% endblock gust %}

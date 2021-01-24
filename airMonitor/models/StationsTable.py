@@ -1,19 +1,6 @@
 import json
 import datetime
-
-# from airMonitor.models.SHMU import ObsNmsko1H
-from airMonitor.models.Station import Station
-
-
-def _get_column(column, list_of_tuples):
-    """Internal function for getting column from 2D array"""
-    return list(map(lambda x: x[column], list_of_tuples))
-
-
-def _max_with_nulls(list_):
-    """Internal function for finding max value in list, which can contain None values"""
-    list_ = [val for val in list_ if val is not None]
-    return max(list_) if len(list_) > 0 else None
+import math
 
 
 class StationsTable:
@@ -30,8 +17,6 @@ class StationsTable:
         # order of polluting materials influences their order in table on page
         self._POLLUTING_MATERIALS = ('pm10', 'so2', 'o3', 'no2', 'pm2_5')
         self._HOUR_RANGE = 25
-        self._PARAMETER_OPTIONS = ('hour', 'max', 'nulls')
-        self.date = None
         self._REAL_STATION_NAMES = {
             'BRATISLAVA,JESENIOVA': 'Bratislava, Jeséniova',
             'CHOPOK,EMEP': 'Chopok, EMEP',
@@ -89,110 +74,118 @@ class StationsTable:
 
         return self._REAL_STATION_NAMES[name] if name in self._REAL_STATION_NAMES else name
 
-    def _get_stations(self):
-        """Internal function, gets station ids with responsive names from database
-
-        Returns
-        -------
-        dict[int, dict[str, str]]
-            Station ids with names
-        """
-
-        stations_raw = [(s.get_station().id, s.get_station().name) for s in Station.all()]
-        return {id_: {'name': self._get_station_name(name)} for id_, name in stations_raw}
-
-    def _convert_raw_values_to_dict(self, values):  # values = [(id, *polluting_materials)]
-        """Internal function, converts values from database to dictionary
+    def _get_stations(self, data):
+        """Internal function, gets all stations from data
 
         Parameters
         ----------
-        values : list[(int, ...)]
-            Measured values from database
-
-        Returns
-        -------
-        dict
-            Measured values as dictionary
-        """
-
-        ids = set(map(lambda x: x[0], values))
-        values_dict = {id_: [] for id_ in ids}
-        for val in values:
-            values_dict[val[0]].append(val[1:])
-        n = len(self._POLLUTING_MATERIALS)
-        for id_ in values_dict.keys():
-            values_dict[id_] = {self._POLLUTING_MATERIALS[i]: _get_column(i, values_dict[id_]) for i in range(n)}
-            for material in values_dict[id_].keys():
-                measured_values = [None if x is None else round(x, 1) for x in values_dict[id_][material]]
-                values_dict[id_][material] = [
-                    measured_values[:] + [None] * (self._HOUR_RANGE - len(measured_values)),
-                    _max_with_nulls(measured_values),
-                    self._HOUR_RANGE - len(measured_values) + measured_values.count(None)
-                ]
-        return values_dict  # {id: {material: [[hour], max, nulls]}}
-
-    def _get_measured_values(self):
-        """Internal function, gets station id with responsive measured values from given period of time
-
-        Returns
-        -------
-        dict
+        data : Chart
             Measured values
-        """
-
-        # time_range = (datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(hours=self._HOUR_RANGE))
-        time_range = (self.date, self.date + datetime.timedelta(hours=self._HOUR_RANGE)) # test
-        measured_values_raw = []
-
-            # list(ObsNmsko1H.objects.filter(date__range=time_range).order_by('-date')
-            #                        .values_list('si', *self._POLLUTING_MATERIALS))
-        return self._convert_raw_values_to_dict(measured_values_raw)
-
-    def _join_stations_and_values(self, stations, values):
-        """Internal function, joins stations and measured values from database based on station id
-
-        Parameters
-        ----------
-        stations : dict[int, dict[str, str]]
-            Station names with ids
-        values : dict
-            Measured values with station ids
 
         Returns
         -------
-        list[dict]
-            List of station names with measured values
+        dict[str, dict]
+            Dictionary with structure - station: empty dictionary
         """
 
-        stations_with_values = stations
-        for id_ in stations.keys():
-            for material in self._POLLUTING_MATERIALS:
-                if id_ in values:
-                    stations_with_values[id_][material] = values[id_][material]  # reference to mutable!!!
-                else:
-                    stations_with_values[id_][material] = [None, None, self._HOUR_RANGE]
-        return list(stations_with_values.values())
+        stations = list(data.get_values('pm10')['data'].keys())
+        return {station: {} for station in stations}
 
-    def _get_stations_with_values(self):
-        """Internal function, gets station names with responsive measured values
-
-        Returns
-        -------
-        list[dict]
-            List of station names with measured values
-        """
-
-        stations = self._get_stations()
-        measured_values = self._get_measured_values()
-        return self._join_stations_and_values(stations, measured_values)
-
-    def _create_table_data(self, stations_values):
-        """Internal function, creates data for stations table
+    def _get_hour_values(self, data):
+        """Internal function, gets hour values from data for stations table
 
         Parameters
         ----------
-        stations_values : list[dict]
-            List of station names with measured values
+        data : Chart
+            Measured values
+
+        Returns
+        -------
+        list[dict[str, Any]]
+            Hour values for stations table
+        """
+
+        hour_values = self._get_stations(data)
+        for material in self._POLLUTING_MATERIALS:
+            values = data.get_values(material)['data']
+            for station in hour_values.keys():
+                hour_values[station][material] = list(reversed(values[station][-self._HOUR_RANGE:]))
+        return hour_values
+
+    def _get_outages(self, values):
+        """Internal function, gets outages for stations table
+
+        Parameters
+        ----------
+        values : dict[str, dict[str, Any]]
+            Measured values
+
+        Returns
+        -------
+        list[dict[str, Any]]
+            Outages
+        """
+
+        outages = []
+        for value_dict in values:
+            station = value_dict.pop('name')
+            outages.append({k: list(map(lambda x: None if math.isnan(x) else x, v)).count(None) for k, v in value_dict.items()})
+            outages[-1]['name'] = station
+            value_dict['name'] = station
+
+        return outages
+
+    def _adjust_values(self, values):
+        """Internal function, adjusts values to required form for stations table
+
+        Parameters
+        ----------
+        values : dict[str, dict[str, Any]]
+            Values of which form need to be changed
+
+        Returns
+        -------
+        list[dict[str, Any]]
+            Adjusted values
+        """
+
+        adjusted_values = []
+        for station in values.keys():
+            adjusted_values.append(values[station])  # mutable!
+            adjusted_values[-1]['name'] = self._get_station_name(station)
+        return sorted(adjusted_values, key=lambda x: x['name'])
+
+    def _process_data(self, data, date):
+        """Internal function, processes data for stations table
+
+        Parameters
+        ----------
+        data : Chart
+            Measured values
+        date : datetime
+            Date from which data are taken
+
+        Returns
+        -------
+        dict[str, Any]
+            Processed data
+        """
+
+        values_dict = {}
+        values_dict['hour'] = self._adjust_values(self._get_hour_values(data))
+        values_dict['max'] = self._adjust_values(data.get_maximal_values(str(date.day)))
+        values_dict['nulls'] = self._get_outages(values_dict['hour'])
+        return values_dict
+
+    def prepare_data(self, data, date):
+        """Adjusts data to their required form for stations table
+
+        Parameters
+        ----------
+        data : Chart
+            Measured values
+        date : datetime
+            Date from which data are taken
 
         Returns
         -------
@@ -200,27 +193,6 @@ class StationsTable:
             Data for stations table
         """
 
-        values_dict = {}
-        for i in range(len(self._PARAMETER_OPTIONS)):
-            option = self._PARAMETER_OPTIONS[i]
-            values_dict[option] = []
-            for data in stations_values:
-                station_name = data.pop('name')
-                values_dict[option].append({material: value[i] for material, value in data.items()})
-                values_dict[option][-1]['name'] = station_name
-                data['name'] = station_name
-        return values_dict
-
-    def load_data(self, date):
-        """Loads data from database from given period of time
-
-                Returns
-                -------
-                dict[str, Any]
-                    Table data and table headers for stations table
-                """
-
-        self.date = date
-        table_data = self._create_table_data(self._get_stations_with_values())
+        table_data = self._process_data(data, date)
         table_header = ['name'] + list(self._POLLUTING_MATERIALS)
-        return {'thead': json.dumps(table_header), 'tbody': json.dumps(table_data)}
+        return {'thead': json.dumps(table_header), 'tbody': json.dumps(table_data).replace("NaN", "null")}

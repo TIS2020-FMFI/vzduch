@@ -36,8 +36,6 @@ class HomeView(View):
 
         data = Chart()
 
-        stations_table = StationsTable().load_data(date)
-
         stations = Station.all()
 
         zl = Pollutant.all(from_date=date - datetime.timedelta(days=7), to_date=date + datetime.timedelta(days=1),
@@ -50,6 +48,7 @@ class HomeView(View):
             key = f"{z.date.day}.{z.date.month}.\n{str(z.date.hour).zfill(2)}:{str(z.date.minute).zfill(2)}"
             for i in settings.POLLUTANTS:
                 data.add_data(station=z.si.name, pollutant=i, data=z.__dict__[i], date=key)
+
 
         avg_table_data = dict()
         try:
@@ -76,6 +75,8 @@ class HomeView(View):
             d = d + datetime.timedelta(hours=1)
             key = f"{d.day}.{d.month}.\n{str(d.hour).zfill(2)}:{str(d.minute).zfill(2)}"
             data.add_label(key)
+
+        stations_table = StationsTable().prepare_data(data, date)
 
         return render(request, "final.html", {
             "data": json.dumps(data.dict()).replace("NaN", "null"),

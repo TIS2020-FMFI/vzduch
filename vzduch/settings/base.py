@@ -201,4 +201,4 @@ DATA_COLORS = {
     "grey": "rgb(201, 203, 207)"
 }
 
-AIR_PATH = BASE_DIR / 'airMonitor/static/air/GUST'
+

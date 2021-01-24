@@ -11,8 +11,6 @@ class AvgTable:
             self._avg_vals[key] = []
             k = 0
             for i in range(12, arr_len+1):
-                if key == 'BRATISLAVA,JESENIOVA':
-                    print(data[key][k:i])
                 self._avg_vals[key].append(self.average(data[key][k:i]))
                 k += 1
 
