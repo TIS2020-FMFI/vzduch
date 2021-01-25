@@ -129,7 +129,7 @@ class StationsTable:
         outages = []
         for value_dict in values:
             station = value_dict.pop('name')
-            outages.append({k: list(map(lambda x: None if math.isnan(x) else x, v)).count(None) for k, v in value_dict.items()})
+            outages.append({k: list(map(lambda x: None if x is None or math.isnan(x) else x, v)).count(None) for k, v in value_dict.items()})
             outages[-1]['name'] = station
             value_dict['name'] = station
 
