@@ -66,7 +66,7 @@ class HomeView(View):
         data.add_colors()
 
         for i in range(5):
-            key = f"+{i}"
+            key = f"+{i + 1}"
             data.add_label(key)
 
         stations_table = StationsTable().prepare_data(data, date)
