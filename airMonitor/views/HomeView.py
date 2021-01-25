@@ -49,7 +49,6 @@ class HomeView(View):
             for i in settings.POLLUTANTS:
                 data.add_data(station=z.si.name, pollutant=i, data=z.__dict__[i], date=key)
 
-
         avg_table_data = dict()
         try:
             avg_table = AvgTable()
@@ -66,14 +65,8 @@ class HomeView(View):
             logger.error("No pollutant named " + ex.args[0])
         data.add_colors()
 
-        data.get_maximal_values("2")
-
-        d = date + datetime.timedelta(days=1)
-        d = datetime.datetime(d.year, d.month, d.day)
-
         for i in range(5):
-            d = d + datetime.timedelta(hours=1)
-            key = f"{d.day}.{d.month}.\n{str(d.hour).zfill(2)}:{str(d.minute).zfill(2)}"
+            key = f"+{i}"
             data.add_label(key)
 
         stations_table = StationsTable().prepare_data(data, date)
