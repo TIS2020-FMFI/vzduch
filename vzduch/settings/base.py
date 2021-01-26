@@ -201,4 +201,4 @@ DATA_COLORS = {
     "grey": "rgb(201, 203, 207)"
 }
 
-
+RETRY_NUMBER = 4
