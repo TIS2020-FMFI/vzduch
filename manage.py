@@ -3,8 +3,6 @@
 import os
 import sys
 
-from airMonitor.services.tunnel import Tunnel
-
 
 def main():
     """Run administrative tasks."""
