@@ -1,10 +1,12 @@
+import logging
+
 import pymysql
 import pandas as pd
 from django.conf import settings
-from pymysql import DatabaseError
 
 from airMonitor.services.tunnel import Tunnel
 
+logger = logging.getLogger("django")
 
 class Database:
     _connection = pymysql.connect(host='srv-mondo', user='oko', passwd='', port=3306)
@@ -20,5 +22,7 @@ class Database:
         for i in range(settings.RETRY_NUMBER):
             try:
                 return pd.read_sql_query(command, Database._connection)
-            except DatabaseError:
+            except Exception as ex:
+                logger.error(f"Failed to connect to database with following exception: {ex}")
                 Tunnel.initialize(username, password)
+                logger.info("Retrying after tunnel re-initialization")
