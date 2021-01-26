@@ -32,6 +32,21 @@ class Station{
         this.circle.on('mouseout', function (e){
             this.closePopup();
         });
+        this.circle.on('click', function (e){
+            let findName = this.getPopup().getContent().split(":");
+            let stationName = findName[0];
+            chart.setStation(stationName);
+            chart.drawChart();
+            avgTable.updateTable(stationName);
+            let sel = document.getElementById('id_stations');
+            for(let i = 0; i < sel.options.length;i++){
+                if(sel.options[i].text === stationName){
+                    sel.options[i].selected = true;
+                }
+            }
+
+        });
+
         return this.circle;
     }
     addTo(map){
