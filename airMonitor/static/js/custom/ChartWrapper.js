@@ -11,8 +11,13 @@ class ChartWrapper {
         this.pollutants = [];
         for (let k in data["data"]["datasets"]) {
             let d = data["data"]["datasets"][k];
-            this.pollutants.push(new Pollutants(d["label"], d["data"], d["fill"], d["backgroundColor"]))
-            this.metas.push(false);
+            this.pollutants.push(new Pollutants(d["label"], d["data"], d["fill"], d["backgroundColor"]));
+            if(d["label"] === "pm10" || d["label"] === "pm2_5" || d["label"] === "avg"){
+                this.metas.push(null);
+            }
+            else {
+                 this.metas.push(true);
+             }
         }
 
         // All labels
@@ -171,7 +176,7 @@ class ChartWrapper {
         chart.metas[index] = meta.hidden;
 
         if (this.chart.getVisibleDatasetCount() <= 3) {
-            chart.processLabels()
+            chart.processLabels();
         }
         else{
             chart.data.options.horizontalLine = null;
