@@ -8,6 +8,7 @@ from airMonitor.services.tunnel import Tunnel
 
 logger = logging.getLogger("django")
 
+
 class Database:
     _connection = pymysql.connect(host='srv-mondo', user='oko', passwd='', port=3306)
 
@@ -25,4 +26,5 @@ class Database:
             except Exception as ex:
                 logger.error(f"Failed to connect to database with following exception: {ex}")
                 Tunnel.initialize(username, password)
-                logger.info("Retrying after tunnel re-initialization")
+                Database._connection = pymysql.connect(host='srv-mondo', user='oko', passwd='', port=3306)
+                logger.info("Retrying after tunnel and database connection re-initialization")
