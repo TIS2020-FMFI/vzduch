@@ -1,6 +1,7 @@
 class AvgTable:
     def __init__(self):
         self._moving_average = {'12h': dict(), '24h': dict()}
+        self._HOURS_IN_WEEK = 168
 
     def prepare_data(self, data):
         """ counts moving average from hour values of PM_10
@@ -17,8 +18,9 @@ class AvgTable:
                     self._moving_average['24h'][key].append(self.average(data[key][k:i+12], 24))
                 k += 1
 
-            if len(self._moving_average['12h'][key]) < 168:
+            if len(self._moving_average['12h'][key]) < self._HOURS_IN_WEEK:
                 self._moving_average['12h'][key] = [None] * 12 + self._moving_average['12h'][key]
+            if len(self._moving_average['24h'][key]) < self._HOURS_IN_WEEK:
                 self._moving_average['24h'][key] = [None] * 12 + self._moving_average['24h'][key]
 
         return {'hours': data, 'moving_average': self._moving_average}
