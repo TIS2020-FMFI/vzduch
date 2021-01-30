@@ -61,7 +61,7 @@ class AverageTable {
         headerCell.style.textAlign = 'center';
         headerCell.style.fontSize = '25px';
         headerCell.colSpan = "19";
-        headerCell.appendChild(document.createTextNode('12-h Moving average PM10'.sub('10')));
+        headerCell.appendChild(document.createTextNode('12-h Moving average PM' + '10'.sub()));
 
         headerRow.appendChild(headerCell);
         header.appendChild(headerRow);
