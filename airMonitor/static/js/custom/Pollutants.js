@@ -47,7 +47,7 @@ class Pollutants{
         if(d === null || d === undefined){
             return null;
         }
-        return parseFloat(d[d.length - 1 - hour]).toFixed(1);
+        return d[d.length - 1 - hour];
     }
 
     addValue(stationName, hour, value){
