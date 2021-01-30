@@ -35,6 +35,9 @@ class Pollutants{
 
     getValue(station, hour){
         let d = this.data[station];
+        if(d === null){
+            return null;
+        }
         return d[d.length - 1 - hour];
     }
 
