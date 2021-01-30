@@ -13,8 +13,8 @@ class AvgTable:
             k = 0
             for i in range(12, arr_len+1):
                 self._moving_average['12h'][key].append(self.average(data[key][k:i], 12))
-            for i in range(24, arr_len + 1):
-                self._moving_average['24h'][key].append(self.average(data[key][k:i], 24))
+                if i+12 <= arr_len:
+                    self._moving_average['24h'][key].append(self.average(data[key][k:i+12], 24))
                 k += 1
 
             if len(self._moving_average['12h'][key]) < 168:
