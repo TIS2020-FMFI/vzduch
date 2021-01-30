@@ -107,7 +107,13 @@
                     if (parameter === "nulls" && value === nullsMax) {
                         td.appendChild(document.createTextNode("-"));
                     } else {
-                        td.appendChild(document.createTextNode((value == null) ? stringForNullValue : parseFloat(value).toFixed(1)));
+                        let parsed_value = parseFloat(value)
+                        if(isNaN(parsed_value)){
+                            td.appendChild(document.createTextNode((value == null) ? stringForNullValue : value));
+                        }
+                        else {
+                            td.appendChild(document.createTextNode((value == null) ? stringForNullValue : parsed_value.toFixed(1)));
+                        }
                     }
                     td.style.border = '1px solid black';
                     td.style.padding = '2px';
