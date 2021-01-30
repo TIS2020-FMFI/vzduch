@@ -71,7 +71,7 @@ class ChartWrapper {
 
                     ctx.lineWidth = 3;
                     ctx.beginPath();
-                    for(let i = 50; i <= canvas.width; i += 10){
+                    for(let i = 100; i <= canvas.width; i += 10){
                         if((i / 10) % 2  === 1){
                             ctx.moveTo(i, yValue);
                         }
