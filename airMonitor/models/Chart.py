@@ -7,7 +7,8 @@ class Chart:
     def __init__(self):
         self._chart = dict()
         self._data = dict()
-        self._avg = dict()
+        self._avg_12 = dict()
+        self._avg_24 = dict()
         self._datasets = list()
         self._labels = list()
         self._stations = set()
@@ -49,10 +50,15 @@ class Chart:
         return self._chart
 
     def add_data(self, date,  station, pollutant, data):
-        if pollutant == "avg":
-            if station not in self._avg:
-                self._avg[station] = []
-            self._avg[station].append(data)
+        if pollutant == "12-hour":
+            if station not in self._avg_12:
+                self._avg_12[station] = []
+            self._avg_12[station].append(data)
+            return
+        if pollutant == "24-hour":
+            if station not in self._avg_24:
+                self._avg_24[station] = []
+            self._avg_24[station].append(data)
             return
         self._stations.add(station)
         if date not in self._data:
@@ -130,8 +136,13 @@ class Chart:
             self._datasets[i]["data"] = pollutant_data[self._datasets[i]["label"]]
 
         self._datasets.append({
-            "label": "avg",
-            "data": self._avg,
+            "label": "12-hour",
+            "data": self._avg_12,
+            "fill": False
+        })
+        self._datasets.append({
+            "label": "24-hour",
+            "data": self._avg_24,
             "fill": False
         })
 
