@@ -79,14 +79,14 @@ window.addEventListener('load', (e) => {
                     let avg = average(nums.concat(hourly_values.slice(nums.length + 1, hourly_values.length)));
                     document.getElementById('avg_' + k + 'h').value = avg;
 
-                    chart.addValue(chart.stationName, k - 1, 'avg', avg);
+                    chart.addValue(chart.stationName, k - 1, '12-hour', avg);
                     chart.addValue(chart.stationName, k - 1, 'pm10', nums[k-1]);
                     chart.updateChart();
                 } else {
                     document.getElementById('hour_' + k + 'h').value = '';
                     document.getElementById('avg_' + k + 'h').value = '';
 
-                    chart.removeValue(chart.stationName, k - 1, 'avg');
+                    chart.removeValue(chart.stationName, k - 1, '12-hour');
                     chart.removeValue(chart.stationName, k - 1, 'pm10');
                     chart.updateChart();
                 }
