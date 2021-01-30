@@ -18,7 +18,8 @@ class AvgTable:
                 k += 1
 
             if len(self._moving_average['12h'][key]) < 168:
-                self._moving_average['12h'][key] = [None]*12 + self._moving_average['12h'][key]
+                self._moving_average['12h'][key] = [None] * 12 + self._moving_average['12h'][key]
+                self._moving_average['24h'][key] = [None] * 12 + self._moving_average['24h'][key]
 
         return {'hours': data, 'moving_average': self._moving_average}
 
