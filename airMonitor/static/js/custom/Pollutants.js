@@ -20,7 +20,11 @@ class Pollutants{
         }
         for(let station in this.data){
             for(let i = 0; i < this.data[station].length; i++){
-                this.data[station][i] = parseFloat(this.data[station][i]).toFixed(1).toString();
+                let parsed_value = parseFloat(this.data[station][i]);
+                if(isNaN(parsed_value)){
+                    continue;
+                }
+                this.data[station][i] = parsed_value.toFixed(1).toString();
             }
         }
     }
