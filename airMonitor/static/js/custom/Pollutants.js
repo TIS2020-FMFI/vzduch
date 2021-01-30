@@ -33,6 +33,11 @@ class Pollutants{
                 "data": d.slice(d.length - n, d.length ).concat(this.added_values[stationName])} ;
     }
 
+    getValue(station, hour){
+        let d = this.data[station];
+        return d[d.length - 1 - hour];
+    }
+
     addValue(stationName, hour, value){
         this.added_values[stationName][hour] = value
     }
