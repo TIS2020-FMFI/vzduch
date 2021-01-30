@@ -108,7 +108,7 @@
                         td.appendChild(document.createTextNode("-"));
                     } else {
                         let parsed_value = parseFloat(value)
-                        if(isNaN(parsed_value)){
+                        if(isNaN(parsed_value) || parameter === "nulls"){
                             td.appendChild(document.createTextNode((value == null) ? stringForNullValue : value));
                         }
                         else {
