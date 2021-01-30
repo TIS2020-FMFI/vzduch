@@ -10,12 +10,12 @@ class Station{
         this.radius = 5;
         this.circle = null
         this.color_dict = {
-            0: ["grey", "#efefef"],
-            1: ["green", "#00b050"],
-            2: ["light green", "#92d050"],
-            3: ["yellow", "#ffff00"],
-            4: ["orange", "#ffc000"],
-            5: ["red", "#ff0000"]
+            0: ["#777777", "#efefef"],
+            1: ["#00b050", "#00b050"],
+            2: ["#92d050", "#92d050"],
+            3: ["#ffff00", "#ffff00"],
+            4: ["#ffc000", "#ffc000"],
+            5: ["#ff0000", "#ff0000"]
         }
     }
     getLocation(){
@@ -24,7 +24,7 @@ class Station{
 
     getCircle(){
         this.circle = L.circleMarker(this.getLocation(),{
-                color: this.color_code,
+                color: this.color,
                 fillColor: this.color_code,
                 fillOpacity: 1,
                 radius: this.radius

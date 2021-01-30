@@ -13,7 +13,7 @@
     </form>
 
     <label for="pollutantsMap", style="padding-right: 1%">Pollutants: </label>
-    <select name="pollutants" id="pollutantsMap">
+    <select name="pollutants" id="pollutantsMap" style="padding-right: 5%;">
           <option value="pm10" selected>pm10</option>
           <option value="pm2_5">pm2_5</option>
           <option value="so2">so2</option>
@@ -21,8 +21,11 @@
           <option value="co">co</option>
           <option value="o3">o3</option>
     </select>
-    <div class="fa-sliders">
-      <input type="range" min="-24" max="0" value="0" class="slider" id="mapHoursRange">
+    <div>
+        <label for="mapHoursRange" id="mapHoursValue">Hours: 0</label>
+        <div class="fa-sliders">
+          <input type="range" min="-24" max="0" value="0" class="slider" id="mapHoursRange">
+        </div>
     </div>
 </div>
 

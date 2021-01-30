@@ -59,6 +59,8 @@ document.getElementById("pollutantsMap").onchange = function (){
 
 document.getElementById("mapHoursRange").onchange = function (){
     let slider = document.getElementById('mapHoursRange');
+    let label = document.getElementById('mapHoursValue');
+    label.innerText = "Hours: " + slider.value.toString();
     mapWrapper.clearAllStations();
     mapWrapper.changeHour(slider.value * -1);
     mapWrapper.drawAllStations();
