@@ -37,6 +37,13 @@ class ChartWrapper {
         this.data["options"]["legend"]["onClick"] = this.legendHandler;
         this.data["options"]["horizontalLine"] = null;
 
+        this.data["options"]["scales"]["yAxes"][0]["ticks"] = {
+            callback: function(value, index, values) {
+                        return value + "\u00B5g" ;
+                    }
+        };
+
+
 
         // Plugin to print out horizontal lines
         this.horizonalLinePlugin = {
