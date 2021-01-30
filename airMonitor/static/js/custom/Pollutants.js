@@ -11,11 +11,16 @@ class Pollutants{
         this.data = dict;
         this.fill = fill;
         this.bg_color = bg_color;
-        this.added_values = {}
+        this.added_values = {};
         for(let station in dict){
             this.added_values[station] = [];
             for(let i = 0; i < 5; i++){
                 this.added_values[station].push(null);
+            }
+        }
+        for(let station in this.data){
+            for(let i = 0; i < this.data[station].length; i++){
+                this.data[station][i] = parseFloat(this.data[station][i]).toFixed(1).toString();
             }
         }
     }
@@ -38,7 +43,7 @@ class Pollutants{
         if(d === null || d === undefined){
             return null;
         }
-        return d[d.length - 1 - hour];
+        return parseFloat(d[d.length - 1 - hour]).toFixed(1);
     }
 
     addValue(stationName, hour, value){
