@@ -49,6 +49,13 @@ window.onload = function() {
     chart.drawChart();
 };
 
+document.getElementById("pollutantsMap").onchange = function (){
+    let sel = document.getElementById('pollutantsMap');
+    let opt = sel.options[sel.selectedIndex];
+    mapWrapper.clearAllStations();
+    mapWrapper.changePollutant(opt.text);
+};
+
 
 window.addEventListener('load', (e) => {
     let added_values = [NaN, NaN, NaN, NaN, NaN];

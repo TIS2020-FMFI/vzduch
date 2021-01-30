@@ -32,7 +32,6 @@ class MapWrapper{
         for(let i = 0; i < this.stations.length; i++){
             this.stations[i].changePollutant(this.pollutant, chart.getValue(this.stations[i].name, this.pollutant, this.hour));
         }
-        this.clearAllStations();
         this.drawAllStations();
 
     }
