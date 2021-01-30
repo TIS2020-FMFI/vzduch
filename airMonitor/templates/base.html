@@ -57,6 +57,12 @@
             {% endblock content %}
         </div>
     </div>
+   <script>
+        const chart = new ChartWrapper(JSON.parse("{{data|escapejs}}"));
+        const mapWrapper = new MapWrapper(JSON.parse("{{ stations|escapejs }}"));
+        mapWrapper.drawAllStations();
+    </script>
+    <script src="{% static 'js/custom/listeners.js' %}"></script>
 </body>
 <footer>
 
