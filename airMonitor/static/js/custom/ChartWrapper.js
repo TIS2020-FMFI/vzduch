@@ -39,7 +39,7 @@ class ChartWrapper {
 
         this.data["options"]["scales"]["yAxes"][0]["ticks"] = {
             callback: function(value, index, values) {
-                        return value + "\u00B5g" ;
+                        return value + "\u00B5g/m"+"3".sup() ;
                     }
         };
 
