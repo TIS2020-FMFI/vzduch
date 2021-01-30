@@ -1,5 +1,3 @@
-import pandas as pd
-
 from airMonitor.services.database import Database
 
 
@@ -16,9 +14,8 @@ class Pollutant:
 
         stations_id = ', '.join([str(x.get_station().id) for x in stations])
         stations_dict = {x.get_station().id: x.get_station() for x in stations}
-        connection = Database.get_connection()
-        data = pd.read_sql_query(f"SELECT * FROM obs.obs_nmsko_1h AS obs WHERE obs.date between '{from_date}' AND  '{to_date}'" +
-                                 f" AND obs.si_id in ({stations_id});", connection)
+        sql = f"SELECT * FROM obs.obs_nmsko_1h AS obs WHERE obs.date between '{from_date}' AND  '{to_date}' AND obs.si_id in ({stations_id});"
+        data = Database.execute_sql(sql)
 
         for pollutant in data.itertuples():
             result.append(Pollutant(pollutant, stations_dict[pollutant[2]]))

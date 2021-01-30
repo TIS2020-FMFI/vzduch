@@ -181,13 +181,12 @@ POLLUTANTS_LIMIT = {
 POLLUTANTS = ["pm10", "pm2_5", "so2", "no2", "co", "o3"]
 
 COLORS = {
-    0: ["gray", "#efefef"],
+    0: ["grey", "#efefef"],
     1: ["green", "#00b050"],
     2: ["light green", "#92d050"],
     3: ["yellow", "#ffff00"],
     4: ["orange", "#ffc000"],
-    5: ["red", "#ff0000"],
-    6: ["light green", "#99ffcc"]
+    5: ["red", "#ff0000"]
 }
 
 DATA_COLORS = {
@@ -198,7 +197,7 @@ DATA_COLORS = {
     "blue": "rgb(54, 162, 235)",
     "purple": "rgb(153, 102, 255)",
     "light green": "rgb(153, 255, 204)",
-    "grey": "rgb(201, 203, 207)"
+    "cyan": "rgb(0, 255, 255)"
 }
 
-
+RETRY_NUMBER = 4

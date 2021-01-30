@@ -45,8 +45,4 @@
     <div style="width:100%;">
 		<canvas id="canvas" aria-label="ZL_CHART" role="img"></canvas>
 	</div>
-  <script>
-    const chart = new ChartWrapper(JSON.parse("{{data|escapejs}}"));
-    </script>
-    <script src="{% static 'js/custom/listeners.js' %}"></script>
 {% endblock chart %}

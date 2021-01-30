@@ -1,8 +1,8 @@
 {% extends 'chart.html' %}
 {% load static %}
 {% block dateForm %}
-
-    <div class="form-inline">
+<div class="form-inline" style="padding-bottom: 1%;">
+    <div style="padding-right: 5%;">
         <form action="" method="post" id="dateForm">
             {% csrf_token %}
             {% for field in dateForm %}
@@ -12,6 +12,23 @@
                    style="padding-bottom: 5px;padding-top: 5px;padding-right: 15px;font-size: 15px">
         </form>
     </div>
+    <div style="padding-right: 5%;">
+        <label for="pollutantsMap" style="padding-right: 1%">Pollutants: </label>
+        <select name="pollutants" id="pollutantsMap">
+              <option value="pm10" selected>pm10</option>
+              <option value="pm2_5">pm2_5</option>
+              <option value="so2">so2</option>
+              <option value="no2">no2</option>
+              <option value="co">co</option>
+              <option value="o3">o3</option>
+        </select>
+    </div>
+    <div  style="padding-right: 5%;">
+        <label for="mapHoursRange" id="mapHoursValue">Hours: 0</label>
+        <input type="range" min="-24" max="0" value="0" class="slider" id="mapHoursRange">
+    </div>
+</div>
+
 
 {% endblock dateForm %}
 {% block map %}
@@ -21,8 +38,5 @@
     <script src="{% static 'js/custom/MapWrapper.js' %}"></script>
 
     <div id="map" style="height: 360px;width: 100%;"></div>
-    <script>
-        let mapWrapper = new MapWrapper(JSON.parse("{{ stations|escapejs }}"));
-        mapWrapper.drawAllStations();
-    </script>
+
 {% endblock map %}

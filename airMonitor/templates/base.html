@@ -22,7 +22,7 @@
             <header class="header">
                 <div class="header-block header-block-nav">
                     <a href='/vzduch' style="padding: 6px 20px; border: 1px solid #969696; border-radius: 5px;">
-                        Predpoveď vetra
+                        Wind prediction
                     </a>
                 </div>
             </header>
@@ -57,6 +57,12 @@
             {% endblock content %}
         </div>
     </div>
+   <script>
+        const chart = new ChartWrapper(JSON.parse("{{data|escapejs}}"));
+        const mapWrapper = new MapWrapper(JSON.parse("{{ stations|escapejs }}"));
+        mapWrapper.drawAllStations();
+    </script>
+    <script src="{% static 'js/custom/listeners.js' %}"></script>
 </body>
 <footer>
 

@@ -15,51 +15,5 @@
 
         let table = avgTable.getTable();
         document.getElementById("averageTable").appendChild(table);
-
-    </script>
-    <script>
-        window.addEventListener('load', (e) => {
-            let added_values = [NaN, NaN, NaN, NaN, NaN];
-            for (let i = 1; i <= 5; i++) {
-                let tmp = document.getElementById('hour_' + i + 'h');
-                tmp.addEventListener('input', (ev) => {
-                    added_values[i - 1] = (isNumber(tmp.value)) ? parseFloat(tmp.value) : NaN;
-                    for (let k = 1; k <= 5; k++) {
-                        if (!isNaN(added_values[k - 1])) {
-                            let nums = added_values.slice(0, k).filter(n => !isNaN(n));
-                            let avg = average(nums.concat(hourly_values.slice(nums.length + 1, hourly_values.length)));
-                            document.getElementById('avg_' + k + 'h').value = avg;
-
-                            chart.addValue(chart.stationName, k - 1, 'avg', avg);
-                            chart.addValue(chart.stationName, k - 1, 'pm10', nums[k-1]);
-                            chart.updateChart();
-                        } else {
-                            document.getElementById('hour_' + k + 'h').value = '';
-                            document.getElementById('avg_' + k + 'h').value = '';
-
-                            chart.removeValue(chart.stationName, k - 1, 'avg');
-                            chart.removeValue(chart.stationName, k - 1, 'pm10');
-                            chart.updateChart();
-                        }
-                    }
-                });
-            }
-        }, false);
-
-        function average(vals) {
-            let total = 0;
-            for (let i = 0; i < vals.length; i++) {
-                if (vals[i] !== -1) {
-                    total += vals[i];
-                }
-
-            }
-            total = total / vals.length;
-            return total.toFixed(1);
-        }
-
-        function isNumber(value) {
-            return /[+-]?([0-9]*[.])?[0-9]+/.test(value);
-        }
     </script>
 {% endblock avgTable %}

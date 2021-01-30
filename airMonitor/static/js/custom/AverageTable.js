@@ -3,7 +3,7 @@ class AverageTable {
         this.data = data;
         this.station = null;
         this.hourly_values = this.data['hours'];
-        this.average_values = this.data['averages'];
+        this.average_values = this.data['moving_average']['12h'];
 
     }
 
@@ -53,6 +53,19 @@ class AverageTable {
         let table = document.createElement('table');
         table.style.width = '1%';
         table.classList.add('table');
+
+        let header = document.createElement('thead');
+        let headerRow = document.createElement('tr');
+        let headerCell = document.createElement('th');
+        headerCell.style.border = '1px solid black';
+        headerCell.style.textAlign = 'center';
+        headerCell.style.fontSize = '25px';
+        headerCell.colSpan = "19";
+        headerCell.appendChild(document.createTextNode('12-h Moving average PM10'));
+
+        headerRow.appendChild(headerCell);
+        header.appendChild(headerRow);
+        table.appendChild(header);
 
         let thead = document.createElement('thead');
         let headRow = document.createElement('tr');

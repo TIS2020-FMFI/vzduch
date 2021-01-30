@@ -3,8 +3,6 @@
 import os
 import sys
 
-from airMonitor.services.tunnel import Tunnel
-
 
 def main():
     """Run administrative tasks."""
@@ -17,7 +15,6 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-    Tunnel.initialize("oko109", "VlfasTP96A")
     execute_from_command_line(sys.argv)
 
 

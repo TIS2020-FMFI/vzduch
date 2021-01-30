@@ -11,17 +11,29 @@ class Pollutants{
         this.data = dict;
         this.fill = fill;
         this.bg_color = bg_color;
-        this.added_values = {}
+        this.added_values = {};
         for(let station in dict){
             this.added_values[station] = [];
             for(let i = 0; i < 5; i++){
                 this.added_values[station].push(null);
             }
         }
+        for(let station in this.data){
+            for(let i = 0; i < this.data[station].length; i++){
+                let parsed_value = parseFloat(this.data[station][i]);
+                if(isNaN(parsed_value)){
+                    continue;
+                }
+                this.data[station][i] = parsed_value.toFixed(1).toString();
+            }
+        }
     }
 
     get(stationName, number){
         let d = this.data[stationName];
+        if(undefined === d){
+            d = [];
+        }
         let n = number + 1;
         if(n > d.length){
             n = d.length
@@ -31,6 +43,14 @@ class Pollutants{
                 "backgroundColor": this.bg_color,
                 "borderColor": this.bg_color,
                 "data": d.slice(d.length - n, d.length ).concat(this.added_values[stationName])} ;
+    }
+
+    getValue(station, hour){
+        let d = this.data[station];
+        if(d === null || d === undefined){
+            return null;
+        }
+        return d[d.length - 1 - hour];
     }
 
     addValue(stationName, hour, value){

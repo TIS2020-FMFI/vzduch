@@ -12,8 +12,8 @@ class Station:
         if len(Station.stations) != 0:
             return Station.stations
         result = list()
-        connection = Database.get_connection()
-        data = pd.read_sql_query("SELECT * FROM si.si WHERE ci = 78", connection)
+        sql = "SELECT * FROM si.si WHERE ci = 78"
+        data = Database.execute_sql(sql)
         for station in data.itertuples():
             result.append(Station(Station.Si(station)))
         Station.stations = result
