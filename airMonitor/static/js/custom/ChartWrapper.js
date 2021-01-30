@@ -58,8 +58,9 @@ class ChartWrapper {
                     if(yValue < 50){
                         continue;
                     }
-                    console.log(line);
-                    console.log(yValue);
+                    if(yValue > 515){
+                        continue;
+                    }
 
                     ctx.lineWidth = 3;
                     ctx.beginPath();
