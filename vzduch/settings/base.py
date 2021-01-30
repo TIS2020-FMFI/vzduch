@@ -197,7 +197,7 @@ DATA_COLORS = {
     "blue": "rgb(54, 162, 235)",
     "purple": "rgb(153, 102, 255)",
     "light green": "rgb(153, 255, 204)",
-    "grey": "rgb(201, 203, 207)"
+    "cyan": "rgb(0, 255, 255)"
 }
 
 RETRY_NUMBER = 4
