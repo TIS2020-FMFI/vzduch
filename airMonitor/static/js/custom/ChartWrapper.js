@@ -58,6 +58,9 @@ class ChartWrapper {
                     if(yValue < 50){
                         continue;
                     }
+                    if(yValue > 515){
+                        continue;
+                    }
 
                     ctx.lineWidth = 3;
                     ctx.beginPath();
@@ -82,6 +85,7 @@ class ChartWrapper {
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
         this.chart = new Chart(this.ctx, this.data);
+        this.setLimits("pm10");
     }
 
     getChart() {
@@ -111,10 +115,10 @@ class ChartWrapper {
      *  Function that collect all data and updated chart according to them
      */
     updateChart() {
-        let dataset = []
+        let dataset = [];
         for (let z in this.pollutants) {
             let data;
-            data = this.pollutants[z].get(this.stationName, this.hours)
+            data = this.pollutants[z].get(this.stationName, this.hours);
             if (!this.show_line) {
                 data["showLine"] = this.show_line;
             }
@@ -201,13 +205,7 @@ class ChartWrapper {
                 chart.data.options.horizontalLine = null;
                 return;
             }
-            chart.data.options.horizontalLine = [{
-                "y": this.limits.pm10["4"],
-                "style": "rgba(255, 0, 0, .4)"
-            }, {
-                "y": this.limits.pm10["3"],
-                "style": "rgba(255, 159, 64, .4)"
-            }];
+            this.setLimits("pm10");
             return;
         }
         if (visibleLabels.length === 2) {
@@ -223,13 +221,7 @@ class ChartWrapper {
                 chart.data.options.horizontalLine = null;
                 return;
             }
-            chart.data.options.horizontalLine = [{
-                "y": this.limits.pm10["4"],
-                "style": "rgba(255, 0, 0, .4)"
-            }, {
-                "y": this.limits.pm10["3"],
-                "style": "rgba(255, 159, 64, .4)"
-            }];
+            this.setLimits("pm10");
             return;
         }
 
@@ -238,15 +230,25 @@ class ChartWrapper {
             if(pollutant === "avg"){
                 pollutant = "pm10";
             }
-            chart.data.options.horizontalLine = [{
+            this.setLimits(pollutant);
+        }
+
+    }
+
+    setLimits(pollutant){
+        this.data.options.horizontalLine = [{
                 "y": this.limits[pollutant]["4"],
                 "style": "rgba(255, 0, 0, .4)"
             }, {
                 "y": this.limits[pollutant]["3"],
-                "style": "rgba(255, 159, 64, .4)"
+                "style": "rgba(255, 192, 0, .4)"
+            }, {
+                "y": this.limits[pollutant]["2"],
+                "style": "rgba(255, 255, 0, .4)"
+            }, {
+                "y": this.limits[pollutant]["1"],
+                "style": "rgba(146, 208, 80, .4)"
             }];
-        }
-
     }
 
     /***
@@ -256,7 +258,7 @@ class ChartWrapper {
      */
 
     getVisiblePollutants() {
-        let result = []
+        let result = [];
         for (let i = 0; i < this.pollutants.length; i++) {
             if (this.chart.isDatasetVisible(i)) {
                 result.push(this.pollutants[i]["name"]);
@@ -283,4 +285,24 @@ class ChartWrapper {
         let i = this.getPollutantIndex(pollutant);
         this.pollutants[i].remove(stationName, hour);
     }
+
+    getValue(station, pollutant, hour){
+        for(let i = 0; i < this.pollutants.length; i++){
+            if(this.pollutants[i].name === pollutant){
+                return this.pollutants[i].getValue(station, hour);
+            }
+        }
+    }
+    getPollutantLevel(pollutant, value){
+        if(value === null){
+            return 0;
+        }
+        for(let i = 4; i > 0; i--){
+            if(value > this.limits[pollutant][i.toString()]){
+                return i + 1;
+            }
+        }
+        return 1;
+    }
+
 }
