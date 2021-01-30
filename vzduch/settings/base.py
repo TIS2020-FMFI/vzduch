@@ -181,13 +181,12 @@ POLLUTANTS_LIMIT = {
 POLLUTANTS = ["pm10", "pm2_5", "so2", "no2", "co", "o3"]
 
 COLORS = {
-    0: ["gray", "#efefef"],
+    0: ["grey", "#efefef"],
     1: ["green", "#00b050"],
     2: ["light green", "#92d050"],
     3: ["yellow", "#ffff00"],
     4: ["orange", "#ffc000"],
-    5: ["red", "#ff0000"],
-    6: ["light green", "#99ffcc"]
+    5: ["red", "#ff0000"]
 }
 
 DATA_COLORS = {
