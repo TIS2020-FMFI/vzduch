@@ -1,30 +1,27 @@
 {% extends 'chart.html' %}
 {% load static %}
 {% block dateForm %}
-<div class="col-md-8">
-    <div class="card-block">
-        <div class="form-inline">
-            <form action="" method="post" id="dateForm">
-                {% csrf_token %}
-                {% for field in dateForm %}
-                    {{ field }}
-                {% endfor %}
-                <input type="submit" value="Submit" class="btn btn-pill-right btn-secondary"
-                       style="padding-bottom: 5px;padding-top: 5px;padding-right: 15px;font-size: 15px">
-            </form>
-        </div>
-    </div>
-    <div class="card-block">
-        <select name="pollutants" id="pollutantsMap">
+<div class="form-inline">
+    <form action="" method="post" id="dateForm">
+        {% csrf_token %}
+        {% for field in dateForm %}
+            {{ field }}
+        {% endfor %}
+        <input type="submit" value="Submit" class="btn btn-pill-right btn-secondary"
+               style="padding-bottom: 5px;padding-top: 5px;padding-right: 15px;font-size: 15px">
+    </form>
+
+    <label for="pollutantsMap">Pollutants </label>
+    <select name="pollutants" id="pollutantsMap">
           <option value="pm10" selected>pm10</option>
           <option value="pm2_5">pm2_5</option>
           <option value="so2">so2</option>
           <option value="no2">no2</option>
           <option value="co">co</option>
           <option value="o3">o3</option>
-        </select>
-    </div>
+    </select>
 </div>
+
 
 {% endblock dateForm %}
 {% block map %}
