@@ -31,6 +31,9 @@ class Pollutants{
 
     get(stationName, number){
         let d = this.data[stationName];
+        if(undefined === d){
+            d = [];
+        }
         let n = number + 1;
         if(n > d.length){
             n = d.length
