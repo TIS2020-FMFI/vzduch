@@ -93,7 +93,7 @@ class AverageTable {
             let tr = document.createElement('tr');
             tr.classList.add('valueRows');
             let td = document.createElement('td');
-            td.appendChild(document.createTextNode(i === 0 ? "HOUR" : "12h AVG"));
+            td.appendChild(document.createTextNode(i === 0 ? "HOUR" : "AVG"));
             td.classList.add('nullCell');
             td.style.border = '1px solid black';
             td.style.width = '50px';

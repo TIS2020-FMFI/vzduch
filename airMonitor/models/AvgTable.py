@@ -11,8 +11,9 @@ class AvgTable:
             self._moving_average['12h'][key] = []
             self._moving_average['24h'][key] = []
             k = 0
-            for i in range(24, arr_len+1):
-                self._moving_average['12h'][key].append(self.average(data[key][k:i-12], 12))
+            for i in range(12, arr_len+1):
+                self._moving_average['12h'][key].append(self.average(data[key][k:i], 12))
+            for i in range(24, arr_len + 1):
                 self._moving_average['24h'][key].append(self.average(data[key][k:i], 24))
                 k += 1
 
