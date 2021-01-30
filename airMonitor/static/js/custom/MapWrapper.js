@@ -2,10 +2,13 @@ class MapWrapper{
     constructor(s) {
         this.stations = [];
         for(let i = 0; i < s.length; i++){
-            this.stations.push(new Station(s[i]["name"], s[i]["lat"], s[i]["lon"],
-                s[i]["color_name"], s[i]["color_code"], s[i]["zl"]));
+            this.stations.push(new Station(s[i]["name"], s[i]["lat"], s[i]["lon"]));
         }
         this.oldZoom = 7.2;
+
+        this.hour = 0;
+        this.pollutant = null;
+
         this.map = L.map('map', {
                 minZoom: 7.2,
                 zoom: 7.2,
@@ -18,18 +21,27 @@ class MapWrapper{
         let position = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
                 attribution: cartodbAttribution
             }).addTo(this.map);
+
+        this.changePollutant("pm10");
     }
-    increaseSize(){
-        for(let s in this.stations){
-            s.increaseSize();
+    changePollutant(name){
+        if(this.pollutant === name){
+            return;
+        }
+        this.pollutant = name;
+        for(let i = 0; i < this.stations.length; i++){
+            this.stations[i].changePollutant(this.pollutant, chart.getValue(this.stations[i].name, this.pollutant, this.hour));
+        }
+        this.clearAllStations();
+        this.drawAllStations();
+
+    }
+    clearAllStations(){
+        for(let i = 0; i < this.stations.length; i++){
+            this.map.removeLayer(this.stations[i].circle);
         }
     }
 
-    decreaseSize(){
-        for(let s in this.stations){
-            s.decreaseSize();
-        }
-    }
     drawAllStations(){
         for(let i = 0; i < this.stations.length; i++){
             this.stations[i].addTo(this.map);
