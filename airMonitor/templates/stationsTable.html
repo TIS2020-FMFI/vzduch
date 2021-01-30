@@ -107,7 +107,7 @@
                     if (parameter === "nulls" && value === nullsMax) {
                         td.appendChild(document.createTextNode("-"));
                     } else {
-                        td.appendChild(document.createTextNode((value == null) ? stringForNullValue : value.toPrecision(1)));
+                        td.appendChild(document.createTextNode((value == null) ? stringForNullValue : parseFloat(value).toFixed(1)));
                     }
                     td.style.border = '1px solid black';
                     td.style.padding = '2px';
