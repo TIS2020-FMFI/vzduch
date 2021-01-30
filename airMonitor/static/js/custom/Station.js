@@ -29,7 +29,7 @@ class Station{
                 fillOpacity: 1,
                 radius: this.radius
             });
-        this.circle.bindPopup(this.name + ': ' + this.pollutant + "(" + this.value + "\u00B5g)");
+        this.circle.bindPopup(this.name + ': ' + this.pollutant + this.value === null?"(" + this.value + "\u00B5g)":"(No value)");
         this.circle.on('mouseover', function (e){
             this.openPopup();
         });
