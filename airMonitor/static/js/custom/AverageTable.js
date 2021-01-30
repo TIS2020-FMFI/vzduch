@@ -122,9 +122,9 @@ class AverageTable {
                 }
 
                 if (i === 0) {
-                    td.appendChild(document.createTextNode(hourly_values[j] !== null ? hourly_values[j].toFixed(1) + "\u00B5g/m3": ''));
+                    td.appendChild(document.createTextNode(hourly_values[j] !== null ? hourly_values[j].toFixed(1) : ''));
                 } else {
-                    td.appendChild(document.createTextNode(average_values[j] !== null ? average_values[j].toFixed(1) + "\u00B5g/m3" : ''));
+                    td.appendChild(document.createTextNode(average_values[j] !== null ? average_values[j].toFixed(1) : ''));
                 }
                 tr.appendChild(td);
             }
