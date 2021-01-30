@@ -3,7 +3,7 @@ class AverageTable {
         this.data = data;
         this.station = null;
         this.hourly_values = this.data['hours'];
-        this.average_values = this.data['averages'];
+        this.average_values = this.data['moving_average']['12h'];
 
     }
 

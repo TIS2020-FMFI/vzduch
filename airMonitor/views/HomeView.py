@@ -51,8 +51,10 @@ class HomeView(View):
             avg_table = AvgTable()
             avg_table_data = avg_table.prepare_data(data.get_values("pm10")["data"])
             for station in avg_table_data['hours']:
-                for value in avg_table_data['averages'][station]:
+                for value in avg_table_data['moving_average']['12h'][station]:
                     data.add_data(station=station, pollutant="12-hour", data=value, date=None)
+                for value in avg_table_data['moving_average']['24h'][station]:
+                    data.add_data(station=station, pollutant="24-hour", data=value, date=None)
         except Exception as ex:
             logger.error(ex)
 

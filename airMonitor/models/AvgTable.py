@@ -1,6 +1,7 @@
 class AvgTable:
     def __init__(self):
-        self._avg_vals = dict()
+        self._moving_average = {'12h': dict(), '24h': dict()}
+        self._HOURS_IN_WEEK = 168
 
     def prepare_data(self, data):
         """ counts moving average from hour values of PM_10
@@ -8,22 +9,27 @@ class AvgTable:
         """
         for key in data:
             arr_len = len(data[key])
-            self._avg_vals[key] = []
+            self._moving_average['12h'][key] = []
+            self._moving_average['24h'][key] = []
             k = 0
             for i in range(12, arr_len+1):
-                self._avg_vals[key].append(self.average(data[key][k:i]))
+                self._moving_average['12h'][key].append(self.average(data[key][k:i], 12))
+                if i+12 <= arr_len:
+                    self._moving_average['24h'][key].append(self.average(data[key][k:i+12], 24))
                 k += 1
 
-            if len(self._avg_vals[key]) < 168:
-                self._avg_vals[key] = [None]*12 + self._avg_vals[key]
+            if len(self._moving_average['12h'][key]) < self._HOURS_IN_WEEK:
+                self._moving_average['12h'][key] = [None] * 12 + self._moving_average['12h'][key]
+            if len(self._moving_average['24h'][key]) < self._HOURS_IN_WEEK:
+                self._moving_average['24h'][key] = [None] * 12 + self._moving_average['24h'][key]
 
-        return {'hours': data, 'averages': self._avg_vals}
+        return {'hours': data, 'moving_average': self._moving_average}
 
-    def average(self, hour_values):
+    def average(self, hour_values, hours):
         """counts average from input values"""
         sum = 0
         for i in hour_values:
             if i is not None:
                 sum += i
-        ret = round(sum / 12, 1)
+        ret = round(sum / hours, 1)
         return ret if ret != 0 else None
