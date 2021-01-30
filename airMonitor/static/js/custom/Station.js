@@ -24,7 +24,7 @@ class Station{
 
     getCircle(){
         this.circle = L.circleMarker(this.getLocation(),{
-                color: this.color,
+                color: this.color_code,
                 fillColor: this.color_code,
                 fillOpacity: 1,
                 radius: this.radius
