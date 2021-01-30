@@ -85,7 +85,7 @@ class ChartWrapper {
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
         this.chart = new Chart(this.ctx, this.data);
-        this.processLabels();
+        this.setLimits("pm10");
     }
 
     getChart() {
@@ -236,7 +236,7 @@ class ChartWrapper {
     }
 
     setLimits(pollutant){
-        chart.data.options.horizontalLine = [{
+        this.data.options.horizontalLine = [{
                 "y": this.limits[pollutant]["4"],
                 "style": "rgba(255, 0, 0, .4)"
             }, {

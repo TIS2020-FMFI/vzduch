@@ -54,6 +54,15 @@ document.getElementById("pollutantsMap").onchange = function (){
     let opt = sel.options[sel.selectedIndex];
     mapWrapper.clearAllStations();
     mapWrapper.changePollutant(opt.text);
+    mapWrapper.drawAllStations();
+};
+
+document.getElementById("mapHoursRange").onchange = function (){
+    let sel = document.getElementById('mapHoursRange');
+    let opt = sel.options[sel.selectedIndex];
+    mapWrapper.clearAllStations();
+    mapWrapper.changeHour(opt.text);
+    mapWrapper.drawAllStations();
 };
 
 

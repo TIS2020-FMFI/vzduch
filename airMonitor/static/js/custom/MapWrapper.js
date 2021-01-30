@@ -23,6 +23,7 @@ class MapWrapper{
             }).addTo(this.map);
 
         this.changePollutant("pm10");
+        this.drawAllStations();
     }
     changePollutant(name){
         if(this.pollutant === name){
@@ -32,9 +33,17 @@ class MapWrapper{
         for(let i = 0; i < this.stations.length; i++){
             this.stations[i].changePollutant(this.pollutant, chart.getValue(this.stations[i].name, this.pollutant, this.hour));
         }
-        this.drawAllStations();
-
     }
+    changeHour(hour){
+        if(this.hour === hour){
+            return;
+        }
+        this.hour = hour;
+        for(let i = 0; i < this.stations.length; i++){
+            this.stations[i].changePollutant(this.pollutant, chart.getValue(this.stations[i].name, this.pollutant, this.hour));
+        }
+    }
+
     clearAllStations(){
         for(let i = 0; i < this.stations.length; i++){
             this.map.removeLayer(this.stations[i].circle);
