@@ -3,7 +3,7 @@ class AverageTable {
         this.data = data;
         this.station = null;
         this.hourly_values = this.data['hours'];
-        this.average_values = this.data['averages'];
+        this.average_values = this.data['moving_average']['12h'];
 
     }
 
@@ -93,7 +93,7 @@ class AverageTable {
             let tr = document.createElement('tr');
             tr.classList.add('valueRows');
             let td = document.createElement('td');
-            td.appendChild(document.createTextNode(i === 0 ? "HOUR" : "AVG"));
+            td.appendChild(document.createTextNode(i === 0 ? "HOUR" : "12h AVG"));
             td.classList.add('nullCell');
             td.style.border = '1px solid black';
             td.style.width = '50px';
