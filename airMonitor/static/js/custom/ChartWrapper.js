@@ -3,7 +3,7 @@ class ChartWrapper {
         this.data = data;
 
         // Set limits for all pollutant
-        this.limits = data["limits"]
+        this.limits = data["limits"];
         data["limits"] = null;
         this.metas = [];
 
@@ -12,7 +12,7 @@ class ChartWrapper {
         for (let k in data["data"]["datasets"]) {
             let d = data["data"]["datasets"][k];
             this.pollutants.push(new Pollutants(d["label"], d["data"], d["fill"], d["backgroundColor"]));
-            if(d["label"] === "pm10" || d["label"] === "pm2_5" || d["label"] === "avg"){
+            if(d["label"] === "pm10" || d["label"] === "pm2_5" || d["label"] === "12-hour" || d["label"] === "24-hour"){
                 this.metas.push(null);
             }
             else {
@@ -179,7 +179,7 @@ class ChartWrapper {
         meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
         chart.metas[index] = meta.hidden;
 
-        if (this.chart.getVisibleDatasetCount() <= 3) {
+        if (this.chart.getVisibleDatasetCount() <= 4) {
             chart.processLabels();
         }
         else{
@@ -200,8 +200,16 @@ class ChartWrapper {
 
     processLabels() {
         let visibleLabels = this.getVisiblePollutants();
+        if (visibleLabels.length === 4) {
+            if (!visibleLabels.includes("pm10") || !visibleLabels.includes("pm2_5") || !visibleLabels.includes("12-hour") || !visibleLabels.includes("24-hour")) {
+                chart.data.options.horizontalLine = null;
+                return;
+            }
+            this.setLimits("pm10");
+            return;
+        }
         if (visibleLabels.length === 3) {
-            if (!visibleLabels.includes("pm10") || !visibleLabels.includes("pm2_5") || !visibleLabels.includes("avg")) {
+            if (!visibleLabels.includes("pm10") || !visibleLabels.includes("pm2_5") || !(visibleLabels.includes("12-hour") || visibleLabels.includes("24-hour"))) {
                 chart.data.options.horizontalLine = null;
                 return;
             }
@@ -213,11 +221,11 @@ class ChartWrapper {
                 chart.data.options.horizontalLine = null;
                 return;
             }
-            if (!visibleLabels.includes("pm10") && !visibleLabels.includes("avg")) {
+            if (!visibleLabels.includes("pm10") && !(visibleLabels.includes("12-hour") || visibleLabels.includes("24-hour"))) {
                 chart.data.options.horizontalLine = null;
                 return;
             }
-            if (!visibleLabels.includes("avg") && !visibleLabels.includes("pm2_5")) {
+            if (!(visibleLabels.includes("12-hour") || visibleLabels.includes("24-hour")) && !visibleLabels.includes("pm2_5")) {
                 chart.data.options.horizontalLine = null;
                 return;
             }
@@ -227,7 +235,7 @@ class ChartWrapper {
 
         if (visibleLabels.length === 1) {
             let pollutant = visibleLabels[0];
-            if(pollutant === "avg"){
+            if(pollutant === "24-hour" || pollutant === "12-hour"){
                 pollutant = "pm10";
             }
             this.setLimits(pollutant);
