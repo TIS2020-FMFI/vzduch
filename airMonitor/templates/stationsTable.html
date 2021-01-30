@@ -56,18 +56,18 @@
          */
         function getColorByTableValue(parameter, material, value) {
             if (parameter === 'nulls') {
-                if (value === nullsMax) return 'WhiteSmoke'
-                if (value >= nullsRedLimit) return 'Red'
-                if (value >= nullsOrangeLimit) return 'Orange'
-                return 'White'
+                if (value === nullsMax) return 'WhiteSmoke';
+                if (value >= nullsRedLimit) return 'Red';
+                if (value >= nullsOrangeLimit) return 'Orange';
+                return 'White';
             }
             if (( ! (material in limits)) || value == null) {
-                return 'White'
+                return 'White';
             }
             for (let i in limits[material]) {
-                if (value > limits[material][i]) return colorsForLimits[i]
+                if (value > limits[material][i]) return colorsForLimits[i];
             }
-            return colorsForLimits[colorsForLimits.length - 1]
+            return colorsForLimits[colorsForLimits.length - 1];
         }
 
         /**
@@ -107,7 +107,7 @@
                     if (parameter === "nulls" && value === nullsMax) {
                         td.appendChild(document.createTextNode("-"));
                     } else {
-                        let parsed_value = parseFloat(value)
+                        let parsed_value = parseFloat(value);
                         if(isNaN(parsed_value) || parameter === "nulls"){
                             td.appendChild(document.createTextNode((value == null) ? stringForNullValue : value));
                         }
