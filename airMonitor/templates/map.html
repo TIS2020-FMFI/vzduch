@@ -2,7 +2,8 @@
 {% load static %}
 {% block dateForm %}
 <div class="form-inline">
-    <form action="" method="post" id="dateForm">
+
+    <form action="" method="post" id="dateForm", style="padding-right: 5%;">
         {% csrf_token %}
         {% for field in dateForm %}
             {{ field }}
@@ -11,7 +12,7 @@
                style="padding-bottom: 5px;padding-top: 5px;padding-right: 15px;font-size: 15px">
     </form>
 
-    <label for="pollutantsMap">Pollutants </label>
+    <label for="pollutantsMap", style="padding-right: 1%">Pollutants: </label>
     <select name="pollutants" id="pollutantsMap">
           <option value="pm10" selected>pm10</option>
           <option value="pm2_5">pm2_5</option>
