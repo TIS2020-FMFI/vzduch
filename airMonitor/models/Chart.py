@@ -143,7 +143,8 @@ class Chart:
         self._datasets.append({
             "label": "24-hour",
             "data": self._filter_dataset(self._avg_24),
-            "fill": False
+            "fill": False,
+            "pointRadius": 10
         })
 
     def _filter_dataset(self, dataset):
