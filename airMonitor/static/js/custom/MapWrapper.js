@@ -56,7 +56,6 @@ class MapWrapper{
         }
     }
     resetMapPosition(){
-        this.map.panTo( [48.60, 19.30]);
-        this.map.zoomOut(10);
+        this.map.flyTo( [48.60, 19.30], 7.2);
     }
 }
