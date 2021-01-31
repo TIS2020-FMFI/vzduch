@@ -153,7 +153,7 @@ class Chart:
             for station in dataset:
                 if station not in result:
                     result[station] = []
-                if "00:00" in self._labels:
+                if "00:00" in self._labels[i]:
                     result[station].append(dataset[station][i])
                 else:
                     result[station].append(None)
