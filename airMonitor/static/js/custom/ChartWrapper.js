@@ -9,10 +9,6 @@ class ChartWrapper {
                 "1": 100,
                 "2": 150
             },
-            "pm2_5": {
-                "1": 100,
-                "2": 150
-            },
             "o3": {
                 "1": 180,
                 "2": 240
@@ -206,68 +202,10 @@ class ChartWrapper {
         meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
         chart.metas[index] = meta.hidden;
 
-        if (this.chart.getVisibleDatasetCount() <= 4) {
-            chart.processLabels();
-        }
-        else{
-            chart.data.options.horizontalLine = null;
-        }
-
         ci.update({
             "duration": 0,
             "lazy": true,
         });
-    }
-
-    /***
-     *
-     *  Function for processing which pollutant are selected and draw lines depending on their limits
-     *
-     */
-
-    processLabels() {
-        let visibleLabels = this.getVisiblePollutants();
-        if (visibleLabels.length === 4) {
-            if (!visibleLabels.includes("pm10") || !visibleLabels.includes("pm2_5") || !visibleLabels.includes("12-hour") || !visibleLabels.includes("24-hour")) {
-                chart.data.options.horizontalLine = null;
-                return;
-            }
-            this.setLimits("pm10");
-            return;
-        }
-        if (visibleLabels.length === 3) {
-            if (!visibleLabels.includes("pm10") || !visibleLabels.includes("pm2_5") || !(visibleLabels.includes("12-hour") || visibleLabels.includes("24-hour"))) {
-                chart.data.options.horizontalLine = null;
-                return;
-            }
-            this.setLimits("pm10");
-            return;
-        }
-        if (visibleLabels.length === 2) {
-            if (!visibleLabels.includes("pm10") && !visibleLabels.includes("pm2_5")) {
-                chart.data.options.horizontalLine = null;
-                return;
-            }
-            if (!visibleLabels.includes("pm10") && !(visibleLabels.includes("12-hour") || visibleLabels.includes("24-hour"))) {
-                chart.data.options.horizontalLine = null;
-                return;
-            }
-            if (!(visibleLabels.includes("12-hour") || visibleLabels.includes("24-hour")) && !visibleLabels.includes("pm2_5")) {
-                chart.data.options.horizontalLine = null;
-                return;
-            }
-            this.setLimits("pm10");
-            return;
-        }
-
-        if (visibleLabels.length === 1) {
-            let pollutant = visibleLabels[0];
-            if(pollutant === "24-hour" || pollutant === "12-hour"){
-                pollutant = "pm10";
-            }
-            this.setLimits(pollutant);
-        }
-
     }
 
     setLimits(pollutant){
@@ -289,6 +227,11 @@ class ChartWrapper {
         }else{
             this.data.options.horizontalLine = null;
         }
+        let ci = this.chart.chart;
+        ci.update({
+            "duration": 0,
+            "lazy": true,
+        });
     }
 
     /***

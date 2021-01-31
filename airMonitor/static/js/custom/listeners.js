@@ -70,6 +70,12 @@ document.getElementById("resetMapButton").onclick = function (){
     mapWrapper.resetMapPosition();
 };
 
+document.getElementById("limitId").onchange = function (){
+    let sel = document.getElementById('limitId');
+    let opt = sel.options[sel.selectedIndex];
+    chart.setLimits(opt.text);
+};
+
 
 window.addEventListener('load', (e) => {
     let added_values = [NaN, NaN, NaN, NaN, NaN];
