@@ -59,8 +59,6 @@ class ChartWrapper {
                     }
         };
 
-
-
         // Plugin to print out horizontal lines
         this.horizonalLinePlugin = {
             afterDraw: function(chartInstance) {
