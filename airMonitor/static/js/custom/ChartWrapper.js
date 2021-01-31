@@ -279,11 +279,13 @@ class ChartWrapper {
                 "y": this.limits_lines[pollutant]["1"],
                 "style": "rgba(255, 192, 0, .4)"
             }];
-        }else{
+        }else if(pollutant in this.limits_lines){
             this.data.options.horizontalLine = [{
                 "y": this.limits_lines[pollutant]["2"],
                 "style": "rgba(255, 0, 0, .4)"
             }];
+        }else{
+            this.data.options.horizontalLine = null;
         }
     }
 
