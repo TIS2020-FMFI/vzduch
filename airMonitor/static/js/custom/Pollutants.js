@@ -38,11 +38,14 @@ class Pollutants{
         if(n > d.length){
             n = d.length
         }
-        return {"label": this.name,
-                "fill": this.fill,
-                "backgroundColor": this.bg_color,
-                "borderColor": this.bg_color,
-                "data": d.slice(d.length - n, d.length ).concat(this.added_values[stationName])} ;
+        return {
+            "label": this.name,
+            "fill": this.fill,
+            "backgroundColor": this.bg_color,
+            "borderColor": this.bg_color,
+            "data": d.slice(d.length - n, d.length ).concat(this.added_values[stationName]),
+            "pointRadius": this.name === "24-hour"?10:3
+        } ;
     }
 
     getValue(station, hour){

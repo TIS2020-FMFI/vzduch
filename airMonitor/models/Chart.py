@@ -142,9 +142,26 @@ class Chart:
         })
         self._datasets.append({
             "label": "24-hour",
-            "data": self._avg_24,
-            "fill": False
+            "data": self._filter_dataset(self._avg_24),
+            "fill": False,
+            "pointRadius": 10
         })
+
+    def _filter_dataset(self, dataset):
+        result = dict()
+        self._generate_labels()
+        for i in range(len(self._labels)):
+            for station in dataset:
+                if station not in result:
+                    result[station] = []
+                if "00:00" in self._labels[i]:
+                    try:
+                        result[station].append(dataset[station][i])
+                    except:
+                        result[station].append(None)
+                else:
+                    result[station].append(None)
+        return result
 
     def _generate_labels(self):
         self._labels = []
