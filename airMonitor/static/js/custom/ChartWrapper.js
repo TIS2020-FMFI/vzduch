@@ -4,6 +4,26 @@ class ChartWrapper {
 
         // Set limits for all pollutant
         this.limits = data["limits"];
+        this.limits_lines = {
+            "pm10": {
+                "1": 100,
+                "2": 150
+            },
+            "pm2_5": {
+                "1": 100,
+                "2": 150
+            },
+            "o3": {
+                "1": 180,
+                "2": 240
+            },
+            "so2": {
+                "2": 500
+            },
+            "no2": {
+                "2": 400
+            }
+        };
         data["limits"] = null;
         this.metas = [];
 
@@ -251,19 +271,20 @@ class ChartWrapper {
     }
 
     setLimits(pollutant){
-        this.data.options.horizontalLine = [{
-                "y": this.limits[pollutant]["4"],
+        if("1" in this.limits_lines[pollutant]) {
+            this.data.options.horizontalLine = [{
+                "y": this.limits_lines[pollutant]["2"],
                 "style": "rgba(255, 0, 0, .4)"
             }, {
-                "y": this.limits[pollutant]["3"],
+                "y": this.limits_lines[pollutant]["1"],
                 "style": "rgba(255, 192, 0, .4)"
-            }, {
-                "y": this.limits[pollutant]["2"],
-                "style": "rgba(255, 255, 0, .4)"
-            }, {
-                "y": this.limits[pollutant]["1"],
-                "style": "rgba(146, 208, 80, .4)"
             }];
+        }else{
+            this.data.options.horizontalLine = [{
+                "y": this.limits_lines[pollutant]["2"],
+                "style": "rgba(255, 0, 0, .4)"
+            }];
+        }
     }
 
     /***
