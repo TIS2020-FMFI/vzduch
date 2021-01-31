@@ -271,19 +271,21 @@ class ChartWrapper {
     }
 
     setLimits(pollutant){
-        if("1" in this.limits_lines[pollutant]) {
-            this.data.options.horizontalLine = [{
-                "y": this.limits_lines[pollutant]["2"],
-                "style": "rgba(255, 0, 0, .4)"
-            }, {
-                "y": this.limits_lines[pollutant]["1"],
-                "style": "rgba(255, 192, 0, .4)"
-            }];
-        }else if(pollutant in this.limits_lines){
-            this.data.options.horizontalLine = [{
-                "y": this.limits_lines[pollutant]["2"],
-                "style": "rgba(255, 0, 0, .4)"
-            }];
+        if(pollutant in this.limits_lines){
+            if("1" in this.limits_lines[pollutant]) {
+                this.data.options.horizontalLine = [{
+                    "y": this.limits_lines[pollutant]["2"],
+                    "style": "rgba(255, 0, 0, .4)"
+                }, {
+                    "y": this.limits_lines[pollutant]["1"],
+                    "style": "rgba(255, 192, 0, .4)"
+                }];
+            }else{
+                this.data.options.horizontalLine = [{
+                    "y": this.limits_lines[pollutant]["2"],
+                    "style": "rgba(255, 0, 0, .4)"
+                }];
+            }
         }else{
             this.data.options.horizontalLine = null;
         }
