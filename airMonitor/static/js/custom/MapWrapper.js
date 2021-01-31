@@ -55,4 +55,8 @@ class MapWrapper{
             this.stations[i].addTo(this.map);
         }
     }
+    resetMapPosition(){
+        this.map.panTo( [48.60, 19.30]);
+        this.map.zoomOut(10);
+    }
 }

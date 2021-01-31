@@ -66,6 +66,10 @@ document.getElementById("mapHoursRange").onchange = function (){
     mapWrapper.drawAllStations();
 };
 
+document.getElementById("resetMapButton").onclick = function (){
+    mapWrapper.resetMapPosition();
+};
+
 
 window.addEventListener('load', (e) => {
     let added_values = [NaN, NaN, NaN, NaN, NaN];
