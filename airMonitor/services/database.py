@@ -25,6 +25,6 @@ class Database:
                 return pd.read_sql_query(command, Database._connection)
             except Exception as ex:
                 logger.error(f"Failed to connect to database with following exception: {ex}")
-                Tunnel.initialize(username, password)
+                # Tunnel.initialize(username, password)
                 Database._connection = pymysql.connect(host='srv-mondo', user='oko', passwd='', port=3306)
                 logger.info("Retrying after tunnel and database connection re-initialization")
