@@ -18,8 +18,8 @@ class Database:
 
     @staticmethod
     def execute_sql(command):
-        username = settings.TUNNEL_CREDENTIALS["username"]
-        password = settings.TUNNEL_CREDENTIALS["password"]
+        #username = settings.TUNNEL_CREDENTIALS["username"]
+        #password = settings.TUNNEL_CREDENTIALS["password"]
         for i in range(settings.RETRY_NUMBER):
             try:
                 return pd.read_sql_query(command, Database._connection)
